@@ -1,37 +1,11 @@
-# create-svelte
+## Travel App
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+An intended evolution of a simple tool created to allow the creation of physical travel planning tables which can be printed off. It is also intended for this project to have a way to log any noteable information about the transport along the journey / journey information (stored locally on the device and exportable to CSV for backup or transfer elsewhere). This app will have PWA support so it can be installed as an 'app' and if possible being able to put locations / logs / journey information notes on a map for interesting viewing.
 
-## Creating a project
+### Technologies
+- [Svelte](https://svelte.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
 
 You can preview the production build with `npm run preview`.
 
