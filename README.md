@@ -6,7 +6,5 @@ An intended evolution of a simple tool created to allow the creation of physical
 - [Svelte](https://svelte.dev/)
 - [TailwindCSS](https://tailwindcss.com/)
 
+.
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
