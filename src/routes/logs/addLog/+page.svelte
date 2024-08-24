@@ -25,6 +25,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    <h3 class="text-neutral-300 italic">Numbers</h3>
+                </div>
             </div>
         </div>
     </div>

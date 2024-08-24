@@ -1,0 +1,41 @@
+[
+    {"trainTypes":[
+        {"name":"Eurosprinter","variants":[
+            {"name":"Eurosprinter","short":"ES_ALL"},
+            {"name":"Taurus","short":"ES_TAURUS"},
+            {"name":"Belgian","short":"ES_BEL"}
+        ]},
+        {"name":"Vectron", "variants":[
+            {"name":"Vectron","short":"VECTR_ALL"}
+        ]},
+        {"name":"TGV","variants":[
+            {"name":"PBKA","short":"TGV_PBKA"},
+            {"name":"PBA", "short":"TGV_PBA"},
+            {"name":"POS","short":"TGV_POS"},
+            {"name":"TMST","short":"TGV_TMST"},
+            {"name":"Duplex","short":"TGV_DUPLEX"}, 
+            {"name":"Réseau","short":"TGV_RESEAU"}, 
+            {"name":"Atlantique","short":"TGV_ATLANTIQUE"}
+        ]},
+        {"name":"DUTCH","variants":[
+            {"name":"TRAXX","short":"DUTCH_TRAXX"},
+            {"name":"ICRm","short":"DUTCH_ICRM"},
+            {"name":"VIRM","short":"DUTCH_VIRM"},
+            {"name":"DDZ","short":"DUTCH_DDZ"},
+            {"name":"SNG","short":"DUTCH_SNG"},
+            {"name":"SLT","short":"DUTCH_SLT"},
+            {"name":"ICR","short":"DUTCH_ICR"},
+            {"name":"ICNG","short":"DUTCH_ICNG"}
+        ]},
+        {"name":"GTW","variants":[
+            {"name":"GTW","short":"GTW_ALL"}
+        ]},
+        {"name":"FLIRT","variants":[
+            {"name":"FLIRT","short":"FLIRT_ALL"}
+        ]},
+        {"name":"KISS","variants":[
+            {"name":"KISS","short":"KISS_ALL"}
+        ]}
+    ]
+    }
+]
