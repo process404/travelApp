@@ -1,7 +1,7 @@
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
 
 
-<div id="app" x-data="app" class="flex flex-col items-center h-screen justify-start">
+<div id="app" class="flex flex-col items-center h-screen justify-start">
 	<Nav ver="main"/>
 	{#if currentPage == 'main'}
 	<div class="h-full max-w-[1000px] w-full flex flex-col flex-grow">
@@ -43,6 +43,14 @@
 	onMount(() => {
 		document.title = 'Trip Planner';
 		currentPage = 'main';
+
+		if(localStorage.getItem('storage') == null){
+			localStorage.setItem('storage', true)
+			localStorage.setItem('logs', JSON.stringify([]));
+			localStorage.setItem('journeys', JSON.stringify([]));
+			localStorage.setItem('stations', JSON.stringify([]));
+			localStorage.setItem('locations', JSON.stringify([{"name":"ore"}]));
+		}
 	});
 
 
@@ -50,7 +58,6 @@
 	function switchPage(page){
 		currentPage = page;
 		window.location.href = page;
-		
 	}
 
 </script>
