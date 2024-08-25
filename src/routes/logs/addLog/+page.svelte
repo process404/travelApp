@@ -8,8 +8,8 @@
                     <div class="relative mt-2">
                         <div class="flex items-center justify-center gap-3 mr-1">
                             <div class="relative w-full">
-                                <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class=" standardInput" bind:value={location} on:keyup={() => promptSuggestions()}>
-                                {#if locationSuggestions.length > 0}
+                                <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="standardInput" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
+                                {#if locationSuggestions.length > 0}z   
                                 <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4">
                                     {#each locationSuggestions.slice(0,6) as name}
                                         {#if name != location}
@@ -26,11 +26,15 @@
                             {/if}
                         </div>
                     </div>
+                    <div class="mt-3 flex gap-2 items-center">
+                        <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
+                        <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
+                    </div>
                 </div>
                 <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                     <h3 class="text-neutral-300 italic">Numbers</h3>
                     <div class="mt-2 flex gap-2 items-center flex-wrap">
-                        <div class="flex border-[1px] p-1 rounded-md border-neutral-800 gap-1 w-full">
+                        <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
                             <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
                             <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                             {#if !typeDropdown}
@@ -98,6 +102,13 @@
                         {/if}
                     </div>
                 </div>
+                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    <h3 class="text-neutral-300 italic">Date / Time</h3>
+                    <div class="flex gap-3">
+                        <input type="date" class="standardInput mt-2 iconEdit" bind:value={inputDate}>
+                        <input type="time" class="standardInput mt-2 iconEdit" bind:value={inputTime}>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -117,6 +128,9 @@
     var inputNumber = ''
     var inputArea = writable([])
     var inputVariant = writable([])
+    var inputDate = ''
+    var inputTime = ''
+    var noLocation = writable(false);
     var id = 0
 
     var db = import ('../../../db/database.json');
@@ -145,6 +159,8 @@
         const resolvedDbData = await dbData.default;
         trainAreas = resolvedDbData.trainTypes;
         console.log(trainAreas)
+
+        inputDate = new Date().toISOString().split('T')[0];
     });
 
     function promptSuggestions(){
@@ -290,6 +306,7 @@
 </script>
 
 <style>
+
     .non-empty{
         @apply border-b-blue-600 valid:border-blue-600 invalid:border-red-600 hover:invalid:border-red-600
     }
@@ -308,10 +325,12 @@
 
     .fadeButton:hover:before{
        animation: boxFillIn 0.1s forwards;
+       animation-timing-function: ease-in-out;
     }
 
     .fadeButton:active:before{
         animation: boxFill 0.1s forwards;
+        animation-timing-function: ease-in-out;
     }
 
     .fadeButton:hover{
@@ -357,6 +376,19 @@
         }
     }
 
+    @keyframes boxFillOut2{
+        0%{
+            width: 100%;
+            left: -50%;
+            border-radius: 0;
+        }
+        100%{
+            width: 100%;
+            left: 0%;
+            border-radius: 100%;
+        }
+    }
+
     .standardInput{
         @apply bg-opacity-30 text-sm rounded-sm w-full p-2 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600
     }
@@ -384,6 +416,54 @@
     ::-webkit-scrollbar-thumb:hover {
     background: #555;
     }
+
+    .iconEdit::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    .fadeCheckbox {
+        @apply appearance-none bg-transparent border-[2px] border-neutral-700 w-5 h-5 rounded-sm relative duration-100 hover:cursor-pointer
+    }
+
+    .fadeCheckbox:checked {
+        @apply bg-blue-600
+    }
+
+    .fadeCheckbox::before{
+        @apply bg-blue-700 bg-opacity-0 duration-100 hover:bg-opacity-20
+    }
+
+
+    .fadeCheckbox::before{
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        z-index: -1;
+        border-radius: 50%;
+    }
+
+    .fadeCheckbox:checked::after{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        content: url('../../../lib/images/check.svg');
+        filter: invert(100);
+        top: 0;
+        transform: translateY(-2px);
+    }
+
+
+    .standardInput.inputDisabled{
+        opacity:0.2;
+    }
+
+    .standardInput.inputDisabled:hover{
+        cursor: not-allowed;
+    }
+
 
     
 
