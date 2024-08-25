@@ -1,14 +1,14 @@
 <Nav ver="back"/>
-    <div class="flex flex-col items-center h-screen justify-start">
-        <div class="h-full max-w-[1000px] w-full flex flex-col">
-            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-2 overflow-y-scroll customScrollbar">
+    <div class="flex flex-col items-center h-auto min-h-screen justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+        <div class="max-w-[1000px] w-full flex flex-col">
+            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Log</h2>
                 <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                     <h3 class="text-neutral-300 italic">Location</h3>
-                    <div class="relative">
+                    <div class="relative mt-2">
                         <div class="flex items-center justify-center gap-3 mr-1">
                             <div class="relative w-full">
-                                <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class="mt-2 standardInput" bind:value={location} on:keyup={() => promptSuggestions()}>
+                                <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class=" standardInput" bind:value={location} on:keyup={() => promptSuggestions()}>
                                 {#if locationSuggestions.length > 0}
                                 <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4">
                                     {#each locationSuggestions.slice(0,6) as name}
@@ -31,8 +31,8 @@
                     <h3 class="text-neutral-300 italic">Numbers</h3>
                     <div class="mt-2 flex gap-2 items-center flex-wrap">
                         <div class="flex border-[1px] p-1 rounded-md border-neutral-800 gap-1 w-full">
-                            <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} >
-                            <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
+                            <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                            <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                             {#if !typeDropdown}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
@@ -44,15 +44,54 @@
                                 <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                               </svg>
                             {/if}
-                            </button>
-                            <button class="fadeButton p-[0.2rem] blue" on:click={() => {addBlankNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
+                            </button> -->
+                            <button class="fadeButton p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                             </svg></button>
                         </div>
                         {#if trainNumbers.length != 0}
-                            <ul>
+                            <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row">
                                 {#each $trainNumbers as train}
-                                    <li>
+                                    <li class="relative inline-block p-0 m-0 h-6">
+                                        <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 fadeButton blue2 textWhite pl-2 pr-2 h-6">{train['name']} ({train['type']} - {train['variant']})</button>
+                                        {#if train['dropdown']}
+                                            <button class="z-30 fixed w-screen h-screen hover:cursor-default" on:click={closeDropdown(train)}></button>
+                                        {/if}
+                                        {#if train['dropdown']}
+                                        <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px]">
+                                            {#if train['dropdown2'] == ''}
+                                            <div class="flex gap-2 min-w-[180px]">
+                                                <button class="text-white text-sm fadeButton red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
+                                                <button class="text-white text-sm fadeButton blue pl-2 pr-2 w-full" on:click={() => train['dropdown2'] = "area"}>Edit type</button>
+                                            </div>
+                                            {/if}
+
+                                            {#if train.dropdown2 === "area"}
+                                                <h3 class="text-white text-sm">Select Area</h3>
+                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                    {#each trainAreas as area}
+                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                            {#if train.dropdown2 === "type"}
+                                                <h3 class="text-white text-sm">Select Type</h3>
+                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                    {#each $inputArea.trainTypes as type}
+                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                            {#if train.dropdown2 === "variant"}
+                                                <h3 class="text-white text-sm">Select Variant</h3>
+                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                    {#each $inputVariant as variant}
+                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                        </div>
+                                        {/if}
                                     </li>
                                 {/each}
                             </ul>
@@ -68,19 +107,25 @@
     import { onMount, tick } from 'svelte';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
-	import { writable } from 'svelte/store';
+    import { writable } from 'svelte/store';
     var combinedLocations = null;
     var locationSuggestions = []
     var trainNumbers = writable([])
     var dbWriteable = writable([])
+
     var typeDropdown = false;
+    var inputNumber = ''
+    var inputArea = writable([])
+    var inputVariant = writable([])
+    var id = 0
 
     var db = import ('../../../db/database.json');
+    var trainAreas = []
     dbWriteable.set(db)
 
     var location = ''
 
-    onMount(() => {
+    onMount(async () => {
         document.title = 'Add Log';
         const stn = localStorage.getItem('stations');
         const loc = localStorage.getItem('locations');
@@ -95,7 +140,11 @@
             }
             combinedLocations = joined;
         }
-        // console.log(combinedLocations)
+    
+        const dbData = await db;
+        const resolvedDbData = await dbData.default;
+        trainAreas = resolvedDbData.trainTypes;
+        console.log(trainAreas)
     });
 
     function promptSuggestions(){
@@ -116,37 +165,133 @@
         location = name
         locationSuggestions = []
     }
+    
+    function inputType(type, train) {
+        console.log(type)
+        inputVariant.set(type.variants);
+        console.log("variants");
+        console.log(inputVariant);
+    
+        trainNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === train.id) {
+                    t.type = type.name;
+                    t.dropdown2 = 'variant';
+                }
+                return t;
+            });
+        });
+    }
+
+    function inputVariantBtn(variant, train) {
+        trainNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === train.id) {
+                    t.variant = variant.name
+                    t.dropdown2 = '';
+                    t.dropdown = false;
+                }
+                return t;
+            });
+        });
+
+        let logs = localStorage.getItem('logs')
+        console.log(logs)
+        if (logs) {
+            const parsedLogs = JSON.parse(logs);
+            parsedLogs.forEach(item => {
+                if(item.number === train.name){
+                    item.type = train.type;
+                    item.variant = train.variant;
+                }
+            });
+            localStorage.setItem('logs', JSON.stringify(parsedLogs));
+        }
+    }
+    
+    function inputAreaBtn(area, train) {
+        inputArea.set(area)
+        console.log(area)
+        trainNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === train.id) {
+                    t.area = area.area;
+                    t.dropdown2 = 'type';
+                }
+                return t;
+            });
+        });
+    }
 
     function clearLocation(){
         location = ''
         locationSuggestions = []
     }
 
-    function addBlankNumber(){
-        trainNumbers.update(numbers => {
-            return [...numbers, {"name":"train","type":"","variant":"", "dropdown":false}];
-        });
+    function addNumber(){
+        id++;
+        // check local storage to see if train is already in logs
+        let logs = localStorage.getItem('logs')
+        let trainFound = false
+        let train = null;
+        console.log(logs)
+        if (logs) {
+            const parsedLogs = JSON.parse(logs);
+            trainFound = parsedLogs.some(log => log.number === inputNumber);
+            if (trainFound) {
+                train = parsedLogs.find(log => log.number === inputNumber);
+            }
+        }
+
+        if(trainFound){
+            trainNumbers.update(numbers => {
+                return [...numbers, {"id": id, "name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown2":""}];
+            });
+        }else{
+            trainNumbers.update(numbers => {
+                return [...numbers, {"id": id, "name":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown2":""}];
+            });
+        }
+
+
+        inputNumber = ''
+    };
         
-    }
 
     function handleKeyPressNumber(e){
-        console.log(e)
         if(e.key == 'Enter'){
-            addBlankNumber()
-        }
-        tick().then(() => {
-            if (newInput) {
-                newInput.focus();
+            if(inputNumber != ''){
+                addNumber()
             }
+        }
+    }
+
+    function removeLog(trainId){
+        trainNumbers.update(numbers => {
+            return numbers.filter(number => number.id != trainId);
         });
     }
+
+    function closeDropdown(train){
+        trainNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === train.id) {
+                    t.dropdown = false;
+                    t.dropdown2 = '';
+                }
+                return t;
+            });
+        });
+    }
+
+
 
     
 </script>
 
 <style>
     .non-empty{
-        @apply border-b-blue-600 valid:border-blue-600 invalid:border-red-600
+        @apply border-b-blue-600 valid:border-blue-600 invalid:border-red-600 hover:invalid:border-red-600
     }
     
     .fadeButton{
@@ -176,6 +321,19 @@
     .fadeButton.blue{
         @apply bg-blue-700  before:bg-blue-300 before:bg-opacity-20
     }
+
+    .fadeButton.red{
+        @apply bg-red-700  before:bg-red-300 before:bg-opacity-20
+    }
+
+    .fadeButton.blue2{
+        @apply bg-blue-800  before:bg-blue-300 before:bg-opacity-20
+    }
+
+    .fadeButton.textWhite{
+        @apply text-white
+    }
+    
     
     @keyframes boxFillIn{
         0%{
@@ -214,18 +372,19 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        @apply bg-neutral-900
+        @apply bg-transparent pt-8
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-    @apply bg-black
+    @apply bg-black bg-opacity-20 h-1/4
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
     background: #555;
     }
+
     
 
 
