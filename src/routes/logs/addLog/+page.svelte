@@ -1,127 +1,133 @@
-<Nav ver="back"/>
-    <div class="flex flex-col items-center h-auto min-h-screen justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
-        <div class="max-w-[1000px] w-full flex flex-col">
-            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
-                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Log</h2>
-                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                    <h3 class="text-neutral-300 italic">Location</h3>
-                    <div class="relative mt-2">
-                        <div class="flex items-center justify-center gap-3 mr-1">
-                            <div class="relative w-full">
-                                <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="standardInput" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
-                                {#if locationSuggestions.length > 0}z   
-                                <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4">
-                                    {#each locationSuggestions.slice(0,6) as name}
-                                        {#if name != location}
-                                            <button on:click={selectLocation(name)} class="text-white w-full text-xs text-left after:absolute after:bottom-[-0.2rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-1 first:before:hidden  pt-2 relative">{name}</button>
-                                        {/if}
-                                    {/each}
+<CustomAlert mode="err" active={true} />
+<div class="flex flex-col h-screen">
+    <Nav ver="back"/>
+        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+            <div class="max-w-[1000px] w-full flex flex-col">
+                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
+                    <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Log</h2>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Location</h3>
+                        <div class="relative mt-2">
+                            <div class="flex items-center justify-center gap-3 mr-1">
+                                <div class="relative w-full">
+                                    <!--TO-DO add precise location info and country selector-->
+                                    <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="standardInput" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
+                                    {#if locationSuggestions.length > 0}
+                                    <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
+                                        {#each locationSuggestions.slice(0,6) as name}
+                                            {#if name != location}
+                                                <button on:click={selectLocation(name)} class="text-white w-full text-xs text-left after:absolute after:bottom-[-0.2rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-1 first:before:hidden  pt-2 relative">{name}</button>
+                                            {/if}
+                                        {/each}
+                                    </div>
+                                    {/if}
                                 </div>
+                                {#if location.length > 0}
+                                    <button class="p-2 fadeButton" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                    </svg></button>
                                 {/if}
                             </div>
-                            {#if location.length > 0}
-                                <button class="p-2 fadeButton" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
-                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                                  </svg></button>
-                            {/if}
+                        </div>
+                        <div class="mt-3 flex gap-2 items-center">
+                            <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
+                            <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
                         </div>
                     </div>
-                    <div class="mt-3 flex gap-2 items-center">
-                        <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
-                        <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
-                    </div>
-                </div>
-                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                    <h3 class="text-neutral-300 italic">Numbers</h3>
-                    <div class="mt-2 flex gap-2 items-center flex-wrap">
-                        <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                            <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
-                            <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
-                            {#if !typeDropdown}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
-                              </svg>
-                            {/if}
-                            {#if typeDropdown}
-                              
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short w-5 h-5" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
-                              </svg>
-                            {/if}
-                            </button> -->
-                            <button class="fadeButton p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                            </svg></button>
-                        </div>
-                        {#if trainNumbers.length != 0}
-                            <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row">
-                                {#each $trainNumbers as train}
-                                    <li class="relative inline-block p-0 m-0 h-6">
-                                        <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 fadeButton blue2 textWhite pl-2 pr-2 h-6">{train['name']} ({train['type']} - {train['variant']})</button>
-                                        {#if train['dropdown']}
-                                            <button class="z-30 fixed w-screen h-screen hover:cursor-default" on:click={closeDropdown(train)}></button>
-                                        {/if}
-                                        {#if train['dropdown']}
-                                        <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px]">
-                                            {#if train['dropdown2'] == ''}
-                                            <div class="flex gap-2 min-w-[180px]">
-                                                <button class="text-white text-sm fadeButton red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
-                                                <button class="text-white text-sm fadeButton blue pl-2 pr-2 w-full" on:click={() => train['dropdown2'] = "area"}>Edit type</button>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Numbers</h3>
+                        <div class="mt-2 flex gap-2 items-center flex-wrap">
+                            <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
+                                <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                                <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
+                                {#if !typeDropdown}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
+                                </svg>
+                                {/if}
+                                {#if typeDropdown}
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short w-5 h-5" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                </svg>
+                                {/if}
+                                </button> -->
+                                <button class="fadeButton p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                </svg></button>
+                            </div>
+                            {#if trainNumbers.length != 0}
+                                <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row">
+                                    {#each $trainNumbers as train}
+                                        <li class="relative inline-block p-0 m-0 h-6">
+                                            <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 fadeButton blue2 textWhite pl-2 pr-2 h-6">{train['name']} ({train['type']} - {train['variant']})</button>
+                                            {#if train['dropdown']}
+                                                <button class="z-30 fixed w-screen h-screen hover:cursor-default" on:click={closeDropdown(train)}></button>
+                                            {/if}
+                                            {#if train['dropdown']}
+                                            <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px]">
+                                                {#if train['dropdown_2'] == ''}
+                                                <div class="flex gap-2 min-w-[180px]">
+                                                    <button class="text-white text-sm fadeButton red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
+                                                    <button class="text-white text-sm fadeButton blue pl-2 pr-2 w-full" on:click={() => train['dropdown_2'] = "area"}>Edit type</button>
+                                                </div>
+                                                {/if}
+
+                                                {#if train.dropdown_2 === "area"}
+                                                    <h3 class="text-white text-sm">Select Area</h3>
+                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                        {#each trainAreas as area}
+                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
+                                                        {/each}
+                                                    </div>
+                                                {/if}
+                                                {#if train.dropdown_2 === "type"}
+                                                    <h3 class="text-white text-sm">Select Type</h3>
+                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                        {#each $inputArea.trainTypes as type}
+                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                        {/each}
+                                                    </div>
+                                                {/if}
+                                                {#if train.dropdown_2 === "variant"}
+                                                    <h3 class="text-white text-sm">Select Variant</h3>
+                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                        {#each $inputVariant as variant}
+                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
+                                                        {/each}
+                                                    </div>
+                                                {/if}
                                             </div>
                                             {/if}
-
-                                            {#if train.dropdown2 === "area"}
-                                                <h3 class="text-white text-sm">Select Area</h3>
-                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    {#each trainAreas as area}
-                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
-                                                    {/each}
-                                                </div>
-                                            {/if}
-                                            {#if train.dropdown2 === "type"}
-                                                <h3 class="text-white text-sm">Select Type</h3>
-                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    {#each $inputArea.trainTypes as type}
-                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
-                                                    {/each}
-                                                </div>
-                                            {/if}
-                                            {#if train.dropdown2 === "variant"}
-                                                <h3 class="text-white text-sm">Select Variant</h3>
-                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    {#each $inputVariant as variant}
-                                                        <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
-                                                    {/each}
-                                                </div>
-                                            {/if}
-                                        </div>
-                                        {/if}
-                                    </li>
-                                {/each}
-                            </ul>
-                        {/if}
+                                        </li>
+                                    {/each}
+                                </ul>
+                            {/if}
+                        </div>
                     </div>
-                </div>
-                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                    <h3 class="text-neutral-300 italic">Date / Time</h3>
-                    <div class="flex gap-3">
-                        <input type="date" class="standardInput mt-2 iconEdit" bind:value={inputDate}>
-                        <input type="time" class="standardInput mt-2 iconEdit" bind:value={inputTime}>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="standardInput mt-2 iconEdit" bind:value={inputDate}>
+                            <input type="time" class="standardInput mt-2 iconEdit" bind:value={inputTime}>
+                        </div>
                     </div>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
+                    <button class="fadeButton blue w-full p-2 text-sm" on:click={confirmLog}>Submit Log</button>
+                    </div>
+                    
                 </div>
-                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
-                   
-                </div>
-                
             </div>
         </div>
-    </div>
-<Footer/>
+    <Footer/>
+</div>
 
 <script>
     import { onMount, tick } from 'svelte';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
+    import CustomAlert from '../../../lib/components/Alert.svelte';
+
     import { writable } from 'svelte/store';
     var combinedLocations = null;
     var locationSuggestions = []
@@ -170,11 +176,12 @@
 
     function promptSuggestions(){
         locationSuggestions = []
-        if(location != ''){
+        console.log(combinedLocations)
+        if(location != '' && combinedLocations){
             for(const item in combinedLocations){
-                console.log(combinedLocations[item]['name'])
-                if (combinedLocations[item]['name'].toLowerCase().includes(location)) {
-                    locationSuggestions.push(combinedLocations[item]['name']);
+                console.log(combinedLocations[item])
+                if (combinedLocations[item] && combinedLocations[item].toLowerCase().includes(location)) {
+                    locationSuggestions.push(combinedLocations[item]);
                 }
             }
         }
@@ -197,7 +204,7 @@
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.type = type.name;
-                    t.dropdown2 = 'variant';
+                    t.dropdown_2 = 'variant';
                 }
                 return t;
             });
@@ -209,7 +216,7 @@
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.variant = variant.name
-                    t.dropdown2 = '';
+                    t.dropdown_2 = '';
                     t.dropdown = false;
                 }
                 return t;
@@ -237,7 +244,7 @@
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.area = area.area;
-                    t.dropdown2 = 'type';
+                    t.dropdown_2 = 'type';
                 }
                 return t;
             });
@@ -266,11 +273,11 @@
 
         if(trainFound){
             trainNumbers.update(numbers => {
-                return [...numbers, {"id": id, "name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown2":""}];
+                return [...numbers, {"id": id, "name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown_2":""}];
             });
         }else{
             trainNumbers.update(numbers => {
-                return [...numbers, {"id": id, "name":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown2":""}];
+                return [...numbers, {"id": id, "name":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
             });
         }
 
@@ -298,7 +305,7 @@
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.dropdown = false;
-                    t.dropdown2 = '';
+                    t.dropdown_2 = '';
                 }
                 return t;
             });
@@ -308,9 +315,51 @@
     function confirmLog(){
         // stuff here
 
+        if(location == ''){
+            if(!$noLocation){
+                
+                return;
+            }
+        }
+
+        var loc = localStorage.getItem('locations');
+        if(loc != null){
+            const parsedLoc = JSON.parse(loc);
+            if(!parsedLoc.includes(location)){
+                var newloc = parsedLoc.concat(location);
+                localStorage.setItem('locations', JSON.stringify(newloc));
+            }
+        }
+
+        let logs = localStorage.getItem('logs');
+        if (!logs) {
+            logs = JSON.stringify([]);
+        }
+
+        trainNumbers.subscribe(numbers => {
+            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
+                ...train,
+                log_location: location,
+                log_date: inputDate,
+                log_time: inputTime
+            }));
+            console.log(numbersWithLocation)
+
+            console.log(numbers)
+            const addNew = JSON.parse(logs).concat(numbersWithLocation);
+            localStorage.setItem('logs', JSON.stringify(addNew));
+            console.log(addNew);
+        })();
+
         let logreplace = inputDate.replace('/', '-');
         console.log(logreplace)
         window.location.href = `../overview/${logreplace}`;
+    }
+
+
+
+    function customAlertSummon(){
+
     }
 
 
@@ -374,7 +423,7 @@
         }
         100%{
             width: 100%;
-            border-radius: 10%;
+            border-radius: 0%;
         }
     }
     
@@ -446,7 +495,7 @@
         @apply bg-blue-700 bg-opacity-0 duration-100
     }
 
-    .fadeCheckbox:not(:checked)::before{
+    .fadeCheckbox:not(:checked):not(:focus)::before{
         @apply hover:bg-opacity-20
     }
 
