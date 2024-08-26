@@ -109,6 +109,10 @@
                         <input type="time" class="standardInput mt-2 iconEdit" bind:value={inputTime}>
                     </div>
                 </div>
+                <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
+                   
+                </div>
+                
             </div>
         </div>
     </div>
@@ -161,6 +165,7 @@
         console.log(trainAreas)
 
         inputDate = new Date().toISOString().split('T')[0];
+
     });
 
     function promptSuggestions(){
@@ -300,6 +305,14 @@
         });
     }
 
+    function confirmLog(){
+        // stuff here
+
+        let logreplace = inputDate.replace('/', '-');
+        console.log(logreplace)
+        window.location.href = `../overview/${logreplace}`;
+    }
+
 
 
     
@@ -430,9 +443,16 @@
     }
 
     .fadeCheckbox::before{
-        @apply bg-blue-700 bg-opacity-0 duration-100 hover:bg-opacity-20
+        @apply bg-blue-700 bg-opacity-0 duration-100
     }
 
+    .fadeCheckbox:not(:checked)::before{
+        @apply hover:bg-opacity-20
+    }
+
+    .fadeCheckbox:checked::before{
+        @apply hover:bg-opacity-10
+    }
 
     .fadeCheckbox::before{
         content: '';
@@ -444,6 +464,7 @@
         z-index: -1;
         border-radius: 50%;
     }
+
 
     .fadeCheckbox:checked::after{
         position: absolute;

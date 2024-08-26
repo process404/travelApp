@@ -52,6 +52,7 @@
 			localStorage.setItem('locations', JSON.stringify([]));
 			localStorage.setItem('planning', JSON.stringify([]));
 		}
+
 	});
 
 

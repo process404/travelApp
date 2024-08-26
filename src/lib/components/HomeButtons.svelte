@@ -6,11 +6,11 @@
             </svg></span></h2>
         </div>
         {#if imgTitle}
-        <a title="{imgTitle}" href="{imgHref}" class="bg-black bottom-0  mr-auto z-30 text-white bg-opacity-40 sm:text-[0.55rem] text-[0.45rem] p-1 pl-2 pr-2 rounded-sm w-full sm:w-auto">{imgTitle2}</a>
+        <a title="{imgTitle}" href="{imgHref}" class="bg-black bottom-0  mr-auto z-30 text-white bg-opacity-40 text-[10px]  p-1 pl-2 pr-2 rounded-sm w-full sm:w-auto">{imgTitle2}</a>
         {/if}
     </div>
     {#if imgSrc}
-    <img class="absolute top-0 w-full h-full z-10 object-cover blur-sm opacity-100 duration-100 group-hover:opacity-70" alt="FFS RABe 522 205 Basel SBB 180611" src="{imgSrc}">
+    <img class="absolute top-0 w-full h-full z-10 object-cover blur-sm opacity-100 duration-100 group-hover:opacity-70" alt="Train" src="{imgSrc}">
     {/if}
     {#if !imgSrc}
         <div class="absolute top-0 w-full h-full z-10 bg-neutral-700 bg-opacity-60"></div>

@@ -1,0 +1,16 @@
+{
+    "name": "Trip Planner", 
+    "short_name": "Trip Planner", 
+    "display_override": ["fullscreen", "standalone", "minimal-ui"],
+    "display": "fullscreen", 
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "start_url": "/",
+    "icons": [ 
+        {
+            "src": "/favicon.png",
+            "type": "image/png",
+            "sizes": "any"
+        }
+    ]
+}
