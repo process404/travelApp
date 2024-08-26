@@ -49,8 +49,10 @@
 			localStorage.setItem('logs', JSON.stringify([]));
 			localStorage.setItem('journeys', JSON.stringify([]));
 			localStorage.setItem('stations', JSON.stringify([]));
-			localStorage.setItem('locations', JSON.stringify([{"name":"ore"}]));
+			localStorage.setItem('locations', JSON.stringify([]));
+			localStorage.setItem('planning', JSON.stringify([]));
 		}
+
 	});
 
 
