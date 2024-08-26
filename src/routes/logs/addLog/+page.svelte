@@ -12,7 +12,7 @@
                                 <div class="relative w-full">
                                     <!--TO-DO add precise location info and country selector-->
                                     <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="standardInput" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
-                                    {#if locationSuggestions.length > 0}
+                                    {#if locationSuggestions.length != 0}
                                     <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
                                         {#each locationSuggestions.slice(0,6) as name}
                                             {#if name != location}
@@ -29,9 +29,16 @@
                                 {/if}
                             </div>
                         </div>
-                        <div class="mt-3 flex gap-2 items-center">
-                            <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
-                            <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
+                        <div class="flex gap-4">
+                            <div class="mt-3 flex gap-2 items-center">
+                                <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
+                                <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
+                            </div>
+                            <div class="mt-3 flex gap-2 items-center">
+                                <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
+                                <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
+                            </div>
+        
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
@@ -140,6 +147,9 @@
     var inputVariant = writable([])
     var inputDate = ''
     var inputTime = ''
+    var preciseLocation = writable(false)
+    var preciseLat;
+    var preciseLon;
     var noLocation = writable(false);
     var id = 0
 
@@ -265,13 +275,13 @@
         console.log(logs)
         if (logs) {
             const parsedLogs = JSON.parse(logs);
-            trainFound = parsedLogs.some(log => log.number === inputNumber);
+            trainFound = parsedLogs.some(log => log.name === inputNumber);
             if (trainFound) {
-                train = parsedLogs.find(log => log.number === inputNumber);
+                train = parsedLogs.find(log => log.name === inputNumber);
             }
         }
 
-        if(trainFound){
+        if(trainFound && train){
             trainNumbers.update(numbers => {
                 return [...numbers, {"id": id, "name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown_2":""}];
             });
@@ -315,9 +325,13 @@
     function confirmLog(){
         // stuff here
 
+        var lat;
+        var lon;
+
+
         if(location == ''){
             if(!$noLocation){
-                
+
                 return;
             }
         }
@@ -336,12 +350,15 @@
             logs = JSON.stringify([]);
         }
 
-        trainNumbers.subscribe(numbers => {
+        if($preciseLocation && preciseLat && preciseLon){
+            trainNumbers.subscribe(numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
                 log_location: location,
                 log_date: inputDate,
-                log_time: inputTime
+                log_time: inputTime,
+                log_lat: preciseLat,
+                log_lon: preciseLon
             }));
             console.log(numbersWithLocation)
 
@@ -349,7 +366,26 @@
             const addNew = JSON.parse(logs).concat(numbersWithLocation);
             localStorage.setItem('logs', JSON.stringify(addNew));
             console.log(addNew);
-        })();
+        });
+        }else{
+            trainNumbers.subscribe(numbers => {
+                console.log("E")
+                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
+                    ...train,
+                    log_location: location,
+                    log_date: inputDate,
+                    log_time: inputTime
+                }));
+
+                console.log(numbers)
+                const addNew = JSON.parse(logs).concat(numbersWithLocation);
+                localStorage.setItem('logs', JSON.stringify(addNew));
+                console.log(addNew);
+            });
+
+
+        }
+
 
         let logreplace = inputDate.replace('/', '-');
         console.log(logreplace)
@@ -361,6 +397,45 @@
     function customAlertSummon(){
 
     }
+
+    function locationToggle() {
+        if($preciseLocation){
+            $preciseLocation = false;
+        }else{
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        preciseLat = latitude;
+                        preciseLon = longitude;
+                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
+                        $preciseLocation = true;
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.log("User denied the request for Geolocation.");
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.log("Location information is unavailable.");
+                                break;
+                            case error.TIMEOUT:
+                                console.log("The request to get user location timed out.");
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                console.log("An unknown error occurred.");
+                                break;
+                        }
+                        $preciseLocation = false;
+                    }
+                );
+            } else {
+                console.log("Geolocation is not supported by the browser.");
+                $preciseLocation = false;
+            }
+        }
+        }
 
 
 

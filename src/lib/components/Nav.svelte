@@ -34,7 +34,6 @@
 <script>
     export let ver;
 
-    console.log("ver", ver)
 
     function goBack(){
         window.history.back();
