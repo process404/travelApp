@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                            <button class="fadeButton blue w-full p-2">Create plan</button>
+                            <button class="fadeButton blue w-full p-2" on:click={createPlan}>Create plan</button>
                         </div>
                 
                         
@@ -43,7 +43,6 @@
         import { writable } from 'svelte/store';
         import { onMount } from 'svelte';
         var plansFromDB = []
-        var tempPlanStore = []
         var currentPG = 'home'
         
         var tripName = ''
@@ -60,6 +59,41 @@
                 plansFromDB = JSON.parse(localStorage.getItem('plans'))
             }
         });
+
+        function createPlan(){
+            if(tripName.length < 3){
+                $alrtTxt = 'Please enter a valid name'
+                $alrtAct = true
+                return
+            }
+            if(tripStart == '' || tripEnd == ''){
+                $alrtTxt = 'Please enter a valid start and end date'
+                $alrtAct = true
+                return
+            }
+
+            var plan = {
+                tripID: [...Array(15)].map(() => Math.random().toString(36)[2]).join(''),
+                name: tripName,
+                start: tripStart,
+                end: tripEnd,
+                days: []
+            }
+
+            if (confirm('Are you sure you want to create this plan?')) {
+                plansFromDB.push(plan);
+                $alrtMode = 'success';
+                $alrtTxt = 'Plan created successfully';
+                $alrtAct = true;
+                tripName = '';
+                tripStart = '';
+                tripEnd = '';
+                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                window.location.href = '/planning';
+
+            }
+            
+        }
     </script>
     
     <style>

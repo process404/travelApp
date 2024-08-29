@@ -4,6 +4,6 @@
     import { onMount } from 'svelte';
     onMount(() => {
         document.title = 'Error';
-        // window.location.href = "/"
+        window.location.href = "/"
     });
 </script>

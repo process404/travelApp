@@ -10,7 +10,7 @@
             <h4 class="text-white ml-auto text-xs text-opacity-60">Click outside of this box to close</h4>
         </div>
         <hr>
-        <h4 class="text-white text-center">{text}</h4>
+        <h4 class="text-white text-center mt-1 mb-2">{text}</h4>
         
     </div>
     {/if}
@@ -23,8 +23,8 @@
             <h2 class="text-white font-bold text-xl">Success</h2>
             <h4 class="text-white ml-auto text-xs text-opacity-60">Click outside of this box to close</h4>
         </div>
-        <hr>
-        <h4 class="text-white text-center">{text}</h4>
+        <hr class="mt-1">
+        <h4 class="text-white text-center mt-4 mb-2">{text}</h4>
     </div>
     {/if}
     {#if mode == 'info'}
@@ -37,8 +37,8 @@
             <h2 class="text-white font-bold text-xl">Information</h2>
             <h4 class="text-white ml-auto text-xs text-opacity-60">Click outside of this box to close</h4>
         </div>
-        <hr>
-        <h4 class="text-white text-center">{text}</h4>
+        <hr class="mt-1">
+        <h4 class="text-white text-center mt-4 mb-2">{text}</h4>
     </div>
     {/if}
 </button>

@@ -29,8 +29,8 @@
 
     onMount(() => {
         document.title = 'Planning';
-        if(localStorage.getItem('plans')){
-            plansFromDB = JSON.parse(localStorage.getItem('plans'))
+        if(localStorage.getItem('planning')){
+            plansFromDB = JSON.parse(localStorage.getItem('planning'))
         }
     });
 
