@@ -6,7 +6,10 @@
                 {"name":"Vectron","short":"VECTR_ALL"},
                 {"name":"ES 'Standard'","short":"ES_ALL"},
                 {"name":"ES Taurus","short":"ES_TAURUS"},
-                {"name":"ES SNCB","short":"ES_SNCB"}
+                {"name":"ES SNCB","short":"ES_SNCB"},
+                {"name":"Velaro","short":"VL_ALL"},
+                {"name":"Velaro e320","short":"VL_ES"},
+                {"name":"Velaro D / MS", "short":"VL_D_MS"}
             ],
             "pictures":[
                 
