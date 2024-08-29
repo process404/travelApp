@@ -463,8 +463,7 @@
 </script>
 
 <style>
-
-    .non-empty{
+     .non-empty{
         @apply border-b-blue-600 valid:border-blue-600 invalid:border-red-600 hover:invalid:border-red-600
     }
     
@@ -504,6 +503,10 @@
 
     .fadeButton.blue2{
         @apply bg-blue-800  before:bg-blue-300 before:bg-opacity-20
+    }
+
+    .fadeButton.blue3{
+        @apply bg-blue-900 bg-opacity-50 before:bg-blue-300 before:bg-opacity-50;
     }
 
     .fadeButton.textWhite{
@@ -628,10 +631,5 @@
     .standardInput.inputDisabled:hover{
         cursor: not-allowed;
     }
-
-
-    
-
-
 
 </style>

@@ -79,6 +79,10 @@
         @apply bg-blue-800  before:bg-blue-300 before:bg-opacity-20
     }
 
+    .fadeButton.blue3{
+        @apply bg-blue-900 bg-opacity-50 before:bg-blue-300 before:bg-opacity-50;
+    }
+
     .fadeButton.textWhite{
         @apply text-white
     }
@@ -201,5 +205,4 @@
     .standardInput.inputDisabled:hover{
         cursor: not-allowed;
     }
-
 </style>
