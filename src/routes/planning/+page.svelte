@@ -6,7 +6,10 @@
                 {#if plansFromDB.length == 0}
                 <div class="h-full flex items-center justify-center flex-col gap-4">
                     <h3 class="text-neutral-400 italic mt-2 text-md">You have no plans yet</h3>
-                    <button class="fadeButton blue p-2 pl-8 pr-8" on:click={createPlanPg}>Create a plan</button>
+                    <div class="flex gap-2 flex-col">
+                        <button class="fadeButton blue p-2 pl-8 pr-8" on:click={createPlanPg}>Create a plan</button>
+                        <!-- <button class="fadeButton green p-2 pl-8 pr-8">Load from String</button> -->
+                    </div>
                 </div>
                 {:else}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Your Planning</h2>
@@ -86,6 +89,10 @@
     .fadeButton.textWhite{
         @apply text-white
     }
+
+    .fadeButton.green{
+        @apply bg-green-800  before:bg-green-300 before:bg-opacity-10 text-white
+    }
     
     
     @keyframes boxFillIn{
@@ -124,11 +131,11 @@
     }
 
     .standardInput{
-        @apply bg-opacity-30 text-sm rounded-sm w-full p-2 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600
+        @apply bg-opacity-30 text-sm rounded-sm w-full p-2 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600 hover:invalid:border-b-red-600
     }
 
     .standardInput.reduced{
-        @apply bg-opacity-30 text-xs rounded-sm w-full p-1 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600
+        @apply bg-opacity-30 text-xs rounded-sm w-full p-1 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600 hover:invalid:border-b-red-600
     }
 
             /* width */
