@@ -1,4 +1,4 @@
-<CustomAlert mode="err" active={true} />
+<CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
@@ -63,9 +63,9 @@
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                 </svg></button>
                             </div>
-                            {#if trainNumbers.length != 0}
+                            {#if logNumbers.length != 0}
                                 <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row">
-                                    {#each $trainNumbers as train}
+                                    {#each $logNumbers as train}
                                         <li class="relative inline-block p-0 m-0 h-6">
                                             <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 fadeButton blue2 textWhite pl-2 pr-2 h-6">{train['name']} ({train['type']} - {train['variant']})</button>
                                             {#if train['dropdown']}
@@ -83,7 +83,7 @@
                                                 {#if train.dropdown_2 === "area"}
                                                     <h3 class="text-white text-sm">Select Area</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                        {#each trainAreas as area}
+                                                        {#each logAreas as area}
                                                             <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
                                                         {/each}
                                                     </div>
@@ -138,7 +138,7 @@
     import { writable } from 'svelte/store';
     var combinedLocations = null;
     var locationSuggestions = []
-    var trainNumbers = writable([])
+    var logNumbers = writable([])
     var dbWriteable = writable([])
 
     var typeDropdown = false;
@@ -152,9 +152,12 @@
     var preciseLon;
     var noLocation = writable(false);
     var id = 0
+    var alrtTxt  = writable('')
+    var alrtAct = writable(false)
+    var alrtMode = writable('err')
 
     var db = import ('../../../db/database.json');
-    var trainAreas = []
+    var logAreas = []
     dbWriteable.set(db)
 
     var location = ''
@@ -177,8 +180,8 @@
     
         const dbData = await db;
         const resolvedDbData = await dbData.default;
-        trainAreas = resolvedDbData.trainTypes;
-        console.log(trainAreas)
+        logAreas = resolvedDbData.trainTypes;
+        console.log(logAreas)
 
         inputDate = new Date().toISOString().split('T')[0];
 
@@ -210,7 +213,7 @@
         console.log("variants");
         console.log(inputVariant);
     
-        trainNumbers.update(numbers => {
+        logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.type = type.name;
@@ -222,7 +225,7 @@
     }
 
     function inputVariantBtn(variant, train) {
-        trainNumbers.update(numbers => {
+        logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.variant = variant.name
@@ -250,7 +253,7 @@
     function inputAreaBtn(area, train) {
         inputArea.set(area)
         console.log(area)
-        trainNumbers.update(numbers => {
+        logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.area = area.area;
@@ -282,11 +285,11 @@
         }
 
         if(trainFound && train){
-            trainNumbers.update(numbers => {
+            logNumbers.update(numbers => {
                 return [...numbers, {"id": id, "name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown_2":""}];
             });
         }else{
-            trainNumbers.update(numbers => {
+            logNumbers.update(numbers => {
                 return [...numbers, {"id": id, "name":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
             });
         }
@@ -305,13 +308,13 @@
     }
 
     function removeLog(trainId){
-        trainNumbers.update(numbers => {
+        logNumbers.update(numbers => {
             return numbers.filter(number => number.id != trainId);
         });
     }
 
     function closeDropdown(train){
-        trainNumbers.update(numbers => {
+        logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id) {
                     t.dropdown = false;
@@ -331,9 +334,19 @@
 
         if(location == ''){
             if(!$noLocation){
-
+                customAlertSummon("No location selected", "err");
                 return;
             }
+        }
+
+        if(inputDate == ''){
+            customAlertSummon("No date selected", "err");
+            return;
+        }
+
+        if($logNumbers.length == 0){
+            customAlertSummon("No numbers added", "err");
+            return;
         }
 
         var loc = localStorage.getItem('locations');
@@ -351,7 +364,7 @@
         }
 
         if($preciseLocation && preciseLat && preciseLon){
-            trainNumbers.subscribe(numbers => {
+            logNumbers.subscribe(numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
                 log_location: location,
@@ -368,7 +381,7 @@
             console.log(addNew);
         });
         }else{
-            trainNumbers.subscribe(numbers => {
+            logNumbers.subscribe(numbers => {
                 console.log("E")
                 const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                     ...train,
@@ -394,8 +407,11 @@
 
 
 
-    function customAlertSummon(){
-
+    function customAlertSummon(text, mode){
+        console.log("Summoning alert")
+        $alrtTxt = text;
+        $alrtMode = mode;
+        $alrtAct = true;
     }
 
     function locationToggle() {
@@ -416,15 +432,19 @@
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
                                 console.log("User denied the request for Geolocation.");
+                                customAlertSummon("User denied the request for Geolocation", "err");
                                 break;
                             case error.POSITION_UNAVAILABLE:
                                 console.log("Location information is unavailable.");
+                                customAlertSummon("Location information is unavailable", "err");
                                 break;
                             case error.TIMEOUT:
                                 console.log("The request to get user location timed out.");
+                                customAlertSummon("The request to get user location timed out", "err");
                                 break;
                             case error.UNKNOWN_ERROR:
                                 console.log("An unknown error occurred.");
+                                customAlertSummon("An unknown error occurred", "err");
                                 break;
                         }
                         $preciseLocation = false;
