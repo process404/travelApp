@@ -558,8 +558,8 @@
         @apply bg-opacity-30 text-xs rounded-sm w-full p-1 bg-neutral-700 border-0 border-b-[2px] border-neutral-600 text-white placeholder:text-neutral-600 outline-none focus:border-b-blue-600 duration-100 invalid:border-b-red-600 hover:invalid:border-b-red-600
     }
 
-            /* width */
-            ::-webkit-scrollbar {
+    /* width */
+    ::-webkit-scrollbar {
     width: 10px;
     }
 

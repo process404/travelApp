@@ -73,7 +73,10 @@
             }
 
             var plan = {
-                tripID: [...Array(15)].map(() => Math.random().toString(36)[2]).join(''),
+                tripID: [...Array(15)].map(() => {
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+                    return characters[Math.floor(Math.random() * characters.length)];
+                }).join(''),
                 name: tripName,
                 start: tripStart,
                 end: tripEnd,
