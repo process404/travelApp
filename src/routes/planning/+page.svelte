@@ -12,8 +12,15 @@
                     </div>
                 </div>
                 {:else}
-                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Your Planning</h2>
-
+                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3 mb-8">Your Planning</h2>
+                {#each plansFromDB as plan}
+                    <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0">
+                        <button class="w-full border-[1px] rounded-md border-neutral-700 p-2 bg-black bg-opacity-30 text-left focus:border-white" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
+                            <h3 class="text-white italic font-semibold">{plan.name}</h3>
+                            <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
+                        </button>
+                    </div>
+                {/each}
                 {/if}
             </div>
         </div>
