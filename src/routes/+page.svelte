@@ -63,10 +63,3 @@
 	}
 
 </script>
-
-<style>
-
-	.clip{
-
-	}
-</style>
