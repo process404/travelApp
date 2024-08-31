@@ -16,7 +16,7 @@
                 {#each plansFromDB as plan}
                     <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0">
                         <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-4 justify-between">
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
                                 {#if timeToStart(plan) < 10}
                                 <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic">Begins in {timeToStart(plan)} days</h3>
