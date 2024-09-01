@@ -18,7 +18,8 @@
     import { page } from '$app/stores';
     var param = $page.params.trip;
 
-    var tripName = 'Trip name here';
+    var tripName = 'Undefined';
+    var thisTrip = null;
 
     onMount(() => {
         document.title = 'Trip';
@@ -27,6 +28,7 @@
             console.log(storage[plan])
             if(storage[plan].tripID == param){
                 tripName = storage[plan].name;
+                thisTrip = storage[plan];
             }
         }
     });
