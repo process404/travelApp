@@ -55,7 +55,7 @@
         var alrtMode = writable('err')
     
         onMount(() => {
-            document.title = 'Planning';
+            document.title = 'Create [Plan';
             if(localStorage.getItem('plans')){
                 plansFromDB = JSON.parse(localStorage.getItem('plans'))
             }
