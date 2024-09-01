@@ -22,5 +22,12 @@
 
     onMount(() => {
         document.title = 'Trip';
+        var storage = JSON.parse(localStorage.getItem('planning'));
+        for(const plan in storage){
+            console.log(storage[plan])
+            if(storage[plan].tripID == param){
+                tripName = storage[plan].name;
+            }
+        }
     });
 </script>
