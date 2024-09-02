@@ -45,8 +45,7 @@
     var tripName = '';
     var thisTrip = null;
 
-    onMount(() => {
-        document.title = 'Trip';
+    function getPlan(){
         var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
             console.log(storage[plan])
@@ -55,6 +54,11 @@
                 thisTrip = storage[plan];
             }
         }
+    }
+
+    onMount(() => {
+        document.title = 'Trip';
+        getPlan();
     });
 </script>
 
