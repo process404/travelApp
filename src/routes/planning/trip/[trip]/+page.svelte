@@ -8,11 +8,13 @@
                     {/if}
                     <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-6">{tripName}</h2>
                     {#if thisTrip == null}
+                    <div class="w-full h-full flex items-center justify-center">
                         <span class="loader"></span>
+                    </div>
                     {:else}
                         <div class="w-full pl-1 flex-col justify-center items-center  max-w-[600px]">
                             {#each thisTrip.days as day}
-                                <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[100px] first:mt-0 mt-4">
+                                <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
                                         <button class="fadeButton blue p-1 text-sm">Add Journey</button>
@@ -20,6 +22,10 @@
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                 </div>
                             {/each} 
+                            <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
+                                <button class="fadeButton green p-2 w-full">Copy plan data</button>
+                                <button class="fadeButton blue p-2 w-full">Print</button>
+                            </div>
                         </div>
                     {/if}
                 </div>
