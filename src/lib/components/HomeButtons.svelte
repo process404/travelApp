@@ -6,7 +6,7 @@
             </svg></span></h2>
         </div>
         {#if imgTitle}
-        <a title="{imgTitle}" href="{imgHref}" class="bg-black bottom-0  mr-auto z-30 text-white bg-opacity-40 text-[8px] sm:text-[10px]  p-1 pl-2 pr-2 rounded-sm w-full sm:w-auto">{imgTitle2}</a>
+        <a title="{imgTitle}" href="{imgHref}" class="bg-black bottom-0  mr-auto z-30 text-white bg-opacity-40 text-[0.6rem] sm:text-xs p-1 pl-2 pr-2 rounded-sm w-full sm:w-auto">{imgTitle2}</a>
         {/if}
     </div>
     {#if imgSrc}
