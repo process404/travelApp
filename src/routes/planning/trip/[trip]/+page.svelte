@@ -6,7 +6,8 @@
                     {#if tripName == ''}
                         <span class="loader"></span>
                     {/if}
-                    <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-6">{tripName}</h2>
+                    <h2 class="text-white text-2xl font-semibold sm:mt-1 mt-8 mb-5">{tripName}</h2>
+                    <hr class="w-[50%] mb-8 border-neutral-700">
                     {#if thisTrip == null}
                     <div class="w-full h-full flex items-center justify-center">
                         <span class="loader"></span>
