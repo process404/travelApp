@@ -3,7 +3,19 @@
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col h-full">
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 h-full sm:pt-4 sm:pb-6 pl-4 pr-4 pb-4">
+                    {#if tripName == ''}
+                        <span class="loader"></span>
+                    {/if}
                     <h2 class="text-white text-xl font-semibold sm:mt-1 mt-2 mb-8">{tripName}</h2>
+                    {#if thisTrip == null}
+                        <span class="loader"></span>
+                    {:else}
+                        {#each thisTrip.days as day}
+                            <div class="border-[1px] border-neutral-700 rounded-md w-full">
+                                <h2>{day.name}</h2>
+                            </div>
+                        {/each} 
+                    {/if}
                 </div>
             </div>
         </div>
@@ -18,7 +30,7 @@
     import { page } from '$app/stores';
     var param = $page.params.trip;
 
-    var tripName = 'Undefined';
+    var tripName = '';
     var thisTrip = null;
 
     onMount(() => {
@@ -33,3 +45,27 @@
         }
     });
 </script>
+
+<style>
+    .loader {
+        margin-top:12px;
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgb(50,50,50);
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+</style>

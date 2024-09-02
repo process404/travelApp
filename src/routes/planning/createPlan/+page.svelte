@@ -14,11 +14,11 @@
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                             <div class="flex gap-2 sm:gap-3 sm:flex-row flex-col">
-                                <div>
+                                <div class="w-full">
                                     <h3 class="text-neutral-300 italic text-left mb-1">Start</h3>
                                     <input type="date" class="standardInput ml-auto iconEdit" bind:value={tripStart}>
                                 </div>
-                                <div>
+                                <div class="w-full">
                                     <h3 class="text-neutral-300 italic text-left mb-1">End</h3>
                                     <input type="date" class="standardInput ml-auto iconEdit" bind:value={tripEnd}>
                                 </div>
@@ -73,6 +73,19 @@
                 return
             }
 
+            var startDate = new Date(tripStart);
+            var endDate = new Date(tripEnd);
+            var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+            var days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+            var dayArr = [];
+            for(var i = 0; i < days; i++){
+                dayArr.push({
+                    day: i + 1,
+                    description: '',
+                    journeys: []
+                })
+            }
+
             var plan = {
                 tripID: [...Array(15)].map(() => {
                     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
@@ -81,14 +94,14 @@
                 name: tripName,
                 start: tripStart,
                 end: tripEnd,
-                days: []
+                days: dayArr
             }
 
             if (confirm('Are you sure you want to create this plan?')) {
                 plansFromDB.push(plan);
-                $alrtMode = 'success';
-                $alrtTxt = 'Plan created successfully';
-                $alrtAct = true;
+                // $alrtMode = 'success';
+                // $alrtTxt = 'Plan created successfully';
+                // $alrtAct = true;
                 tripName = '';
                 tripStart = '';
                 tripEnd = '';
