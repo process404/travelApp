@@ -87,7 +87,7 @@
         let end = new Date(plan.end);
         let diffTime = Math.abs(end - start);
         let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return days
+        return days + 1
     }
 
     function formatDate(date){
