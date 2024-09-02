@@ -4,6 +4,7 @@
         <div class="max-w-[1000px] w-full flex flex-col h-full">
             <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                 {#if plansFromDB.length == 0}
+                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
                 <div class="h-full flex items-center justify-center flex-col gap-4">
                     <h3 class="text-neutral-400 italic mt-2 text-md">You have no plans yet</h3>
                     <div class="flex gap-2 flex-col">
@@ -14,8 +15,8 @@
                 {:else}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
                 {#each plansFromDB as plan}
-                    <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0">
-                        <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
+                    <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0 items-center">
+                        <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[600px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
                                 {#if timeToStart(plan) < 10}
@@ -73,46 +74,46 @@
 
     onMount(() => {
         document.title = 'Planning';
-        if(localStorage.getItem('planning')){
-            plansFromDB = JSON.parse(localStorage.getItem('planning'))
+        if (localStorage.getItem('planning')) {
+            plansFromDB = JSON.parse(localStorage.getItem('planning'));
         }
     });
 
-    function createPlanPg(){
-        window.location.href = '/planning/createPlan'
+    function createPlanPg() {
+        window.location.href = '/planning/createPlan';
     }
 
-    function getDays(plan){
+    function getDays(plan) {
         let start = new Date(plan.start);
         let end = new Date(plan.end);
         let diffTime = Math.abs(end - start);
         let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return days + 1
+        return days + 1;
     }
 
-    function formatDate(date){
+    function formatDate(date) {
         let d = new Date(date);
         let day = d.getDate();
         let month = d.getMonth() + 1;
         let year = d.getFullYear();
-        return `${day}/${month}/${year}`
+        return `${day}/${month}/${year}`;
     }
 
-    function countJourneys(plan){
+    function countJourneys(plan) {
         let count = 0;
-        for(const day in plan.days){
-            for(const journey in day.journeys){
-                count++
+        for (const day in plan.days) {
+            for (const journey in day.journeys) {
+                count++;
             }
         }
         return count;
     }
 
-    function timeToStart(plan){
+    function timeToStart(plan) {
         let start = new Date(plan.start);
         let now = new Date();
         let diffTime = Math.abs(start - now);
         let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return days
+        return days;
     }
 </script>
