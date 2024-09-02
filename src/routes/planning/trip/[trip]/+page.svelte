@@ -13,7 +13,7 @@
                         <div class="w-full pl-1 flex-col justify-center items-center  max-w-[600px]">
                             {#each thisTrip.days as day}
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[100px] first:mt-0 mt-4">
-                                    <div class="flex justify-between w-full items-center">
+                                    <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
                                         <button class="fadeButton blue p-1 text-sm">Add Journey</button>
                                     </div>
