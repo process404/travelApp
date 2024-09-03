@@ -19,7 +19,7 @@
                             <div class="absolute top-[125%] left-0 bg-black p-2 rounded-md z-20 min-w-[150px]">
                                 <div class="triangle w-4 h-2 bg-black absolute bottom-[99%]"></div>
                                 <input class="standardInput non-empty" bind:value={editName} placeholder="Edit name" on:keyup={callEdit} on:input={submitChanges} maxlength="20" minlength="3">
-                                <button class="fadeButton red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan()}>Delete Plan</button>
+                                <button class="fadeButton red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan}>Delete Plan</button>
                             </div>
                         {/if}
                     </div>
@@ -88,7 +88,17 @@
     }
 
     function deletePlan(){
-        
+        var plan = thisTrip;
+        if(confirm("Are you sure you would like to delete plan '" + plan.name  + "'? THIS IS A PERMANENT ACTION AND CANNOT BE UNDONE.")){
+            var storage = JSON.parse(localStorage.getItem('planning'));
+            for(const plan in storage){
+                if(storage[plan].tripID == param){
+                    storage.splice(plan, 1);
+                    localStorage.setItem('planning', JSON.stringify(storage));
+                    window.location.href = '/planning';
+                }
+            }
+        }
     }
 
     function submitChanges(){
