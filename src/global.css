@@ -11,7 +11,7 @@
 }
 
 .fadeButton{
-    @apply text-neutral-200 before:w-0 before:h-full  before:bg-neutral-500 before:bg-opacity-10 before:absolute before:left-1/2 before:top-1/2 before:transform before:-translate-x-1/2 before:-translate-y-1/2 before:z-[-1] bg-white bg-opacity-[0.02] rounded-sm overflow-hidden;
+    @apply text-neutral-200 before:w-0 before:h-full  before:bg-neutral-500 before:bg-opacity-10 before:absolute before:left-1/2 before:top-1/2 before:transform before:-translate-x-1/2 before:-translate-y-1/2 before:z-[-1] bg-white bg-opacity-[0.02] rounded-sm overflow-hidden invalid:border-b-red-700;
 }
 
 .fadeButton:hover:before{
@@ -29,7 +29,7 @@
 }
 
 .fadeButton.blue{
-    @apply bg-blue-700  before:bg-blue-300 before:bg-opacity-5
+    @apply bg-blue-700  before:bg-blue-300 before:bg-opacity-5 invalid:border-b-red-700 hover:invalid:border-red-700
 }
 
 .fadeButton.green{
@@ -51,6 +51,7 @@
 .fadeButton.textWhite{
     @apply text-white
 }
+
 
 
 @keyframes boxFillIn{

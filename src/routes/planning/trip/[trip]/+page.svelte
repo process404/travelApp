@@ -1,3 +1,6 @@
+{#if tooltip}
+<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false}}></button>
+{/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
@@ -6,7 +9,20 @@
                     {#if tripName == ''}
                         <span class="loader"></span>
                     {/if}
-                    <h2 class="text-white text-2xl font-semibold sm:mt-1 mt-8 mb-5">{tripName}</h2>
+                    <div class="flex gap-3 items-center mt-5 sm:mt-0 mb-5 relative">
+                        {#if $tripName.length != 0}
+                            <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>{$tripName}</button>
+                        {:else}
+                        <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>[No Trip Name]</button>
+                        {/if}
+                        {#if tooltip}
+                            <div class="absolute top-[125%] left-0 bg-black p-2 rounded-md z-20 min-w-[150px]">
+                                <div class="triangle w-4 h-2 bg-black absolute bottom-[99%]"></div>
+                                <input class="standardInput non-empty" bind:value={editName} placeholder="Edit name" on:keyup={callEdit} on:input={submitChanges} maxlength="20" minlength="3">
+                                <button class="fadeButton red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan()}>Delete Plan</button>
+                            </div>
+                        {/if}
+                    </div>
                     <hr class="w-[50%] mb-8 border-neutral-700">
                     {#if thisTrip == null}
                     <div class="w-full h-full flex items-center justify-center">
@@ -41,9 +57,13 @@
     import Footer from '../../../../lib/components/Footer.svelte';
     import '../../../../global.css';
     import { page } from '$app/stores';
+	import { writable } from 'svelte/store';
     var param = $page.params.trip;
+    var tooltip = false;
 
-    var tripName = '';
+    var editName = ''
+
+    var tripName = writable('');
     var thisTrip = null;
 
     function getPlan(){
@@ -51,8 +71,9 @@
         for(const plan in storage){
             console.log(storage[plan])
             if(storage[plan].tripID == param){
-                tripName = storage[plan].name;
+                tripName.set(storage[plan].name);
                 thisTrip = storage[plan];
+                editName = storage[plan].name;
             }
         }
     }
@@ -61,6 +82,24 @@
         document.title = 'Trip';
         getPlan();
     });
+
+    function callEdit(){
+        tripName.set(editName);
+    }
+
+    function deletePlan(){
+        
+    }
+
+    function submitChanges(){
+        var storage = JSON.parse(localStorage.getItem('planning'));
+        for(const plan in storage){
+            if(storage[plan].tripID == param){
+                storage[plan].name = editName;
+                localStorage.setItem('planning', JSON.stringify(storage));
+            }
+        }
+    }
 </script>
 
 <style>
@@ -85,4 +124,8 @@
         transform: rotate(360deg);
     }
     } 
+
+    .triangle{
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
 </style>

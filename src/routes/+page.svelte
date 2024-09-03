@@ -36,28 +36,25 @@
 	import Nav from '../lib/components/Nav.svelte';
 	import Footer from '../lib/components/Footer.svelte';
 	import HomeButton from '../lib/components/HomeButtons.svelte';
-
 	import { onMount } from 'svelte';
-	var currentPage = 'main'
+
+	var currentPage = 'main';
 
 	onMount(() => {
 		document.title = 'Trip Planner';
 		currentPage = 'main';
 
-		if(localStorage.getItem('storage') == null){
-			localStorage.setItem('storage', true)
+		if (localStorage.getItem('storage') == null) {
+			localStorage.setItem('storage', true);
 			localStorage.setItem('logs', JSON.stringify([]));
 			localStorage.setItem('journeys', JSON.stringify([]));
 			localStorage.setItem('stations', JSON.stringify([]));
 			localStorage.setItem('locations', JSON.stringify([]));
 			localStorage.setItem('planning', JSON.stringify([]));
 		}
-
 	});
 
-
-
-	function switchPage(page){
+	function switchPage(page) {
 		currentPage = page;
 		window.location.href = page;
 	}
