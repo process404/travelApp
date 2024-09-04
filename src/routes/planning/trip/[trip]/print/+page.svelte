@@ -2,8 +2,8 @@
 <div class="w-screen h-screen flex flex-col" style="background: rgb(255,255,255)">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div>
-            <button class="fadeButton dark p-2 text-sm" on:click={() => window.history.back()}>Go Back</button>
-            <button class="fadeButton green p-2 text-sm pl-4 pr-4" on:click={print}>Print</button>
+            <button class="fadeButton dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
+            <button class="fadeButton green p-3 text-sm pl-6 pr-6" on:click={print}>Print</button>
         </div>
         <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
     </div>
@@ -17,9 +17,13 @@
             <h3 class="font-regular italic text-sm mt-1">{GD}</h3>
             {/if}
         </div>
-        <div class="flex gap-8">
+        <div class="flex gap-6">
             <div class="flex items-center">
-                <h2 class="font-bold text-xl">{calcDays(plan.start, plan.end)} DAYS</h2>
+                {#if plan.days && plan.days.length > 1}
+                    <h2 class="font-bold text-xl">{calcDays(plan.start, plan.end)} DAYS</h2>
+                {:else if plan.days && plan.days.length === 1}
+                    <h2 class="font-bold text-xl">1 DAY</h2>
+                {/if}
             </div>
             <div>
                 <h2 class="font-semibold text-md text-right">{formatDate(plan.start)}</h2>
@@ -27,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="ml-6 mr-6">
+    <div class="ml-6 mr-6 overflow-x-auto">
         <table class="table-auto w-full">
             <thead class="bg-black">
                 <th class="text-white w-[7%] text-left">ID</th>
