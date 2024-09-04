@@ -2,7 +2,7 @@
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false}}></button>
 {/if}
 {#if addJourney}
-<AddJourney on:message={() => {addJourney = false}} on:submit={addJourneyToDay} day={addJourneyDay}/>
+<AddJourney on:message={addJourneyToDay} day={addJourneyDay}/>
 {/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
@@ -73,8 +73,9 @@
     var thisTrip = null;
     var addJourneyDay = ''
 
+    var storage = JSON.parse(localStorage.getItem('planning'));
+
     function getPlan(){
-        var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
             console.log(storage[plan])
             if(storage[plan].tripID == param){
@@ -127,8 +128,20 @@
     }
 
 
-    function addJourneyToDay(){
-
+    function addJourneyToDay(data){
+        console.log(data.detail.text);
+        addJourney = false;
+        for(const plan in storage){
+            if(storage[plan].tripID == param){
+                for(const day in storage[plan].days){
+                    if(storage[plan].days[day].day == data.detail.text.day){
+                        storage[plan].days[day].journeys.push(data.detail.text.journey);
+                        localStorage.setItem('planning', JSON.stringify(storage));
+                        getPlan();
+                    }
+                }
+            }
+        }
     }
 
 

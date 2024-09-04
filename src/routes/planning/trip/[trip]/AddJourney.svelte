@@ -39,7 +39,7 @@
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1 w-full">Description</h3>
-                <textarea class="standardInput text-xs resize-none" minlength="5" maxlength="175" rows="4" placeholder="" bind:value={description}></textarea>
+                <textarea class="standardInput text-xs resize-none" maxlength="175" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
         <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
@@ -74,13 +74,9 @@
 
 
     function close(e){
-        e.preventDefault();
-        console.log(e.keyCode)
-        if(e.keyCode != 32){
-            dispatch('message', {
-                text: 'close'
-            });
-        }
+        dispatch('message', {
+            text: 'close'
+        });
     }
 
 
@@ -113,12 +109,18 @@
 
     function cLS(loc){
         if(localStorage.getItem('locations')){
-            const existingLocation = locations.find(loc => loc.toLowerCase() === loc.toLowerCase());
+            const existingLocation = locations.find(l => l.toLowerCase() === loc.toLowerCase());
             if (!existingLocation) {
                 locations.push(loc);
                 localStorage.setItem('locations', JSON.stringify(locations));
                 console.log('Location added');
+            } else {
+                console.log('Location already exists');
             }
+        } else {
+            locations.push(loc);
+            localStorage.setItem('locations', JSON.stringify(locations));
+            console.log('Location added');
         }
     }
 
@@ -131,15 +133,19 @@
             return
         }else{
             if(confirm("Please confirm you would like to enter this journey.")){
-                journeyInfo = {
-                    from: from,
-                    to: to,
-                    arrival: arrival,
-                    departure: departure,
-                    service: service,
-                    operator: operator,
-                    description: description
+                let journeyInfo = {
+                    day: day,
+                    journey: {                    
+                        from: from,
+                        to: to,
+                        arrival: arrival,
+                        departure: departure,
+                        service: service,
+                        operator: operator,
+                        description: description
+                    }
                 }
+                console.log("JI: ", journeyInfo);
                 submit(journeyInfo);
                 cLS(from);
                 cLS(to)
