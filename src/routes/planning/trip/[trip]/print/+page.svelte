@@ -1,7 +1,7 @@
 
 <div class="w-screen h-screen flex flex-col" style="background: rgb(255,255,255)">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
-        <div>
+        <div class="flex gap-2">
             <button class="fadeButton dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
             <button class="fadeButton green p-3 text-sm pl-6 pr-6" on:click={print}>Print</button>
         </div>
@@ -86,7 +86,6 @@
     let titleSet = writable('No title set')
     let descriptionSet = writable('No description set')
     let plan = {}
-    console.log(param)
 
     function print(){
         window.print();
@@ -101,7 +100,7 @@
             let plansFromDB = JSON.parse(localStorage.getItem('planning'));
             plan = plansFromDB.find((plan) => plan.tripID === param);
             if(plan){
-                console.log(plan)
+                // console.log(plan)
                 calcDays(plan.start, plan.end)
                 titleSet.set(UC(plan.name))
                 descriptionSet.set(UC(plan.description))
@@ -112,7 +111,6 @@
     });
 
     function UC(str) {
-        console.log(str)
         if (str) {
             return str.toUpperCase();
         }
