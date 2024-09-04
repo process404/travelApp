@@ -2,7 +2,10 @@
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false}}></button>
 {/if}
 {#if addJourney}
-<AddJourney on:message={addJourneyToDay} day={addJourneyDay}/>
+<AddJourney on:message={addJourneyFinal} day={addJourneyDay}/>
+{/if}
+{#if editJourney}
+<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit}/>
 {/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
@@ -38,9 +41,59 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="fadeButton blue p-1 text-sm" on:click={addJourneyFn(day)}>Add Journey</button>
+                                        <button class="fadeButton blue p-1 text-sm" on:click={addJourneyFn(day)}>Add</button>
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
+                                    <div class="flex flex-col gap-3 mt-3">
+                                        {#each day.journeys as journey}
+                                            <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
+                                                <div class="flex justify-between items-center">
+                                                    <div class="flex flex-col gap-1 items-start">
+                                                        <h3 class="text-white text-md"><span class="w-full inline-block sm:w-auto">{journey.from}</span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to}</h3>
+                                                        <div class="flex gap-2 flex-wrap mt-1">
+                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
+                                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                                  </svg>
+                                                                  {#if journey.operator != '' && journey.service != ''}
+                                                                        <h4 class="text-white text-sm">{journey.service}<span class="ml-1 mr-1 opacity-30">/</span>{journey.operator}</h4>
+                                                                  {:else if journey.operator != ''}
+                                                                        <h4 class="text-white text-sm">{journey.operator}</h4>
+                                                                  {:else if journey.service != ''}
+                                                                        <h4 class="text-white text-sm">{journey.service}</h4>
+                                                                  {/if}
+                                                                </div>
+                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
+                                                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                                                                  </svg>
+                                                                  <h4 class="text-white text-sm">{journey.departure} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrival}</h4>
+                                                            </div>
+                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
+                                                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                                                                  </svg>
+                                                                  <h4 class="text-white text-sm">{calcTime(journey.departure, journey.arrival)}</h4>
+                                                            </div>
+                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky fill-white opacity-30" viewBox="0 0 16 16">
+                                                                    <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293z"/>
+                                                                  </svg>
+                                                                  <h4 class="text-white text-sm">{journey.description}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-1/2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
+                                                        <button class="fadeButton blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        <button class="fadeButton red p-1 text-xs w-full" on:click={deleteJourney(journey)}>Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {/each}
+                                    </div>
                                 </div>
                             {/each} 
                             <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
@@ -60,18 +113,21 @@
     import Nav from '../../../../lib/components/Nav.svelte';
     import Footer from '../../../../lib/components/Footer.svelte';
     import AddJourney from './AddJourney.svelte';
+    import EditJourney from './EditJourney.svelte';
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
     var param = $page.params.trip;
     var tooltip = false;
     var addJourney = false;
+    var editJourney = false;
 
     var editName = ''
 
     var tripName = writable('');
     var thisTrip = null;
     var addJourneyDay = ''
+    var editJourneyDay = ''
     let storage = []
 
 
@@ -133,7 +189,7 @@
     }
 
 
-    function addJourneyToDay(data){
+    function addJourneyFinal(data){
         console.log(data.detail.text);
         addJourney = false;
         for(const plan in storage){
@@ -143,6 +199,69 @@
                         storage[plan].days[day].journeys.push(data.detail.text.journey);
                         localStorage.setItem('planning', JSON.stringify(storage));
                         getPlan();
+                    }
+                }
+            }
+        }
+    }
+
+    let journeyToEdit
+
+    function callEditJourney(journey, day){
+        editJourney = true;
+        journeyToEdit = journey;
+        console.log(day);
+        editJourneyDay = day;
+    }
+
+    function editJourneyFinal(data){
+        console.log(data.detail.text);
+        editJourney = false;
+        for(const plan in storage){
+            if(storage[plan].tripID == param){
+                for(const day in storage[plan].days){
+                    console.log("A", storage[plan].days[day].day, data.detail.text.day)
+                    if(storage[plan].days[day].day == data.detail.text.day){
+                        console.log("B", storage[plan].days[day].journeys)
+                        for(const journey in storage[plan].days[day].journeys){
+                            console.log("C", storage[plan].days[day].journeys[journey])
+                            if(storage[plan].days[day].journeys[journey].code = data.detail.text.journey.code){
+                                console.log("D", storage[plan].days[day].journeys[journey])
+                                storage[plan].days[day].journeys[journey] = data.detail.text.journey;
+                                localStorage.setItem('planning', JSON.stringify(storage));
+                                getPlan();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function calcTime(departure, arrival){
+        var dep = new Date();
+        var arr = new Date();
+        var [depHour, depMinute] = departure.split(':');
+        var [arrHour, arrMinute] = arrival.split(':');
+        dep.setHours(depHour, depMinute);
+        arr.setHours(arrHour, arrMinute);
+        var diff = arr - dep;
+        var hours = Math.floor(diff / 1000 / 60 / 60);
+        diff -= hours * 1000 * 60 * 60;
+        var minutes = Math.floor(diff / 1000 / 60);
+        return `${hours}h ${minutes}m`;
+    }
+
+    function deleteJourney(journey){
+        if(confirm("Are you sure you would like to delete this journey?")){
+            for(const plan in storage){
+                if(storage[plan].tripID == param){
+                    for(const day in storage[plan].days){
+                        if(storage[plan].days[day].day == addJourneyDay){
+                            storage[plan].days[day].journeys = storage[plan].days[day].journeys.filter(j => j !== journey);
+                            localStorage.setItem('planning', JSON.stringify(storage));
+                            getPlan();
+                        }
                     }
                 }
             }
