@@ -81,7 +81,6 @@
             for(var i = 0; i < days; i++){
                 dayArr.push({
                     day: i + 1,
-                    description: '',
                     journeys: []
                 })
             }
