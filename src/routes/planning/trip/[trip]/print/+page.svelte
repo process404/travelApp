@@ -51,11 +51,11 @@
                         {#each day.journeys as journey}
                             <tr>
                                 <td class="border border-neutral-200 p-1">{journey.service}</td>
-                                <td class="border border-neutral-200 p-1 bg-neutral-100 font-bold text-center">{journey.departure}</td>
-                                <td class="border border-neutral-200 p-1 bg-neutral-100 font-bold text-center">{journey.arrival}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center">{journey.departure}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center">{journey.arrival}</td>
                                 <td class="border border-neutral-200 p-1">{journey.from}</td>
                                 <td class="border border-neutral-200 p-1">{journey.to}</td>
-                                <td class="border border-neutral-200 p-1 bg-neutral-100 text-left">{journey.operator}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 text-left">{journey.operator}</td>
                                 <td class="border border-neutral-200 p-1">{journey.description}</td>
                             </tr>
                         {/each}
