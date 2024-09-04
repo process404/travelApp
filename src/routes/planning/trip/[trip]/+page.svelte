@@ -1,6 +1,9 @@
 {#if tooltip}
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false}}></button>
 {/if}
+{#if addJourney}
+<AddJourney on:message={() => {addJourney = false}} on:submit={addJourneyToDay} day={addJourneyDay}/>
+{/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
@@ -35,7 +38,7 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="fadeButton blue p-1 text-sm">Add Journey</button>
+                                        <button class="fadeButton blue p-1 text-sm" on:click={addJourneyFn(day)}>Add Journey</button>
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                 </div>
@@ -56,16 +59,19 @@
     import { onMount } from 'svelte';
     import Nav from '../../../../lib/components/Nav.svelte';
     import Footer from '../../../../lib/components/Footer.svelte';
+    import AddJourney from './AddJourney.svelte';
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
     var param = $page.params.trip;
     var tooltip = false;
+    var addJourney = true;
 
     var editName = ''
 
     var tripName = writable('');
     var thisTrip = null;
+    var addJourneyDay = ''
 
     function getPlan(){
         var storage = JSON.parse(localStorage.getItem('planning'));
@@ -111,6 +117,21 @@
             }
         }
     }
+
+    let addDay = ''
+
+    function addJourneyFn(day){
+        addJourney = true;
+        addJourneyDay = day.day;
+        addDay = day;
+    }
+
+
+    function addJourneyToDay(){
+
+    }
+
+
 </script>
 
 <style>
