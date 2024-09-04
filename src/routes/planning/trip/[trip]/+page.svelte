@@ -63,7 +63,7 @@
                                                 <div class="flex justify-between items-center">
                                                     <div class="flex flex-col gap-1 items-start">
                                                         <h3 class="text-white text-md"><span class="w-full inline-block sm:w-auto">{journey.from}</span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to}</h3>
-                                                        <div class="flex gap-2 flex-wrap mt-1">
+                                                        <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -91,17 +91,19 @@
                                                                   </svg>
                                                                   <h4 class="text-white text-sm">{calcTime(journey.departure, journey.arrival)}</h4>
                                                             </div>
-                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky fill-white opacity-30" viewBox="0 0 16 16">
-                                                                    <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293z"/>
-                                                                  </svg>
-                                                                  <h4 class="text-white text-sm">{journey.description}</h4>
-                                                            </div>
+                                                            {#if journey.description != '' && journey.description != null}
+                                                                <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky fill-white opacity-30 min-w-3" viewBox="0 0 16 16">
+                                                                        <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293z"/>
+                                                                    </svg>
+                                                                    <h4 class="text-white text-sm">{journey.description}</h4>
+                                                                </div>
+                                                            {/if}
                                                         </div>
                                                     </div>
                                                     <div class="w-1/2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
                                                         <button class="fadeButton blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
-                                                        <button class="fadeButton red p-1 text-xs w-full" on:click={deleteJourney(journey)}>Delete</button>
+                                                        <button class="fadeButton red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -258,7 +260,7 @@
                         console.log("B", storage[plan].days[day].journeys)
                         for(const journey in storage[plan].days[day].journeys){
                             console.log("C", storage[plan].days[day].journeys[journey])
-                            if(storage[plan].days[day].journeys[journey].code = data.detail.text.journey.code){
+                            if(storage[plan].days[day].journeys[journey].code === data.detail.text.journey.code){
                                 console.log("D", storage[plan].days[day].journeys[journey])
                                 storage[plan].days[day].journeys[journey] = data.detail.text.journey;
                                 localStorage.setItem('planning', JSON.stringify(storage));
@@ -278,6 +280,9 @@
         var [arrHour, arrMinute] = arrival.split(':');
         dep.setHours(depHour, depMinute);
         arr.setHours(arrHour, arrMinute);
+        if (arr < dep) {
+            arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+        }
         var diff = arr - dep;
         var hours = Math.floor(diff / 1000 / 60 / 60);
         diff -= hours * 1000 * 60 * 60;
@@ -285,15 +290,18 @@
         return `${hours}h ${minutes}m`;
     }
 
-    function deleteJourney(journey){
+    function deleteJourney(journey, dayImport){
         if(confirm("Are you sure you would like to delete this journey?")){
-            for(const plan in storage){
-                if(storage[plan].tripID == param){
-                    for(const day in storage[plan].days){
-                        if(storage[plan].days[day].day == addJourneyDay){
-                            storage[plan].days[day].journeys = storage[plan].days[day].journeys.filter(j => j !== journey);
+            for (const plan of storage) {
+                console.log(plan.tripID, param)
+                if (plan.tripID === param) {
+                    for (const day of plan.days) {
+                        console.log(day.day, dayImport)
+                        if (day.day === dayImport) {
+                            day.journeys = day.journeys.filter(j => j !== journey);
                             localStorage.setItem('planning', JSON.stringify(storage));
                             getPlan();
+                            return; 
                         }
                     }
                 }

@@ -39,7 +39,7 @@
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1 w-full">Description</h3>
-                <textarea class="standardInput text-xs resize-none" maxlength="175" rows="4" placeholder="" bind:value={description}></textarea>
+                <textarea class="standardInput text-xs resize-none" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
         <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">

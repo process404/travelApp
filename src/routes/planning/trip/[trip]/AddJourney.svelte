@@ -39,7 +39,7 @@
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1 w-full">Description</h3>
-                <textarea class="standardInput text-xs resize-none" maxlength="175" rows="4" placeholder="" bind:value={description}></textarea>
+                <textarea class="standardInput text-xs resize-none" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
         <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
@@ -124,6 +124,15 @@
         }
     }
 
+    function genCode(){
+        let code = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+        for (let i = 0; i < 6; i++) {
+            code += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return code;
+    }
+
     function addJourneyConfirm(){
         if(from == undefined || to == undefined || arrival == undefined || departure == undefined){
             alrtTxt.set('Please fill in all fields');
@@ -133,11 +142,10 @@
             return
         }else{
             if(confirm("Please confirm you would like to enter this journey.")){
-                let code = Math.random().toString(36).substring(2, 12);
                 let journeyInfo = {
                     day: day,
                     journey: {      
-                        code: code,              
+                        code: genCode(),              
                         from: from,
                         to: to,
                         arrival: arrival,
