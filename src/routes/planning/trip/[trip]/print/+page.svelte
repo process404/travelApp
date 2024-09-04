@@ -5,15 +5,19 @@
             <button class="fadeButton dark p-2 text-sm" on:click={() => window.history.back()}>Go Back</button>
             <button class="fadeButton green p-2 text-sm pl-4 pr-4" on:click={print}>Print</button>
         </div>
-        <h3 class="text-xs w-1/2 text-right">This will not show when you click print. <br><b>Desktop recommended.</b></h3>
+        <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
     </div>
     {#if plan}
     <div class="ml-6 mr-6 mb-4 flex justify-between items-center">
         <div>
             <h2 class="font-bold text-xl">{UC(plan.name)}</h2>
+            {#if plan.description}
             <h3 class="font-regular italic text-sm mt-1">{UC(plan.description)}</h3>
+            {:else}
+            <h3 class="font-regular italic text-sm mt-1">{GD}</h3>
+            {/if}
         </div>
-        <div class="flex gap-12">
+        <div class="flex gap-8">
             <div class="flex items-center">
                 <h2 class="font-bold text-xl">{calcDays(plan.start, plan.end)} DAYS</h2>
             </div>
@@ -26,18 +30,44 @@
     <div class="ml-6 mr-6">
         <table class="table-auto w-full">
             <thead class="bg-black">
-                <th class="text-white">ID</th>
-                <th class="text-white">DEP</th>
-                <th class="text-white">ARR</th>
-                <th class="text-white">FROM</th>
-                <th class="text-white">TO</th>
-                <th class="text-white">OP</th>
-                <th class="text-white">NOTE</th>
+                <th class="text-white w-[7%] text-left">ID</th>
+                <th class="text-white w-[3%]  text-left">DEP</th>
+                <th class="text-white w-[3%] text-left">ARR</th>
+                <th class="text-white w-[15%] text-left">FROM</th>
+                <th class="text-white w-[15%] text-left">TO</th>
+                <th class="text-white text-left w-[5%]">OP</th>
+                <th class="text-white w-[20%] text-left">NOTE</th>
             </thead>
+            <tbody class="border-[1px]">
+                {#if plan.days && plan.days.length > 0}
+                    {#each plan.days as day}
+                        <tr class="border-[1px] border-neutral-200">
+                            <td colspan="7" class="bg-gray-200 font-semibold italic p-1">Day {day.day}</td>
+                        </tr>
+                        {#each day.journeys as journey}
+                            <tr>
+                                <td class="border border-neutral-200 p-1">{journey.service}</td>
+                                <td class="border border-neutral-200 p-1 bg-neutral-100 font-bold text-center">{journey.departure}</td>
+                                <td class="border border-neutral-200 p-1 bg-neutral-100 font-bold text-center">{journey.arrival}</td>
+                                <td class="border border-neutral-200 p-1">{journey.from}</td>
+                                <td class="border border-neutral-200 p-1">{journey.to}</td>
+                                <td class="border border-neutral-200 p-1 bg-neutral-100 text-left">{journey.operator}</td>
+                                <td class="border border-neutral-200 p-1">{journey.description}</td>
+                            </tr>
+                        {/each}
+                        {#if day.journeys.length === 0}
+                            <tr>
+                                <td colspan="7" class="text-center">No journeys for this day</td>
+                            </tr>
+                        {/if}
+                    {/each}
+                {:else}
+                    <tr>
+                        <td colspan="7" class="text-center">Loading...</td>
+                    </tr>
+                {/if}
+            </tbody>
         </table>
-        <tbody>
-
-        </tbody>
     </div>
     {/if}
 </div>
@@ -90,6 +120,17 @@
         let timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
         let days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
         return days;
+    }
+
+    function GD() {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        const hours = String(today.getHours()).padStart(2, '0');
+        const minutes = String(today.getMinutes()).padStart(2, '0');
+        const seconds = String(today.getSeconds()).padStart(2, '0');
+        return `Generated ${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     }
 
 
