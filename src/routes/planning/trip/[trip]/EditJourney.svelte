@@ -2,7 +2,7 @@
 <button class="fixed w-full h-screen bg-black z-30 bg-opacity-10 backdrop-blur-xl flex items-center justify-center overflow-y-scroll" on:mousedown|self={close}>
     <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col">
         <div class="flex justify-between items-center">
-            <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
+            <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
             <button class="fadeButton red p-1 pl-3 pr-3" on:click={close}>Cancel</button>
         </div>
         <hr class="mt-2 mb-4 border-neutral-700">
@@ -44,28 +44,30 @@
         </div>
         <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
             <div class="w-full flex">
-                <button class="fadeButton green w-full p-2" on:click={addJourneyConfirm}>Add Journey</button>
+                <button class="fadeButton green w-full p-2" on:click={addJourneyConfirm}>Edit</button>
             </div>
         </div>
     </div>
 </button>
 
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     const dispatch = createEventDispatcher();
     export let day;
+    export let journey;
 
     import PromptField from '../../../../lib/components/PromptField.svelte';
     import CustomAlert from '../../../../lib/components/Alert.svelte';
 	import { writable } from 'svelte/store';
 
-    let from;
-    let to;
-    let arrival;
-    let departure;
-    let service;
-    let operator;
-    let description;
+    let from = journey.from;
+    let to = journey.to;
+    let arrival = journey.arrival;
+    let departure  = journey.departure;
+    let service = journey.service;
+    let operator = journey.operator; 
+    let description = journey.description;
+    let code = journey.code;
 
     let alrtMode = writable('err');
     let alrtTxt = writable('');
@@ -132,12 +134,11 @@
             console.log(from, to, arrival, departure);
             return
         }else{
-            if(confirm("Please confirm you would like to enter this journey.")){
-                let code = Math.random().toString(36).substring(2, 12);
+            if(confirm("Please confirm you would like to edit this journey.")){
                 let journeyInfo = {
                     day: day,
-                    journey: {      
-                        code: code,              
+                    journey: {       
+                        code: code,           
                         from: from,
                         to: to,
                         arrival: arrival,
@@ -154,6 +155,7 @@
             }
         }
     }
+
 
 
 </script>
