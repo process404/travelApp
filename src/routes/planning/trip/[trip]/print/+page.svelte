@@ -10,17 +10,17 @@
     {#if plan}
     <div class="ml-6 mr-6 mb-4 flex justify-between items-center">
         <div>
-            <h2 class="font-bold text-xl">{UC(plan.name)}</h2>
+            <h2 class="font-bold text-xl">{$titleSet}</h2>
             {#if plan.description}
-            <h3 class="font-regular italic text-sm mt-1">{UC(plan.description)}</h3>
+            <h3 class="font-regular italic text-sm mt-1">{$descriptionSet}</h3>
             {:else}
-            <h3 class="font-regular italic text-sm mt-1">{GD}</h3>
+            <h3 class="font-regular italic text-sm mt-1">{GD()}</h3>
             {/if}
         </div>
         <div class="flex gap-6">
             <div class="flex items-center">
                 {#if plan.days && plan.days.length > 1}
-                    <h2 class="font-bold text-xl">{calcDays(plan.start, plan.end)} DAYS</h2>
+                    <h2 class="font-bold text-xl">{$calcDaysWr} DAYS</h2>
                 {:else if plan.days && plan.days.length === 1}
                     <h2 class="font-bold text-xl">1 DAY</h2>
                 {/if}
@@ -82,6 +82,9 @@
     import Footer from '../../../../../lib/components/Footer.svelte';
     import '../../../../../global.css'
     var param = $page.params.trip;
+    let calcDaysWr = writable('')
+    let titleSet = writable('No title set')
+    let descriptionSet = writable('No description set')
     let plan = {}
     console.log(param)
 
@@ -90,6 +93,7 @@
     }
 
     import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
     onMount(() => {
         document.title = 'Print Window';
@@ -98,6 +102,11 @@
             plan = plansFromDB.find((plan) => plan.tripID === param);
             if(plan){
                 console.log(plan)
+                calcDays(plan.start, plan.end)
+                titleSet.set(UC(plan.name))
+                descriptionSet.set(UC(plan.description))
+
+    
             }
         }
     });
@@ -123,6 +132,7 @@
         let endDate = new Date(end);
         let timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
         let days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+        calcDaysWr.set(days)        
         return days;
     }
 
