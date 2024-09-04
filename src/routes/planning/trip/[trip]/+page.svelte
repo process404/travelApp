@@ -65,7 +65,7 @@
 	import { writable } from 'svelte/store';
     var param = $page.params.trip;
     var tooltip = false;
-    var addJourney = true;
+    var addJourney = false;
 
     var editName = ''
 
