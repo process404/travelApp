@@ -16,7 +16,7 @@
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
                 {#each plansFromDB as plan}
                     <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0 items-center">
-                        <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[600px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
+                        <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[700px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
                                 <div class="flex gap-2">
@@ -57,7 +57,7 @@
                         </button>
                     </div>
                 {/each}
-                <div class="w-full border-neutral-700 rounded-md border-[1px] p-2">
+                <div class="w-full border-neutral-700 rounded-md border-[1px] p-2 max-w-[700px]">
                     <button class="fadeButton blue w-full p-2" on:click={createPlanPg}>Create a plan</button>
                 </div>
                 {/if}
