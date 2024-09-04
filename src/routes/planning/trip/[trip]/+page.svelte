@@ -1,5 +1,5 @@
-{#if tooltip}
-<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false}}></button>
+{#if tooltip || tooltip2}   
+<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}}></button>
 {/if}
 {#if addJourney}
 <AddJourney on:message={addJourneyFinal} day={addJourneyDay}/>
@@ -16,7 +16,7 @@
                         <h1 class="text-2xl text-white">Loading...</h1>
                         <span class="loader"></span>
                     {/if}
-                    <div class="flex gap-3 items-center mt-5 sm:mt-0 mb-5 relative">
+                    <div class="flex  items-center mt-5 sm:mt-0 mb-5 relative flex-col">
                         {#if $tripName.length != 0}
                             <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>{$tripName}</button>
                         {:else}
@@ -29,6 +29,19 @@
                                 <button class="fadeButton red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan}>Delete Plan</button>
                             </div>
                         {/if}
+                        <div class="relative">
+                            {#if $tripDescription == ''}
+                                <button class="text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>[No Description]</button>
+                            {:else}
+                                <button class="text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>{$tripDescription}</button>
+                            {/if}
+                            {#if tooltip2}
+                                <div class="absolute top-[125%] left-0 bg-black p-2 rounded-md z-20 min-w-[150px]">
+                                    <div class="triangle w-4 h-2 bg-black absolute bottom-[99%]"></div>
+                                    <input class="standardInput non-empty" bind:value={editDescription} placeholder="Edit description" on:keyup={callEditDesc} on:input={submitChangesDesc} maxlength="20" minlength="3">
+                                </div>
+                            {/if}
+                        </div>
                     </div>
                     <hr class="w-[50%] mb-8 border-neutral-700">
                     {#if thisTrip == null}
@@ -98,7 +111,7 @@
                             {/each} 
                             <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
                                 <button class="fadeButton green p-2 w-full">Copy plan data</button>
-                                <button class="fadeButton blue p-2 w-full">Print</button>
+                                <button class="fadeButton blue p-2 w-full" on:click={goPrint}>Print</button>
                             </div>
                         </div>
                     {/if}
@@ -119,12 +132,15 @@
 	import { writable } from 'svelte/store';
     var param = $page.params.trip;
     var tooltip = false;
+    var tooltip2 = false;
     var addJourney = false;
     var editJourney = false;
 
     var editName = ''
+    var editDescription = ''
 
     var tripName = writable('');
+    var tripDescription = writable('');
     var thisTrip = null;
     var addJourneyDay = ''
     var editJourneyDay = ''
@@ -141,8 +157,10 @@
             console.log(storage[plan])
             if(storage[plan].tripID == param){
                 tripName.set(storage[plan].name);
+                tripDescription.set(storage[plan].description);
                 thisTrip = storage[plan];
                 editName = storage[plan].name;
+                editDescription = storage[plan].description;
             }
         }
     }
@@ -155,6 +173,11 @@
     function callEdit(){
         tripName.set(editName);
     }
+
+    function callEditDesc(){
+        tripDescription.set(editDescription);
+    }
+
 
     function deletePlan(){
         var plan = thisTrip;
@@ -175,6 +198,16 @@
         for(const plan in storage){
             if(storage[plan].tripID == param){
                 storage[plan].name = editName;
+                localStorage.setItem('planning', JSON.stringify(storage));
+            }
+        }
+    }
+
+    function submitChangesDesc(){
+        var storage = JSON.parse(localStorage.getItem('planning'));
+        for(const plan in storage){
+            if(storage[plan].tripID == param){
+                storage[plan].name = editDescription;
                 localStorage.setItem('planning', JSON.stringify(storage));
             }
         }
@@ -266,6 +299,10 @@
                 }
             }
         }
+    }
+
+    function goPrint(){
+        window.location.href = '/planning/trip/' + param + '/print';
     }
 
 

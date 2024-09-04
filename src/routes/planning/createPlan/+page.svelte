@@ -10,7 +10,7 @@
                             <h3 class="text-neutral-300 italic text-left mb-2">Title</h3>
                             <input minlength="3" maxlength="20" class="standardInput" bind:value={tripName}>
                             <h3 class="text-neutral-300 italic text-left mt-4">Description</h3>
-                            <textarea class="standardInput mt-2 text-xs resize-none" minlength="5" maxlength="175" rows="4"></textarea>
+                            <textarea class="standardInput mt-2 text-xs resize-none" minlength="5" maxlength="175" rows="4" bind:value={description}></textarea>
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                             <div class="flex gap-2 sm:gap-3 sm:flex-row flex-col">
@@ -49,6 +49,7 @@
         var tripName = ''
         var tripStart = ''
         var tripEnd = ''
+        var description = ''
         
         var alrtTxt  = writable('')
         var alrtAct = writable(false)
@@ -90,6 +91,7 @@
                     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
                     return characters[Math.floor(Math.random() * characters.length)];
                 }).join(''),
+                description: description,
                 name: tripName,
                 start: tripStart,
                 end: tripEnd,
