@@ -72,8 +72,13 @@
     var tripName = writable('');
     var thisTrip = null;
     var addJourneyDay = ''
+    let storage = []
 
-    var storage = JSON.parse(localStorage.getItem('planning'));
+
+    // Check if running in the browser before accessing localStorage
+    if (typeof window !== 'undefined') {
+        storage = JSON.parse(localStorage.getItem('planning')) || [];
+    }
 
     function getPlan(){
         for(const plan in storage){
