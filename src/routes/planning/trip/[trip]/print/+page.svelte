@@ -95,82 +95,9 @@
 </div>
 
 <script>
-    import { page } from '$app/stores';
-    import Nav from '../../../../../lib/components/Nav.svelte';
-    import Footer from '../../../../../lib/components/Footer.svelte';
-    import '../../../../../global.css'
-    var param = $page.params.trip;
-    let calcDaysWr = writable('')
-    let titleSet = writable('No title set')
-    let descriptionSet = writable('No description set')
-    let plan = {}
-
-    function print(){
-        window.print();
-    }
-
-    import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-
-    onMount(() => {
-        document.title = 'Print Window';
-        if (localStorage.getItem('planning')) {
-            let plansFromDB = JSON.parse(localStorage.getItem('planning'));
-            plan = plansFromDB.find((plan) => plan.tripID === param);
-            if(plan){
-                // console.log(plan)
-                calcDays(plan.start, plan.end)
-                titleSet.set(UC(plan.name))
-                descriptionSet.set(UC(plan.description))
-                document.title = "Print (" + plan.name + ")"
-
-    
-            }
-        }
-    });
-
-    function UC(str) {
-        if (str) {
-            return str.toUpperCase();
-        }
-        return '';
-    }
-
-    function formatDate(date){
-        let d = new Date(date);
-        let day = d.getDate();
-        let month = d.getMonth() + 1;
-        let year = d.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
-
-    function calcDays(start, end){
-        let startDate = new Date(start);
-        let endDate = new Date(end);
-        let timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-        let days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-        calcDaysWr.set(days)        
-        return days;
-    }
-
-    function GD() {
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        const hours = String(today.getHours()).padStart(2, '0');
-        const minutes = String(today.getMinutes()).padStart(2, '0');
-        const seconds = String(today.getSeconds()).padStart(2, '0');
-        return `Generated ${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    }
-
-
+    import{page}from"$app/stores";import"../../../../../global.css";var param=$page.params.trip;let calcDaysWr=writable(""),titleSet=writable("No title set"),descriptionSet=writable("No description set"),plan={};function print(){window.print()}import{onMount}from"svelte";import{writable}from"svelte/store";function UC(t){return t?t.toUpperCase():""}function formatDate(t){let e=new Date(t);return`${e.getDate()}/${e.getMonth()+1}/${e.getFullYear()}`}function calcDays(t,e){let a=new Date(t),n=new Date(e),r=Math.abs(n.getTime()-a.getTime()),i=Math.ceil(r/864e5)+1;return calcDaysWr.set(i),i}function GD(){const t=new Date;return`Generated ${String(t.getDate()).padStart(2,"0")}/${String(t.getMonth()+1).padStart(2,"0")}/${t.getFullYear()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}:${String(t.getSeconds()).padStart(2,"0")}`}onMount((()=>{if(document.title="Print Window",localStorage.getItem("planning")){let t=JSON.parse(localStorage.getItem("planning"));plan=t.find((t=>t.tripID===param)),plan&&(calcDays(plan.start,plan.end),titleSet.set(UC(plan.name)),descriptionSet.set(UC(plan.description)),document.title="Print ("+plan.name+")")}}));
 </script>
 
 <style>
-    @media print {
-        .non-print {
-            display: none;
-        }
-    }
+    @media print {.non-print {display: none;}}
 </style>
