@@ -9,13 +9,14 @@
                     <h3 class="text-neutral-400 italic mt-2 text-md">You have no plans yet</h3>
                     <div class="flex gap-2 flex-col">
                         <button class="fadeButton blue p-2 pl-8 pr-8" on:click={createPlanPg}>Create a plan</button>
+                        <button class="fadeButton green p-2 pl-8 pr-8" on:click={loadFromData}>Load from data</button>
                         <!-- <button class="fadeButton green p-2 pl-8 pr-8">Load from String</button> -->
                     </div>
                 </div>
                 {:else}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
-                {#each plansFromDB as plan}
-                    <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0 items-center">
+                <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0 items-center gap-3">
+                        {#each plansFromDB as plan}
                         <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[700px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
@@ -55,10 +56,11 @@
                             </div>
                             <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
                         </button>
+                        {/each}
                     </div>
-                {/each}
-                <div class="w-full border-neutral-700 rounded-md border-[1px] p-2 max-w-[700px]">
+                <div class="w-full border-neutral-700 rounded-md border-[1px] p-2 max-w-[700px] flex gap-4">
                     <button class="fadeButton blue w-full p-2" on:click={createPlanPg}>Create a plan</button>
+                    <button class="fadeButton green w-1/2 p-2" on:click={loadFromData}>Load from data</button>
                 </div>
                 {/if}
             </div>
@@ -124,6 +126,33 @@
             let newPlans = plansFromDB.filter(p => p.tripID != plan.tripID);
             localStorage.setItem('planning', JSON.stringify(newPlans));
             window.location.href = '/planning';
+        }
+    }
+
+    import LZString from 'lz-string';
+
+    function loadFromData(){
+        let data = prompt('Please enter the data string');
+        if(data){
+            var decompressed = LZString.decompressFromBase64(data);
+            let parsed = JSON.parse(decompressed);
+
+            if (plansFromDB.some(p => p.tripID === parsed.tripID)) {
+                alert('Journey with tripID already exists');
+                parsed.tripID = [...Array(20)].map(() => {
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    return characters[Math.floor(Math.random() * characters.length)];
+                }).join('');
+
+                plansFromDB.push(parsed);
+                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                window.location.href = '/planning';
+
+            } else {
+                plansFromDB.push(parsed);
+                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                window.location.href = '/planning';
+            }
         }
     }
 </script>
