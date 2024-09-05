@@ -1,5 +1,5 @@
 
-<div class="w-screen h-screen flex flex-col" style="background: rgb(255,255,255)">
+<div class="w-screen h-auto pb-16 flex flex-col" style="background: rgb(255,255,255)">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
             <button class="fadeButton dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="ml-6 mr-6 overflow-x-auto">
+    <div class="ml-6 mr-6">
         <table class="table-auto w-full">
             <thead class="bg-black">
                 <th class="text-white w-[7%] text-left">ID</th>
@@ -46,17 +46,21 @@
                 {#if plan.days && plan.days.length > 0}
                     {#each plan.days as day}
                         <tr class="border-[1px] border-neutral-200">
-                            <td colspan="7" class="bg-gray-200 font-semibold italic p-1">Day {day.day}</td>
+                            <td colspan="7" class="bg-gray-200 font-semibold italic p-1 text-sm">Day {day.day}</td>
                         </tr>
                         {#each day.journeys as journey}
                             <tr>
-                                <td class="border border-neutral-200 p-1">{journey.service}</td>
-                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center">{journey.departure}</td>
-                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center">{journey.arrival}</td>
-                                <td class="border border-neutral-200 p-1">{journey.from}</td>
-                                <td class="border border-neutral-200 p-1">{journey.to}</td>
-                                <td class="border border-neutral-200 p-1 bg-gray-100 text-left">{journey.operator}</td>
-                                <td class="border border-neutral-200 p-1">{journey.description}</td>
+                                <td class="border border-neutral-200 p-1 text-xs">{journey.service}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.departure}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.arrival}</td>
+                                <td class="border border-neutral-200 p-1 text-xs">{journey.from}</td>
+                                <td class="border border-neutral-200 p-1 text-xs">{journey.to}</td>
+                                <td class="border border-neutral-200 p-1 bg-gray-100 text-left text-xs">{journey.operator}</td>
+                                {#if journey.description != '' && journey.description != null}
+                                    <td class="border border-neutral-200 p-1 text-xs">{journey.description}</td>
+                                {:else}
+                                    <td class="border border-neutral-200 p-1"></td>
+                                {/if}
                             </tr>
                         {/each}
                         {#if day.journeys.length === 0}
@@ -65,6 +69,20 @@
                             </tr>
                         {/if}
                     {/each}
+                    <tr class="border-[1px] border-neutral-200">
+                        <td colspan="7" class="bg-gray-200 font-semibold italic p-1">Spare Row</td>
+                    </tr>
+                    {#each {length: 12} as _, i}
+                        <tr>
+                            <td class="border border-neutral-200 p-1 h-[25px]"></td>
+                            <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center h-[25px]"></td>
+                            <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center h-[25px]"></td>
+                            <td class="border border-neutral-200 p-1 h-[20px]"></td>
+                            <td class="border border-neutral-200 p-1 h-[25px]"></td>
+                            <td class="border border-neutral-200 p-1 bg-gray-100 text-left h-[25px]"></td>
+                            <td class="border border-neutral-200 p-1 h-[25px]"></td>
+                        </tr>
+                        {/each}
                 {:else}
                     <tr>
                         <td colspan="7" class="text-center">Loading...</td>
@@ -104,6 +122,7 @@
                 calcDays(plan.start, plan.end)
                 titleSet.set(UC(plan.name))
                 descriptionSet.set(UC(plan.description))
+                document.title = "Print (" + plan.name + ")"
 
     
             }
