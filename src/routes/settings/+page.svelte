@@ -9,11 +9,5 @@
 <Footer/>
 
 <script>
-    import { onMount } from 'svelte';
-    import Nav from '../../lib/components/Nav.svelte';
-    import Footer from '../../lib/components/Footer.svelte';
-    import '../../global.css'
-    onMount(() => {
-        document.title = 'Settings';
-    });
+    import { onMount } from 'svelte';import Nav from '../../lib/components/Nav.svelte';import Footer from '../../lib/components/Footer.svelte';import '../../global.css';onMount(() => {document.title = 'Settings';});
 </script>
