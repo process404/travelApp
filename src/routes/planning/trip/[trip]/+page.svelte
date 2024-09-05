@@ -54,7 +54,7 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="fadeButton blue p-1 text-sm" on:click={addJourneyFn(day)}>Add</button>
+                                        <button class="fadeButton blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
