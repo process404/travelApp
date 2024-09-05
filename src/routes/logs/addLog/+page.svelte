@@ -11,7 +11,7 @@
                             <div class="flex items-center justify-center gap-3 mr-1">
                                 <div class="relative w-full">
                                     <!--TO-DO add precise location info and country selector-->
-                                    <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="standardInput" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
+                                    <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="input blue" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
                                     {#if locationSuggestions.length != 0}
                                     <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
                                         {#each locationSuggestions.slice(0,6) as name}
@@ -23,7 +23,7 @@
                                     {/if}
                                 </div>
                                 {#if location.length > 0}
-                                    <button class="p-2 fadeButton" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
+                                    <button class="p-2 button" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
                                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                                     </svg></button>
                                 {/if}
@@ -31,11 +31,11 @@
                         </div>
                         <div class="flex gap-4">
                             <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$noLocation}>
+                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noLocation}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
                             </div>
                             <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="fadeCheckbox" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
+                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
         
@@ -45,7 +45,7 @@
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                                <input placeholder="Enter Number" class="standardInput" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                                <input placeholder="Enter Number" class="input blue" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
                                 <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                                 {#if !typeDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
@@ -59,7 +59,7 @@
                                 </svg>
                                 {/if}
                                 </button> -->
-                                <button class="fadeButton p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
+                                <button class="button p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                 </svg></button>
                             </div>
@@ -67,7 +67,7 @@
                                 <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row">
                                     {#each $logNumbers as train}
                                         <li class="relative inline-block p-0 m-0 h-6">
-                                            <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 fadeButton blue2 textWhite pl-2 pr-2 h-6">{train['name']} ({train['type']} - {train['variant']})</button>
+                                            <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding">{train['name']} ({train['type']} - {train['variant']})</button>
                                             {#if train['dropdown']}
                                                 <button class="z-30 fixed w-screen h-screen hover:cursor-default" on:click={closeDropdown(train)}></button>
                                             {/if}
@@ -75,8 +75,8 @@
                                             <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px]">
                                                 {#if train['dropdown_2'] == ''}
                                                 <div class="flex gap-2 min-w-[180px]">
-                                                    <button class="text-white text-sm fadeButton red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
-                                                    <button class="text-white text-sm fadeButton blue pl-2 pr-2 w-full" on:click={() => train['dropdown_2'] = "area"}>Edit type</button>
+                                                    <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
+                                                    <button class="sm button blue pl-2 pr-2 w-full" on:click={() => train['dropdown_2'] = "area"}>Edit type</button>
                                                 </div>
                                                 {/if}
 
@@ -84,7 +84,7 @@
                                                     <h3 class="text-white text-sm">Select Area</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                         {#each logAreas as area}
-                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
                                                         {/each}
                                                     </div>
                                                 {/if}
@@ -92,7 +92,7 @@
                                                     <h3 class="text-white text-sm">Select Type</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                         {#each $inputArea.trainTypes as type}
-                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
                                                         {/each}
                                                     </div>
                                                 {/if}
@@ -100,7 +100,7 @@
                                                     <h3 class="text-white text-sm">Select Variant</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                         {#each $inputVariant as variant}
-                                                            <button class="fadeButton text-sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
                                                         {/each}
                                                     </div>
                                                 {/if}
@@ -115,12 +115,12 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Date / Time</h3>
                         <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="standardInput mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="standardInput mt-2 iconEdit" bind:value={inputTime}>
+                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
+                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
-                    <button class="fadeButton blue w-full p-2 text-sm" on:click={confirmLog}>Submit Log</button>
+                    <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
                     
                 </div>

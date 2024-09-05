@@ -8,8 +8,8 @@
                 <div class="h-full flex items-center justify-center flex-col gap-4">
                     <h3 class="text-neutral-400 italic mt-2 text-md">You have no plans yet</h3>
                     <div class="flex gap-2 flex-col">
-                        <button class="fadeButton blue p-2 pl-8 pr-8" on:click={createPlanPg}>Create a plan</button>
-                        <button class="fadeButton green p-2 pl-8 pr-8" on:click={loadFromData}>Load from data</button>
+                        <button class="button blue pl-8 pr-8 xl-padding" on:click={createPlanPg}>Create a plan</button>
+                        <button class="button green pl-8 pr-8 xl-padding" on:click={loadFromData}>Load from data</button>
                         <!-- <button class="fadeButton green p-2 pl-8 pr-8">Load from String</button> -->
                     </div>
                 </div>
@@ -59,8 +59,8 @@
                         {/each}
                     </div>
                 <div class="w-full border-neutral-700 rounded-md border-[1px] p-2 max-w-[700px] flex gap-4">
-                    <button class="fadeButton blue w-full p-2" on:click={createPlanPg}>Create a plan</button>
-                    <button class="fadeButton green w-1/2 p-2" on:click={loadFromData}>Load from data</button>
+                    <button class="button blue w-full p-2" on:click={createPlanPg}>Create a plan</button>
+                    <button class="button green w-1/2 p-2" on:click={loadFromData}>Load from data</button>
                 </div>
                 {/if}
             </div>
