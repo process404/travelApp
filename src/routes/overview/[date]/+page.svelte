@@ -13,12 +13,28 @@
     import { page } from '$app/stores';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
+    
+    let imgArr = []
 
     let param = $page.params.date;
     let formatParam = param.replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1');
     onMount(() => {
         param = param.replace(/-/g, '/');
         document.title = 'Overview for ' + formatParam;
+        getImgArr();
     });
+
+    function getImgArr() {
+        const logs = $page.params.date;
+        const trainTypes = require('../../../database.json').trainTypes;
+        
+        const variant = logs.split('-')[1];
+        const trainType = trainTypes.find(type => type.variants.some(variant => variant.short === variant));
+        
+        if (trainType) {
+            const pictures = trainType.pictures;
+            imgArr.push(pictures)
+        }
+    }
 </script>
 
