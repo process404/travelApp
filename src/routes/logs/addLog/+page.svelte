@@ -203,7 +203,7 @@
         const dbData = await db;
         const resolvedDbData = await dbData.default;
         logAreas = resolvedDbData.trainTypes;
-        console.log(logAreas)
+        // console.log(logAreas)
 
         inputDate = new Date().toISOString().split('T')[0];
 
@@ -211,10 +211,10 @@
 
     function promptSuggestions(){
         locationSuggestions = []
-        console.log(combinedLocations)
+        // console.log(combinedLocations)
         if(location != '' && combinedLocations){
             for(const item in combinedLocations){
-                console.log(combinedLocations[item])
+                // console.log(combinedLocations[item])
                 if (combinedLocations[item] && combinedLocations[item].toLowerCase().includes(location)) {
                     locationSuggestions.push(combinedLocations[item]);
                 }
@@ -230,10 +230,10 @@
     }
     
     function inputType(type, train) {
-        console.log(type)
+        // console.log(type)
         inputVariant.set(type.variants);
-        console.log("variants");
-        console.log(inputVariant);
+        // console.log("variants");
+        // console.log(inputVariant);
     
         logNumbers.update(numbers => {
             return numbers.map(t => {
@@ -259,7 +259,7 @@
         });
 
         let logs = localStorage.getItem('logs')
-        console.log(logs)
+        // console.log(logs)
         if (logs) {
             const parsedLogs = JSON.parse(logs);
             parsedLogs.forEach(item => {
@@ -274,7 +274,7 @@
     
     function inputAreaBtn(area, train) {
         inputArea.set(area);
-        console.log(area);
+        // console.log(area);
         logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id && t.vehicleType === train.vehicleType) {
@@ -297,7 +297,7 @@
         let logs = localStorage.getItem('logs')
         let vehFound = false
         let veh = null;
-        console.log(logs)
+        // console.log(logs)
         if (logs) {
             const parsedLogs = JSON.parse(logs);
             vehFound = parsedLogs.some(log => log.name === inputNumber);
