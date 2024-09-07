@@ -1,6 +1,6 @@
 <div class="relative w-full">
     <!--TO-DO add precise location info and country selector-->
-    <input minlength="3" placeholder="" class="standardInput" bind:value on:input={() => promptSuggestions()}>
+    <input minlength="3" placeholder="" class="input blue" bind:value on:input={() => promptSuggestions()}>
     {#if locationSuggestions.length != 0}
     <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
         {#each locationSuggestions.slice(0,6) as name}

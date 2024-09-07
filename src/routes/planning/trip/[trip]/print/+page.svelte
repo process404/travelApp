@@ -2,8 +2,8 @@
 <div class="w-screen h-auto pb-16 flex flex-col" style="background: rgb(255,255,255)">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
-            <button class="fadeButton dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
-            <button class="fadeButton green p-3 text-sm pl-6 pr-6" on:click={print}>Print</button>
+            <button class="button dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
+            <button class="button green p-3 text-sm pl-6 pr-6" on:click={print}>Print</button>
         </div>
         <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
     </div>

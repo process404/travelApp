@@ -25,8 +25,8 @@
                         {#if tooltip}
                             <div class="absolute top-[125%] left-0 bg-black p-2 rounded-md z-20 min-w-[150px]">
                                 <div class="triangle w-4 h-2 bg-black absolute bottom-[99%]"></div>
-                                <input class="standardInput non-empty" bind:value={editName} placeholder="Edit name" on:keyup={callEdit} on:input={submitChanges} maxlength="20" minlength="3">
-                                <button class="fadeButton red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan}>Delete Plan</button>
+                                <input class="input darker non-empty" bind:value={editName} placeholder="Edit name" on:keyup={callEdit} on:input={submitChanges} maxlength="20" minlength="3">
+                                <button class="button red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan}>Delete Plan</button>
                             </div>
                         {/if}
                         <div class="relative">
@@ -38,7 +38,7 @@
                             {#if tooltip2}
                                 <div class="absolute top-[125%] left-0 bg-black p-2 rounded-md z-20 min-w-[150px]">
                                     <div class="triangle w-4 h-2 bg-black absolute bottom-[99%]"></div>
-                                    <input class="standardInput non-empty" bind:value={editDescription} placeholder="Edit description" on:keyup={callEditDesc} on:input={submitChangesDesc} maxlength="20" minlength="3">
+                                    <input class="input darker non-empty" bind:value={editDescription} placeholder="Edit description" on:keyup={callEditDesc} on:input={submitChangesDesc} maxlength="20" minlength="3">
                                 </div>
                             {/if}
                         </div>
@@ -54,7 +54,7 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="fadeButton blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                        <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
@@ -102,8 +102,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="w-1/2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
-                                                        <button class="fadeButton blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
-                                                        <button class="fadeButton red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
+                                                        <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,8 +112,8 @@
                                 </div>
                             {/each} 
                             <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
-                                <button class="fadeButton green p-2 w-full" on:click={copyData}>Copy plan data</button>
-                                <button class="fadeButton blue p-2 w-full" on:click={goPrint}>Print</button>
+                                <button class="button green p-2 w-full" on:click={copyData}>Copy plan data</button>
+                                <button class="button blue p-2 w-full" on:click={goPrint}>Print</button>
                             </div>
                         </div>
                     {/if}
