@@ -9,24 +9,7 @@
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
                             <div class="flex items-center justify-center gap-3 mr-1">
-                                <div class="relative w-full">
-                                    <!--TO-DO add precise location info and country selector-->
-                                    <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="input blue" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
-                                    {#if locationSuggestions.length != 0}
-                                    <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
-                                        {#each locationSuggestions.slice(0,6) as name}
-                                            {#if name != location}
-                                                <button on:click={selectLocation(name)} class="text-white w-full text-xs text-left after:absolute after:bottom-[-0.2rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-1 first:before:hidden  pt-2 relative">{name}</button>
-                                            {/if}
-                                        {/each}
-                                    </div>
-                                    {/if}
-                                </div>
-                                {#if location.length > 0}
-                                    <button class="p-2 button" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                                    </svg></button>
-                                {/if}
+                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} />
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -38,7 +21,14 @@
                                 <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
-        
+                            
+                        </div>
+                    </div>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
+                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
@@ -132,13 +122,6 @@
                             {/if}
                         </div>
                     </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Date / Time</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
-                        </div>
-                    </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
                     <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
@@ -154,6 +137,7 @@
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
     import CustomAlert from '../../../lib/components/Alert.svelte';
+    import PromptField from '../../../lib/components/PromptField.svelte';
     import '../../../global.css'
 
     import { writable } from 'svelte/store';
@@ -183,6 +167,11 @@
     dbWriteable.set(db)
 
     var location = ''
+    var locations = []
+
+    if (typeof window !== 'undefined') {
+        locations = JSON.parse(localStorage.getItem('locations')) || [];
+    }
 
     onMount(async () => {
         document.title = 'Add Log';
@@ -224,8 +213,8 @@
         // console.log(locationSuggestions)
     }
 
-    function selectLocation(name){
-        location = name
+    function selectLocation(o){
+        location = o.detail.text
         locationSuggestions = []
     }
     
