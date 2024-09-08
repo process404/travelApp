@@ -38,7 +38,14 @@
                                 <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
-        
+                            
+                        </div>
+                    </div>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
+                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
@@ -130,13 +137,6 @@
                                     {/each}
                                 </ul>
                             {/if}
-                        </div>
-                    </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Date / Time</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">

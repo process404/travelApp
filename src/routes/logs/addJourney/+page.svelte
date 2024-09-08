@@ -6,15 +6,19 @@
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                     <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Location</h3>
-                        <div class="relative mt-2">
-                            <div class="flex items-center justify-center gap-3 mr-1">
+                        <div class="flex items-center justify-center gap-3 mr-1 sm:flex-row flex-col mb-3 sm:mb-1">
+                            <div class="w-full">
+                                <h3 class="text-neutral-300 italic mb-2">From</h3>
                                 <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} />
-                                <!-- {#if location.length > 0} -->
-                                    <!-- <button class="p-2 button" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                                    </svg></button>
-                                {/if} -->
+                            </div>
+                            <!-- {#if location.length > 0} -->
+                                <!-- <button class="p-2 button" on:click={() => clearLocation()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg w-3 h-3" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                </svg></button>
+                            {/if} -->
+                            <div class="w-full">
+                                <h3 class="text-neutral-300 italic mb-2">To</h3>
+                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} />
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -30,6 +34,23 @@
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
+                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- more journey info needs to go here-->
+
+
+
+
+                    
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
@@ -43,7 +64,7 @@
                                 {#if typeDropdown}
                                 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short w-5 h-5" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                                 </svg>
                                 {/if}
                                 </button> -->
@@ -120,17 +141,9 @@
                             {/if}
                         </div>
                     </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Date / Time</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
-                        </div>
-                    </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
                     <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
-                    
                 </div>
             </div>
         </div>
