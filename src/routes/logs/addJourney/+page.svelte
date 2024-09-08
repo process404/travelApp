@@ -8,6 +8,7 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex items-center justify-center gap-3 mr-1 sm:flex-row flex-col mb-3 sm:mb-1">
                             <div class="w-full">
+                                <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
                                 <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} />
                             </div>
@@ -49,7 +50,7 @@
 
 
 
-                    
+
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
