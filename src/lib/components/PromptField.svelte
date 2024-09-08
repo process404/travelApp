@@ -1,6 +1,6 @@
 <div class="relative w-full">
     <!--TO-DO add precise location info and country selector-->
-    <input minlength="3" placeholder="" class="input blue" bind:value on:input={() => promptSuggestions()}>
+    <input minlength="3" placeholder="" class="input blue" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled}>
     {#if locationSuggestions.length != 0}
     <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
         {#each locationSuggestions.slice(0,6) as name}
@@ -15,11 +15,13 @@
 <script>
     export let ds;
     export let value;
+    export let disabled;
 
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     const dispatch = createEventDispatcher();
 
     let locationSuggestions = []
+
 
     function promptSuggestions(){
         locationSuggestions = []
@@ -42,4 +44,13 @@
             text: value
         });
     }
+
+    $: {
+        if (disabled) {
+            locationSuggestions = [];
+            value = ''
+        }
+    }
+
+
 </script>

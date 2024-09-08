@@ -11,7 +11,7 @@
                             <div class="flex items-center justify-center gap-3 mr-1">
                                 <div class="relative w-full">
                                     <!--TO-DO add precise location info and country selector-->
-                                    <input minlength="3" placeholder="Enter location" class:non-empty={location.length > 0} class:inputDisabled={$noLocation} class="input blue" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
+                                    <input minlength="3" placeholder="Enter location" class:inputDisabled={$noLocation} class="input blue" bind:value={location} on:keyup={() => promptSuggestions()} disabled={$noLocation}>
                                     {#if locationSuggestions.length != 0}
                                     <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30">
                                         {#each locationSuggestions.slice(0,6) as name}
