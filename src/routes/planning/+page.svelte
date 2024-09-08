@@ -22,10 +22,15 @@
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
                                 <div class="flex gap-2">
                                     {#if timeToStart(plan) < 10}
-                                    <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Begins in {timeToStart(plan)} days</h3>
-                                    {/if}
-                                    {#if timeToStart(plan) > 10}
-                                    <h3 class="text-white bg-neutral-800 pl-2 pr-2 p-1 rounded-sm text-xs italic">Begins in {timeToStart(plan)} days</h3>
+                                        {#if timeToEnd(plan) < 0}
+                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ended {timeToEnd(plan)} days ago</h3>
+                                        {:else if timeToEnd(plan) < getDays(plan)}
+                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ongoing ({timeToStart(plan)} days to end)</h3>
+                                        {:else}
+                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Begins in {timeToStart(plan)} days</h3>
+                                        {/if}
+                                    {:else}
+                                        <h3 class="text-white bg-neutral-800 pl-2 pr-2 p-1 rounded-sm text-xs italic">Begins in {timeToStart(plan)} days</h3>
                                     {/if}
                                 </div>
                             </div>
@@ -120,6 +125,15 @@
         let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         return days;
     }
+
+    function timeToEnd(plan){
+        let end = new Date(plan.end);
+        let now = new Date();
+        let diffTime = Math.abs(end - now);
+        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return days;
+    }
+    
 
     function deletePlan(plan, event){
         if (confirm("Are you sure you want to delete this plan? This action is permanent.")) {
