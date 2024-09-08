@@ -84,7 +84,29 @@
                         { "name": "ALX300", "short": "AD_ALX300" },
                         { "name": "ALX200", "short": "AD_ALX200" }
                     ]
-                }
+                },
+                {"name":"Wrightbus", "variants":[
+                    {"name":"Solar","short":"WRGT_SLR"},
+                    {"name":"Pulsar","short":"WRGT_PLSR"},
+                    {"name":"Pulsar 2","short":"WRGT_PLSR_2"},
+                    {"name":"Eclipse","short":"WRGT_ECL"},
+                    {"name":"Eclipse 2","short":"WRGT_ECL_2"},
+                    {"name":"Eclipse (Others)","short":"WRGT_ECL_OTHER"},
+                    {"name":"Meridian","short":"WRGT_MRE"},
+                    {"name":"Gemini","short":"WRGT_GMN"},
+                    {"name":"Gemini 2","short":"WRGT_GMN_2"},
+                    {"name":"Gemini 3","short":"WRGT_GMN_3"},
+                    {"name":"Streetdeck","short":"WRGT_STD"},
+                    {"name":"Hawk","short":"WRGT_HAW"},
+                    {"name":"Kite","short":"WRGT_KIT"},
+                    {"name":"Cadet","short":"WRGT_CDT"},
+                    {"name":"Commander","short":"WRGT_COM"},
+                    {"name":"Kite","short":"WRGT_KIT"},
+                    {"name":"StreetAir","short":"WRGT_AIR"},
+                    {"name":"StreetLite","short":"WRGT_SL"},
+                    {"name":"New Routemaster","short":"WRGT_NRM"},
+                    {"name":"SRM","short":"WRGT_SRM"}
+                ]}
             ]
         }
     ]
