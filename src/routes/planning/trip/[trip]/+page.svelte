@@ -62,7 +62,7 @@
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center">
                                                     <div class="flex flex-col gap-1 items-start">
-                                                        <h3 class="text-white text-md"><span class="w-full flex items-center gap-2 sm:w-auto">{journey.from} <span class="inline-block"><img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></h3>
+                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col"><span class="flex gap-2 items-center">{journey.from}<img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class=" flex gap-2 items-center"><span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span><span class="flex gap-2 items-center">{journey.to}<img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></span></h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -101,7 +101,7 @@
                                                             {/if}
                                                         </div>
                                                     </div>
-                                                    <div class="w-1/2 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
+                                                    <div class="w-1/4 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
                                                         <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
