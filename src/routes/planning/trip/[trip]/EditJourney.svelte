@@ -9,11 +9,11 @@
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
-                <PromptField ds="{locations}" on:select={selectFrom} bind:value={from}/>
+                <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc"/>
             </div>
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">To</h3>
-                <PromptField ds="{locations}" on:select={selectTo} bind:value={to}/>
+                <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc"/>
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">

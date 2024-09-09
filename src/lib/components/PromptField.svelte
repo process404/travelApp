@@ -12,10 +12,18 @@
     {/if}
 </div>
 
+
 <script>
+
+    // TO-DO: Add country selector when getting country from list of stations is unavailable, also use list of stations from github for stations
+    // See also: https://www.reddit.com/r/openstreetmap/comments/uxfdgo/exporting_specific_railway_data/ and https://github.com/juliuste/trainline-stations
+
+
+
     export let ds;
     export let value;
     export let disabled;
+    export let ver;
 
     import { createEventDispatcher, onMount } from 'svelte';
     const dispatch = createEventDispatcher();
@@ -25,7 +33,20 @@
 
     function promptSuggestions(){
         locationSuggestions = []
-        if(value.length > 1){
+        if(ver == "loc"){
+            if(value.length > 1){
+            ds.forEach(set => {
+                // console.log(set)
+                if(set.name.toLowerCase().includes(value.toLowerCase())){
+                    if(value != set.name){
+                        locationSuggestions.push(set.name)
+                    }
+                }
+            })
+        }
+        }
+        else{
+            if(value.length > 1){
             ds.forEach(set => {
                 // console.log(set)
                 if(set.toLowerCase().includes(value.toLowerCase())){
@@ -34,6 +55,7 @@
                     }
                 }
             })
+        }
         }
     }
 

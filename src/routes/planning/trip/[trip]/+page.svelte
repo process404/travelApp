@@ -101,7 +101,7 @@
                                                             {/if}
                                                         </div>
                                                     </div>
-                                                    <div class="w-1/2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
+                                                    <div class="w-1/2 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
                                                         <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
