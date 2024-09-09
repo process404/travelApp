@@ -1,10 +1,12 @@
-
+{#if locationSuggestions.length != 0}
+    <button class="fixed w-screen h-screen z-40 left-0 top-0 cursor-default" on:click={() => {locationSuggestions = []}}></button>
+{/if}
 <div class="flex gap-1 w-full">
     <div class="relative w-full gap-2">
         <!--TO-DO add precise location info and country selector-->
         <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled}>
         {#if locationSuggestions.length != 0}
-        <div class="absolute bottom-100 bg-neutral-800 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
+        <div class="absolute bottom-100 bg-neutral-800 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
             {#each locationSuggestions.slice(0,6) as name}
             {#if name.name != value}
             <button on:click={selectLocationFrom(name)} class="text-white w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden  mt-2 relative flex items-center gap-3">{name.name} <span><img src={`https://flagsapi.com/${name.country}/flat/64.png`} class="w-4 h-4" alt={name.country}></span></button>
