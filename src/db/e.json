@@ -28,7 +28,9 @@
                     {
                         "code": "ee3nso0o1s",
                         "from": "London Euston",
+                        "fromCountry": "GB",
                         "to": "London St Pancras Intl",
+                        "toCountry": "GB",
                         "arrival": "09:20",
                         "departure": "09:05",
                         "service": "N/A",

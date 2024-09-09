@@ -62,7 +62,7 @@
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center">
                                                     <div class="flex flex-col gap-1 items-start">
-                                                        <h3 class="text-white text-md"><span class="w-full flex items-center gap-2 sm:w-auto">{journey.from} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.fromCountry}/flat/64.png`}></span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></h3>
+                                                        <h3 class="text-white text-md"><span class="w-full flex items-center gap-2 sm:w-auto">{journey.from} <span class="inline-block"><img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -149,10 +149,14 @@
     let storage = []
 
 
-    // Check if running in the browser before accessing localStorage
-    if (typeof window !== 'undefined') {
-        storage = JSON.parse(localStorage.getItem('planning')) || [];
-    }
+
+    onMount(() => {
+        // Check if running in the browser before accessing localStorage
+        if (typeof window !== 'undefined') {
+            storage = JSON.parse(localStorage.getItem('planning')) || [];
+            getFlags();
+        }
+    });
 
     function getPlan(){
         for(const plan in storage){
@@ -327,15 +331,50 @@
         navigator.clipboard.writeText(compressed); 
     }
 
-    function getCountryEmoji(code){
-        const codeToEmoji = {
-            GB: "🇬🇧",
-            US: "🇺🇸",
-            // Add more country code to emoji mappings here
-        };
 
-        return codeToEmoji[code] || "";
+    var countries = []
+
+    function getFlags() {
+        for (const plan in storage) {
+            for (const day of storage[plan].days) {
+                for (const journey of day.journeys) {
+                    if (journey.fromCountry && typeof journey.fromCountry === 'string') {
+                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                        if (fromCountryIndex === -1) {
+                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(journey)
+                        console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+                    }
+
+                    if (journey.toCountry && typeof journey.toCountry === 'string') {
+                        const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                        if (toCountryIndex === -1) {
+                            countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(`Invalid toCountry code: ${journey.toCountry}`);
+                    }
+                }
+            }
+        }
+        console.log(countries);
+        return countries;
     }
+
+    function getCountryEmoji(code) {
+        if (countries.length === 0) {
+            getFlags();
+        }
+        const country = countries.find(country => country.code === code);
+        if (country) {
+            console.log("src", country.src);
+            return country.src;
+        }
+        return "";
+    }
+    
 
 
 </script>
