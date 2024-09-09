@@ -6,15 +6,15 @@
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                     <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <div class="flex items-center justify-center gap-3 mr-1 sm:flex-row flex-col mb-3 sm:mb-1">
+                        <div class="flex items-center justify-center gap-3 mr-1 flex-col mb-3 sm:mb-1">
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
-                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc"/>
+                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc" bind:presetC={fromC}/>
                             </div>
                             <div class="w-full">
                                 <h3 class="text-neutral-300 italic mb-2">To</h3>
-                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc"/>
+                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC}/>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -30,10 +30,15 @@
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <h3 class="text-neutral-300 italic">Departure</h3>
                         <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
+                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateStart}>
+                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeStart}>
+                        </div>
+                        <h3 class="text-neutral-300 italic mt-4">Arrival</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateEnd}>
+                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeEnd}>
                         </div>
                     </div>
 
@@ -50,7 +55,7 @@
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                                <input placeholder="Enter Number" class="input blue" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                                <input placeholder="Enter Number" class="input blue w-full" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
                                 <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                                 {#if !typeDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
@@ -89,8 +94,8 @@
                                                 {#if train.dropdown_2 === "section"}
                                                 <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", train)}>Train</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", train)}>Other</button>
                                                 </div>
                                                 {/if}
@@ -173,13 +178,17 @@
     var inputNumber = ''
     var inputArea = writable([])
     var inputVariant = writable([])
-    var inputDate = ''
-    var inputTime = ''
+    var inputDateStart = ''
+    var inputTimeStart = ''
+    var inputDateEnd = ''
+    var inputTimeEnd = ''
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
     var noLocation = writable(false);
     var id = 0
+    var toC = ''
+    var fromC = ''
     
     var alrtTxt  = writable('')
     var alrtAct = writable(false)
@@ -218,29 +227,11 @@
         logAreas = resolvedDbData.trainTypes;
         // console.log(logAreas)
 
-        inputDate = new Date().toISOString().split('T')[0];
+        inputDateStart = new Date().toISOString().split('T')[0];
+        inputDateEnd = new Date().toISOString().split('T')[0];
 
     });
 
-    function promptSuggestions(){
-        locationSuggestions = []
-        // console.log(combinedLocations)
-        if(location != '' && combinedLocations){
-            for(const item in combinedLocations){
-                // console.log(combinedLocations[item])
-                if (combinedLocations[item] && combinedLocations[item].toLowerCase().includes(location)) {
-                    locationSuggestions.push(combinedLocations[item]);
-                }
-            }
-        }
-        // console.log(location)
-        // console.log(locationSuggestions)
-    }
-
-    function selectLocation(name){
-        location = name
-        locationSuggestions = []
-    }
     
     function inputType(type, train) {
         // console.log(type)
@@ -367,14 +358,15 @@
         var lon;
 
 
-        if(location == ''){
+        if(from === '' || to === ''){
             if(!$noLocation){
-                customAlertSummon("No location selected", "err");
-                return;
+            console.log(from,to)
+            customAlertSummon("No location selected", "err");
+            return;
             }
         }
 
-        if(inputDate == ''){
+        if(inputDateStart == '' || inputDateEnd == ''){
             customAlertSummon("No date selected", "err");
             return;
         }
@@ -384,60 +376,80 @@
             return;
         }
 
-        var loc = localStorage.getItem('locations');
-        if(loc != null){
-            const parsedLoc = JSON.parse(loc);
-            if(!parsedLoc.includes(location)){
-                var newloc = parsedLoc.concat(location);
-                localStorage.setItem('locations', JSON.stringify(newloc));
+        if(fromC == '' || toC == ''){
+            if(!$noLocation){
+                customAlertSummon("No country selected", "err");
+                return;
             }
         }
 
-        let logs = localStorage.getItem('logs');
-        if (!logs) {
-            logs = JSON.stringify([]);
+        var loc = localStorage.getItem('locations');
+        if(loc != null){
+            const parsedLoc = JSON.parse(loc);
+            var found = false;
+            for(var locs in parsedLoc){
+                if(locs == from){
+                    found = true;
+                }
+            }
+            if(found = false){
+                parsedLoc.push({"name":from, "country":fromCountry})
+            }
+
+            found = false
+            for(var locs in parsedLoc){
+                if(locs == to){
+                    found = true;
+                }
+            }
+            if(found = false){
+                parsedLoc.push({"name":to, "country":toCountry})
+            } 
+        }
+
+        let journeys = localStorage.getItem('journeys');
+        if (!journeys) {
+            journeys = JSON.stringify([]);
         }
 
         if($preciseLocation && preciseLat && preciseLon){
             logNumbers.subscribe(numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
-                log_location: location,
-                log_date: inputDate,
-                log_time: inputTime,
+                from: from,
+                fromCountry: fromC,
+                to: to,
+                toCountry: toC,
+                start_date: inputDateStart,
+                start_time: inputTimeStart,
+                end_date: inputDateEnd,
+                end_time: inputTimeEnd,
                 log_lat: preciseLat,
                 log_lon: preciseLon
             }));
-            console.log(numbersWithLocation)
 
-            console.log(numbers)
-            const addNew = JSON.parse(logs).concat(numbersWithLocation);
-            localStorage.setItem('logs', JSON.stringify(addNew));
-            console.log(addNew);
+            const addNew = JSON.parse(journeys).concat(numbersWithLocation);
+            localStorage.setItem('journeys', JSON.stringify(addNew));
         });
         }else{
             logNumbers.subscribe(numbers => {
-                console.log("E")
                 const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                     ...train,
-                    log_location: location,
-                    log_date: inputDate,
-                    log_time: inputTime
+                    from: from,
+                    to: to,
+                    start_date: inputDateStart,
+                    start_time: inputTimeStart,
+                    end_date: inputDateEnd,
+                    end_time: inputTimeEnd,
                 }));
 
-                console.log(numbers)
-                const addNew = JSON.parse(logs).concat(numbersWithLocation);
-                localStorage.setItem('logs', JSON.stringify(addNew));
-                console.log(addNew);
+                const addNew = JSON.parse(journeys).concat(numbersWithLocation);
+                localStorage.setItem('journeys', JSON.stringify(addNew));
             });
-
-
         }
 
 
-        let logreplace = inputDate.replace('/', '-');
-        console.log(logreplace)
-        window.location.href = `../overview/${logreplace}`;
+        window.location.href = `../overview/` + inputDateStart; 
     }
 
 
@@ -505,11 +517,11 @@
         }
 
         function selectFrom(o){
-            this.from = o.detail.text;
+            from = o.detail.text;
         }
 
         function selectTo(o){
-            this.to = o.detail.text;
+            to = o.detail.text;
         }
 
 

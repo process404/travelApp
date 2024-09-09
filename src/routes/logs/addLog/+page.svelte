@@ -8,8 +8,8 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
-                            <div class="flex items-center justify-center gap-3 mr-1">
-                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc"/>
+                            <div class="flex items-center w-full gap-3 mr-1">
+                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc" class="w-full" bind:presetC={sCountry}/>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -35,7 +35,7 @@
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                                <input placeholder="Enter Number" class="input blue" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                                <input placeholder="Enter Number" class="input blue w-full lighter" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
                                 <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                                 {#if !typeDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
@@ -74,8 +74,8 @@
                                                 {#if train.dropdown_2 === "section"}
                                                 <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", train)}>Train</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", train)}>Other</button>
                                                 </div>
                                                 {/if}
@@ -152,6 +152,7 @@
     var inputVariant = writable([])
     var inputDate = ''
     var inputTime = ''
+    var sCountry = ''
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
@@ -363,9 +364,14 @@
         var loc = localStorage.getItem('locations');
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
-            if(!parsedLoc.includes(location)){
-                var newloc = parsedLoc.concat(location);
-                localStorage.setItem('locations', JSON.stringify(newloc));
+            var found = false;
+            for(var locs in parsedLoc){
+                if(locs == from){
+                    found = true;
+                }
+            }
+            if(found = false){
+                parsedLoc.push({"name":location, "country":sCountry})
             }
         }
 
