@@ -14,7 +14,7 @@
         {/if}
     </div>
     {#if ver === "loc"}
-        <select class="input blue w-[65px] h-[38px]" bind:value={presetC}>
+        <select class="input blue w-[65px] h-[38px]" bind:value={presetC} class:inputDisabled={disabled} disbled={disabled}>
             {#each countryList as country}
             <option value={country.code} selected={presetC === country.code}>({country.code}) - {country.name}</option>
             {/each}
