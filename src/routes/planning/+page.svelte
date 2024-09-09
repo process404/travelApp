@@ -58,6 +58,17 @@
                                       </svg>
                                     <h4 class="text-white text-sm">{countJourneys(plan)} journeys</h4>
                                 </div>
+                                <div class="bg-neutral-800 flex pl-3 pr-3 p-1 rounded-sm gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill fill-white opacity-30" viewBox="0 0 16 16">
+                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                                      </svg>
+                                    <h4 class="text-white text-sm">{countLocations(plan)} locations</h4>
+                                </div>
+                                <div class="bg-neutral-800 flex pl-3 pr-3 p-1 rounded-sm gap-2 items-center">
+                                    {#each countries as country}
+                                      <img src={country.src} alt={country.code} class="w-4 h-4"/>
+                                    {/each}
+                                </div>
                             </div>
                             <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
                         </button>
@@ -85,6 +96,7 @@
         document.title = 'Planning';
         if (localStorage.getItem('planning')) {
             plansFromDB = JSON.parse(localStorage.getItem('planning'));
+            getFlags();
         }
     });
 
@@ -169,4 +181,74 @@
             }
         }
     }
+
+    function countLocations(plan){
+        let locations = new Set();
+        for (const dayKey in plan.days) {
+            const day = plan.days[dayKey];
+            for (const journey of day.journeys) {
+                locations.add(journey.from);
+                locations.add(journey.to);
+            }
+        }
+        console.log(locations);
+        return locations.size;
+    }
+
+    function countCountries(plan){
+        let countries = new Set();
+        for (const dayKey in plan.days) {
+            const day = plan.days[dayKey];
+            for (const journey of day.journeys) {
+                countries.add(journey.fromCountry);
+                countries.add(journey.toCountry);
+            }
+        }
+        console.log(countries);
+        return countries.size;
+    }
+
+    var countries = []
+
+    function getFlags() {
+        for (const plan in plansFromDB) {
+            for (const day of plansFromDB[plan].days) {
+                for (const journey of day.journeys) {
+                    if (journey.fromCountry && typeof journey.fromCountry === 'string') {
+                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                        if (fromCountryIndex === -1) {
+                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(journey)
+                        console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+                    }
+
+                    if (journey.toCountry && typeof journey.toCountry === 'string') {
+                        const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                        if (toCountryIndex === -1) {
+                            countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(`Invalid toCountry code: ${journey.toCountry}`);
+                    }
+                }
+            }
+        }
+        console.log(countries);
+        return countries;
+    }
+
+    function getCountryEmoji(code) {
+        if (countries.length === 0) {
+            getFlags();
+        }
+        const country = countries.find(country => country.code === code);
+        if (country) {
+            console.log("src", country.src);
+            return country.src;
+        }
+        return "";
+    }
+    
 </script>
