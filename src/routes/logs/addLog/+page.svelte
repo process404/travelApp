@@ -8,8 +8,8 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
-                            <div class="flex items-center justify-center gap-3 mr-1">
-                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc"/>
+                            <div class="flex items-center w-full gap-3 mr-1">
+                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc" class="w-full"/>
                             </div>
                         </div>
                         <div class="flex gap-4">

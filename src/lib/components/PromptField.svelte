@@ -1,5 +1,5 @@
 
-<div class="flex gap-1">
+<div class="flex gap-1 w-full">
     <div class="relative w-full gap-2">
         <!--TO-DO add precise location info and country selector-->
         <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled}>
@@ -14,7 +14,7 @@
         {/if}
     </div>
     {#if ver === "loc"}
-        <select class="input blue w-1/4 h-[38px]" bind:value={presetC}>
+        <select class="input blue w-[65px] h-[38px]" bind:value={presetC}>
             {#each countryList as country}
             <option value={country.code} selected={presetC === country.code}>({country.code}) - {country.name}</option>
             {/each}
@@ -44,9 +44,9 @@
     let locationSuggestions = []
     let countryList = getCountryList()
 
-    console.log(presetC)
+    // console.log(presetC)
 
-    console.log(ds)
+    // console.log(ds)
     function promptSuggestions(){
         locationSuggestions = []
         if(ver == "loc"){
