@@ -35,7 +35,7 @@
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                                <input placeholder="Enter Number" class="input blue" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                                <input placeholder="Enter Number" class="input blue w-full" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
                                 <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                                 {#if !typeDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
