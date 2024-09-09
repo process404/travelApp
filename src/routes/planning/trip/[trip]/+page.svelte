@@ -62,7 +62,7 @@
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center">
                                                     <div class="flex flex-col gap-1 items-start">
-                                                        <h3 class="text-white text-md"><span class="w-full inline-block sm:w-auto">{journey.from}</span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to}</h3>
+                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col"><span class="flex gap-2 items-center">{journey.from}<img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class=" flex gap-2 items-center"><span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span><span class="flex gap-2 items-center">{journey.to}<img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></span></h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -101,7 +101,7 @@
                                                             {/if}
                                                         </div>
                                                     </div>
-                                                    <div class="w-1/2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
+                                                    <div class="w-1/4 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
                                                         <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
@@ -149,10 +149,14 @@
     let storage = []
 
 
-    // Check if running in the browser before accessing localStorage
-    if (typeof window !== 'undefined') {
-        storage = JSON.parse(localStorage.getItem('planning')) || [];
-    }
+
+    onMount(() => {
+        // Check if running in the browser before accessing localStorage
+        if (typeof window !== 'undefined') {
+            storage = JSON.parse(localStorage.getItem('planning')) || [];
+            getFlags();
+        }
+    });
 
     function getPlan(){
         for(const plan in storage){
@@ -274,20 +278,24 @@
     }
 
     function calcTime(departure, arrival){
-        var dep = new Date();
-        var arr = new Date();
-        var [depHour, depMinute] = departure.split(':');
-        var [arrHour, arrMinute] = arrival.split(':');
-        dep.setHours(depHour, depMinute);
-        arr.setHours(arrHour, arrMinute);
-        if (arr < dep) {
-            arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+        try{
+            var dep = new Date();
+            var arr = new Date();
+            var [depHour, depMinute] = departure.split(':');
+            var [arrHour, arrMinute] = arrival.split(':');
+            dep.setHours(depHour, depMinute);
+            arr.setHours(arrHour, arrMinute);
+            if (arr < dep) {
+                arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+            }
+            var diff = arr - dep;
+            var hours = Math.floor(diff / 1000 / 60 / 60);
+            diff -= hours * 1000 * 60 * 60;
+            var minutes = Math.floor(diff / 1000 / 60);
+            return `${hours}h ${minutes}m`;
+        }catch(e){
+            return 'Error';
         }
-        var diff = arr - dep;
-        var hours = Math.floor(diff / 1000 / 60 / 60);
-        diff -= hours * 1000 * 60 * 60;
-        var minutes = Math.floor(diff / 1000 / 60);
-        return `${hours}h ${minutes}m`;
     }
 
     function deleteJourney(journey, dayImport){
@@ -322,6 +330,51 @@
         console.log(compressed);
         navigator.clipboard.writeText(compressed); 
     }
+
+
+    var countries = []
+
+    function getFlags() {
+        for (const plan in storage) {
+            for (const day of storage[plan].days) {
+                for (const journey of day.journeys) {
+                    if (journey.fromCountry && typeof journey.fromCountry === 'string') {
+                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                        if (fromCountryIndex === -1) {
+                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(journey)
+                        console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+                    }
+
+                    if (journey.toCountry && typeof journey.toCountry === 'string') {
+                        const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                        if (toCountryIndex === -1) {
+                            countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                        }
+                    } else {
+                        console.log(`Invalid toCountry code: ${journey.toCountry}`);
+                    }
+                }
+            }
+        }
+        console.log(countries);
+        return countries;
+    }
+
+    function getCountryEmoji(code) {
+        if (countries.length === 0) {
+            getFlags();
+        }
+        const country = countries.find(country => country.code === code);
+        if (country) {
+            console.log("src", country.src);
+            return country.src;
+        }
+        return "";
+    }
+    
 
 
 </script>

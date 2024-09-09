@@ -9,7 +9,7 @@
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
                             <div class="flex items-center justify-center gap-3 mr-1">
-                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} />
+                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc"/>
                             </div>
                         </div>
                         <div class="flex gap-4">

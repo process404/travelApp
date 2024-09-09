@@ -26,5 +26,5 @@
 .blurBox::after{content:"";position:absolute;inset:0;z-index:20;width:100%;mask:linear-gradient(to right,transparent,black 60%);backdrop-filter:blur(4px)}
 @media(min-width:640px){.blurBox::after{mask:none}}
 @media(max-width:639px){.blurBox::after{mask:linear-gradient(to right,transparent,black 0%)}}
-.gradient{background: linear-gradient(90deg, rgb(6, 61, 112) 0%, rgb(15, 116, 199)100%);}
+.gradient{background: linear-gradient(90deg, rgb(6, 34, 112) 0%, rgb(15, 73, 199)100%);}
 </style>
