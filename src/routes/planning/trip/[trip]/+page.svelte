@@ -62,7 +62,7 @@
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center">
                                                     <div class="flex flex-col gap-1 items-start">
-                                                        <h3 class="text-white text-md"><span class="w-full inline-block sm:w-auto">{journey.from}</span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to}</h3>
+                                                        <h3 class="text-white text-md"><span class="w-full flex items-center gap-2 sm:w-auto">{journey.from} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.fromCountry}/flat/64.png`}></span> <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span> {journey.to} <span class="inline-block"><img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -274,20 +274,24 @@
     }
 
     function calcTime(departure, arrival){
-        var dep = new Date();
-        var arr = new Date();
-        var [depHour, depMinute] = departure.split(':');
-        var [arrHour, arrMinute] = arrival.split(':');
-        dep.setHours(depHour, depMinute);
-        arr.setHours(arrHour, arrMinute);
-        if (arr < dep) {
-            arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+        try{
+            var dep = new Date();
+            var arr = new Date();
+            var [depHour, depMinute] = departure.split(':');
+            var [arrHour, arrMinute] = arrival.split(':');
+            dep.setHours(depHour, depMinute);
+            arr.setHours(arrHour, arrMinute);
+            if (arr < dep) {
+                arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+            }
+            var diff = arr - dep;
+            var hours = Math.floor(diff / 1000 / 60 / 60);
+            diff -= hours * 1000 * 60 * 60;
+            var minutes = Math.floor(diff / 1000 / 60);
+            return `${hours}h ${minutes}m`;
+        }catch(e){
+            return 'Error';
         }
-        var diff = arr - dep;
-        var hours = Math.floor(diff / 1000 / 60 / 60);
-        diff -= hours * 1000 * 60 * 60;
-        var minutes = Math.floor(diff / 1000 / 60);
-        return `${hours}h ${minutes}m`;
     }
 
     function deleteJourney(journey, dayImport){
@@ -321,6 +325,16 @@
         var compressed = LZString.compressToBase64(data);
         console.log(compressed);
         navigator.clipboard.writeText(compressed); 
+    }
+
+    function getCountryEmoji(code){
+        const codeToEmoji = {
+            GB: "🇬🇧",
+            US: "🇺🇸",
+            // Add more country code to emoji mappings here
+        };
+
+        return codeToEmoji[code] || "";
     }
 
 

@@ -10,11 +10,11 @@
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
-                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} />
+                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc"/>
                             </div>
                             <div class="w-full">
                                 <h3 class="text-neutral-300 italic mb-2">To</h3>
-                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} />
+                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc"/>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -147,6 +147,15 @@
 </div>
 
 <script>
+    // TO-DO
+    // Add VIA points for journey (as the app will not be fetching timetable data unless a way is found with minimal / no api usage)
+    // Start / End Date AND time
+    // Select Operator
+    // Add fields such as class, ticket costs, delay, train code, leisure / commute, tags (wifi, dining car, sleeper train, cycling)
+    
+
+
+
     import { onMount, tick } from 'svelte';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';

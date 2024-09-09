@@ -1,0 +1,388 @@
+[
+    {
+        "tripID": "AEHTouKCpO1IjRn",
+        "name": "Europe 2024",
+        "start": "2024-09-30",
+        "end": "2024-10-04",
+        "description": "NL, CH, DE and BE",
+        "days": [
+            {
+                "day": 1,
+                "description": "",
+                "journeys": [
+                    { "code": "az77ww1ts2", "from": "Ormskirk", "fromCountry": "GB", "to": "Liverpool Central", "toCountry": "GB", "arrival": "06:25", "departure": "05:51", "service": "2U01 ", "operator": "ME", "description": "Option 1" },
+                    { "code": "mfjqdhgfzs", "from": "Liverpool Central", "fromCountry": "GB", "to": "Liverpool Lime Street", "toCountry": "GB", "arrival": "06:34", "departure": "06:26", "service": "N/A", "operator": "N/A", "description": "Option 1 - Walk Transfer" },
+                    { "code": "aaxibi1e6n", "from": "Liverpool Lime Street", "fromCountry": "GB", "to": "London Euston", "toCountry": "GB", "arrival": "08:56", "departure": "06:43", "service": "1R18", "operator": "VT", "description": "Option 1" },
+                    {
+                        "code": "bvsdm1792s",
+                        "from": "Liverpool Lime Street",
+                        "fromCountry": "GB",
+                        "to": "London Euston",
+                        "toCountry": "GB",
+                        "arrival": "08:27",
+                        "departure": "06:04",
+                        "service": "1R12 ",
+                        "operator": "VT",
+                        "description": "Option 2"
+                    },
+                    {
+                        "code": "ee3nso0o1s",
+                        "from": "London Euston",
+                        "to": "London St Pancras Intl",
+                        "arrival": "09:20",
+                        "departure": "09:05",
+                        "service": "N/A",
+                        "operator": "N/A",
+                        "description": "Walk or Tube Transfer - 15/20 minutes, assume maximum time.\nAdvised connection time between Euston and Eurostar departures is 1hr 20 minutes."
+                    },
+                    {
+                        "code": "vjydnatnne",
+                        "from": "London St Pancras Intl",
+                        "fromCountry": "GB",
+                        "to": "Amsterdam Centraal",
+                        "toCountry": "NL",
+                        "arrival": "16:15",
+                        "departure": "11:04",
+                        "service": "9126",
+                        "operator": "ES",
+                        "description": "SEPERATE RESERVATION (MUST BE PRINTED - 3 COPIES). ARRIVE 60-90 MIN BEFORE DEP. CHECK IN OPENS 90 MINUTES BEFORE DEPARTURE AND CLOSES 30 MINUTES PRIOR TO DEPARTURE."
+                    },
+                    { "code": "gxs6hccnj7", "from": "Amsterdam Centraal", "fromCountry": "NL", "to": "Utrecht Centraal", "toCountry": "NL", "arrival": "17:51", "departure": "17:24", "service": "3063", "operator": "NS / IC" }
+                ]
+            },
+            {
+                "day": 2,
+                "description": "",
+                "journeys": [
+                    {
+                        "code": "2g35hurk93",
+                        "from": "Utrecht Centraal",
+                        "fromCountry": "NL",
+                        "to": "Den Haag Centraal",
+                        "toCountry": "NL",
+                        "arrival": "06:35",
+                        "departure": "05:58",
+                        "service": "11712",
+                        "operator": "NS / IC",
+                        "description": "04:20 - 04:30 wake up to allow time to shower. Leave hotel at 05:20 (9-15 minute walk to station)"
+                    },
+                    {
+                        "code": "it110e028z",
+                        "from": "Den Haag Centraal",
+                        "fromCountry": "NL",
+                        "to": "Delft",
+                        "toCountry": "NL",
+                        "arrival": "07:00",
+                        "departure": "06:49",
+                        "service": "1123",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "2skl43zw0d",
+                        "from": "Delft",
+                        "fromCountry": "NL",
+                        "to": "Rotterdam Centraal",
+                        "toCountry": "NL",
+                        "arrival": "07:48",
+                        "departure": "07:35",
+                        "service": "2214",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "jclxh7zji7",
+                        "from": "Rotterdam Centraal",
+                        "fromCountry": "NL",
+                        "to": "Amsterdam Centraal",
+                        "toCountry": "NL",
+                        "arrival": "12:55",
+                        "departure": "11:42",
+                        "service": "2343",
+                        "operator": "NS / IC",
+                        "description": "Via Leiden / not HSL Zuid. \n\nEarlier train could be caught depending on interests (and supplement fee aswell as rail route and mileage intentions). Further travel to explore around the destination is to be considered but not included as not strictly planned, as long as return to AMS Centraal by no later than 19:00.  Follow the instructions of the next entry for this day."
+                    },
+                    {
+                        "code": "iem5ds3xyy",
+                        "from": "Amsterdam Centraal",
+                        "fromCountry": "NL",
+                        "to": "Basel SBB",
+                        "toCountry": "CH",
+                        "arrival": "06:20",
+                        "departure": "19:44",
+                        "service": "403",
+                        "operator": "NJ",
+                        "description": "SEPERATE RESERVATION (BOOKED, MUST BE PRINTED IN ADVANCE - 3 COPIES). ARRIVE AT AMS-CS (NL) NO LATER THAN 1850-1900 AS RESERVATION IS VOID IF NOT ONBOARD WITHIN 15 MINUTES OF DEPARTURE. THEREFORE, AIM FOR BOARDING 30-40 MINUTES PRIOR TO DEPARTURE. SET ALARMS FOR 17:45, 18:00, 18:25, 18:45. Aim to sleep at around 22:30 and wake up 05:40-05:50. Use vibrate alarm first before full volume alarm to minimize disturbance to others, consider using earphones with USB C adapter for alarm."
+                    }
+                ]
+            },
+            {
+                "day": 3,
+                "description": "",
+                "journeys": [
+                        { "code": "AvNGyP", "from": "Basel SBB", "fromCountry": "CH", "to": "Interlaken-Ost", "toCountry": "CH", "arrival": "08:58", "departure": "06:56", "service": "959", "operator": "SBB" },
+                        { "code": "cv^NOh", "from": "Interlaken-Ost", "fromCountry": "CH", "to": "Lauterbrunnen", "toCountry": "CH", "arrival": "09:26", "departure": "09:04", "service": "147", "operator": "BOB" },
+                        { "code": "&@Md9&", "from": "Lauterbrunnen", "fromCountry": "CH", "to": "Interlaken-Ost", "toCountry": "CH", "arrival": "11:24", "departure": "11:02", "service": "140", "operator": "BOB" },
+                        { "code": "EyU051", "from": "Interlaken-Ost", "fromCountry": "CH", "to": "Spiez", "toCountry": "CH", "arrival": "11:51", "departure": "11:30", "service": "4219", "operator": "SBB", "description": "Cross platform transfer at Spiez (3 min)" },
+                        { "code": "#(uSzv", "from": "Spiez", "fromCountry": "CH", "to": "Bern", "toCountry": "CH", "arrival": "12:24", "departure": "11:54", "service": "1068", "operator": "SBB" },
+                    {
+                        "code": "sCISEN",
+                        "from": "Bern",
+                        "fromCountry": "CH",
+                        "to": "Zurich HB",
+                        "toCountry": "CH",
+                        "arrival": "13:28",
+                        "departure": "12:31",
+                        "service": "717",
+                        "operator": "SBB",
+                        "description": "It is also possible to get to Zurich by on the hour almost as well as what was originally intended (before giving more time to account for issues) the hour after at 14:28"
+                    },
+                        {
+                            "code": "AT34Sh",
+                            "from": "Zurich HB",
+                            "fromCountry": "CH",
+                            "to": "Innsbruck Hbf",
+                            "toCountry": "AT",
+                            "arrival": "18:11",
+                            "departure": "14:40",
+                            "service": "169",
+                            "operator": "RJX",
+                            "description": "Intended option, see below for backup."
+                        },
+                        {
+                            "code": "LCwg!1",
+                            "from": "Zurich HB",
+                            "fromCountry": "CH",
+                            "to": "Sargrans",
+                            "toCountry": "CH",
+                            "arrival": "16:23",
+                            "departure": "15:12",
+                            "service": "2373",
+                            "operator": "SBB",
+                            "description": "BACKUP OPTION ONLY."
+                        },
+                        {
+                            "code": "TiX2Vp",
+                            "from": "Sargrans",
+                            "fromCountry": "CH",
+                            "to": "Buchs SG",
+                            "toCountry": "CH",
+                            "arrival": "16:44",
+                            "departure": "16:35",
+                            "service": "3278",
+                            "operator": "SBB",
+                            "description": "BACKUP OPTION ONLY."
+                        },
+                        {
+                            "code": "iehNvn",
+                            "from": "Buchs SG",
+                            "fromCountry": "CH",
+                            "to": "Feldkirch",
+                            "toCountry": "AT",
+                            "arrival": "17:11",
+                            "departure": "14:09",
+                            "service": "5721",
+                            "operator": "",
+                            "description": "BACKUP OPTION ONLY."
+                        },
+                        {
+                            "code": "$(f(55",
+                            "from": "Feldkirch",
+                            "fromCountry": "AT",
+                            "to": "Innsbruck Hbf",
+                            "toCountry": "AT",
+                            "arrival": "19:11",
+                            "departure": "17:17",
+                            "service": "663",
+                            "operator": "RJX",
+                            "description": "BACKUP OPTION ONLY."
+                        },
+                    {
+                        "code": "C6Usl(",
+                        "from": "Innsbruck Hbf",
+                        "fromCountry": "AT",
+                        "to": "Koln Messe / Deutz Gl.11-12",
+                        "toCountry": "DE",
+                        "arrival": "06:53",
+                        "departure": "20:44",
+                        "service": "420",
+                        "operator": "NJ",
+                        "description": "SEPERATE RESERVATION, ARRIVE / BOARD NO LATER THAN 20:00 AS RESERVATION IS VOID IF NOT ONBOARD 15 MINUTS BEFORE DEPARTURE (2019 / 2029). IF DESIRED: IF DESIRED, ARRIVE EARLIER THAN 20:00 TO ALLOW FOR FOOD IN STATION CONCOURSE FOOD OUTLETS. SET ALARMS: 1845, 1900, 1930, 1945. \n\nAim to sleep at around 22:30 and wake up at 06:00. Use vibrate alarm first before full volume alarm to minimize disturbance to others, consider using earphones with USB C adapter for alarm."
+                    }
+                ]
+            },
+            {
+                "day": 4,
+                "description": "",
+                "journeys": [
+                    {
+                        "code": "b)A5^N",
+                        "from": "Koln Messe / Deutz Gl.11-12",
+                        "fromCountry": "DE",
+                        "to": "Dusseldorf Hbf",
+                        "toCountry": "DE",
+                        "arrival": "08:45",
+                        "departure": "08:24",
+                        "service": "1223",
+                        "operator": "ICE / DB"
+                    },
+                    {
+                        "code": "#bAEqn",
+                        "from": "Dusseldorf Hbf",
+                        "fromCountry": "DE",
+                        "to": "Münster (Westf) Hbf",
+                        "toCountry": "DE",
+                        "arrival": "10:45",
+                        "departure": "09:28",
+                        "service": "2310",
+                        "operator": "IC / DB"
+                    },
+                    {
+                        "code": "6u8a@F",
+                        "from": "Münster (Westf) Hbf",
+                        "fromCountry": "DE",
+                        "to": "Rheine",
+                        "toCountry": "DE",
+                        "arrival": "13:32",
+                        "departure": "13:05",
+                        "service": "90282",
+                        "operator": "DB / RE"
+                    },
+                    {
+                        "code": "FTzFqn",
+                        "from": "Rheine",
+                        "fromCountry": "DE",
+                        "to": "Hengelo",
+                        "toCountry": "NL",
+                        "arrival": "14:26",
+                        "departure": "13:49",
+                        "service": "20368",
+                        "operator": "DB / RE"
+                    },
+                    {
+                        "code": "8%u%5n",
+                        "from": "Hengelo",
+                        "fromCountry": "NL",
+                        "to": "Zwolle",
+                        "toCountry": "NL",
+                        "arrival": "15:21",
+                        "departure": "14:39",
+                        "service": "17954",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "$dUmC8",
+                        "from": "Zwolle",
+                        "fromCountry": "NL",
+                        "to": "Assen",
+                        "toCountry": "NL",
+                        "arrival": "16:24",
+                        "departure": "15:45",
+                        "service": "551",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "5$TEEJ",
+                        "from": "Assen",
+                        "fromCountry": "NL",
+                        "to": "Groningen",
+                        "toCountry": "NL",
+                        "arrival": "17:11",
+                        "departure": "16:54",
+                        "service": "753",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "9cQNAT",
+                        "from": "Groningen",
+                        "fromCountry": "NL",
+                        "to": "Zwolle",
+                        "toCountry": "NL",
+                        "arrival": "19:38",
+                        "departure": "18:33",
+                        "service": "8170",
+                        "operator": "NS / RE",
+                        "description": "Possibility of catching earlier train at 18:19 via Zwolle arriving at Utrecht at 20:11. "
+                    },
+                    {
+                        "code": "3*rpW#",
+                        "from": "Zwolle",
+                        "fromCountry": "NL",
+                        "to": "Utrecht Centraal",
+                        "toCountry": "NL",
+                        "arrival": "20:41",
+                        "departure": "19:50",
+                        "service": "670",
+                        "operator": "NS / IC",
+                        "description": "07:30 wake up."
+                    }
+                ]
+            },
+            {
+                "day": 5,
+                "description": "",
+                "journeys": [
+                    {
+                        "code": "Uz$XeY",
+                        "from": "Utrecht Centraal",
+                        "fromCountry": "NL",
+                        "to": "Rotterdam Centraal",
+                        "toCountry": "NL",
+                        "arrival": "09:55",
+                        "departure": "09:18",
+                        "service": "524",
+                        "operator": "NS / IC",
+                        "description": "07:30 wake up to allow time for shower etc. Leave hotel at 08:40-08:50 (9-15 minute walk to the station)."
+                    },
+                    {
+                        "code": "hf0AV7",
+                        "from": "Rotterdam Centraal",
+                        "fromCountry": "NL",
+                        "to": "Breda",
+                        "toCountry": "NL",
+                        "arrival": "10:34",
+                        "departure": "10:11",
+                        "service": "9224",
+                        "operator": "NS / IC"
+                    },
+                    {
+                        "code": "lx8nkB",
+                        "from": "Breda",
+                        "fromCountry": "NL",
+                        "to": "Brussels-Midi",
+                        "toCountry": "BE",
+                        "arrival": "15:17",
+                        "departure": "13:42",
+                        "service": "9236",
+                        "operator": "NS / IC",
+                        "description": "Supplement included for international journeys."
+                    },
+                    {
+                        "code": "#YgqlJ",
+                        "from": "Brussels-Midi",
+                        "fromCountry": "BE",
+                        "to": "London St Pancras Intl",
+                        "toCountry": "GB",
+                        "arrival": "17:57",
+                        "departure": "16:51",
+                        "service": "9149",
+                        "operator": "ES",
+                        "description": "SEPERATE RESERVATION (MUST BE PRINTED - 3 COPIES). ARRIVE 60-90 MIN BEFORE DEP. CHECK IN OPENS 90 MINUTES BEFORE DEPARTURE AND CLOSES 30 MINUTES PRIOR TO DEPARTURE."
+                    },
+                    { "code": "SQZqbY", "from": "London St Pancras Intl", "fromCountry": "GB", "to": "London Euston", "toCountry": "GB", "arrival": "18:45", "departure": "18:10", "service": "N/A", "operator": "N/A", "description": "Walk / Tube transfer (tube preference)" },
+                    {
+                        "code": "VZU6KL",
+                        "from": "London Euston",
+                        "fromCountry": "GB",
+                        "to": "Liverpool Lime Street",
+                        "toCountry": "GB",
+                        "arrival": "21:22",
+                        "departure": "19:07",
+                        "service": "1F35",
+                        "operator": "VT"
+                    },
+                    { "code": "%)W6uR", "from": "Liverpool Lime Street", "fromCountry": "GB", "to": "Liverpool Central", "toCountry": "GB", "arrival": "21:35", "departure": "21:33", "service": "2W54", "operator": "ME" },
+                    { "code": "iweXiR", "from": "Liverpool Central", "fromCountry": "GB", "to": "Ormskirk", "toCountry": "GB", "arrival": "22:28", "departure": "21:55", "service": "2O63", "operator": "ME" }
+                ]
+            }
+        ]
+    }
+]
