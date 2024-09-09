@@ -1,6 +1,4 @@
-{#if dropdownCountry}
-    <button class="fixed w-full h-screen z-30 left-0 top-0 hover:cursor-default" on:click={() => {dropdownCountry = false}}></button>
-{/if}
+
 <div class="flex gap-1">
     <div class="relative w-full gap-2">
         <!--TO-DO add precise location info and country selector-->
@@ -15,17 +13,12 @@
         </div>
         {/if}
     </div>
-    {#if ver="loc"}
-    <div class="relative min-w-[40px]">
-        <button class="input blue min-w-[40px]" on:click={() => {dropdownCountry = true}}>{presetC}</button>
-        {#if dropdownCountry}
-            <div class="absolute bottom-100 bg-neutral-700 border-[1px] border-neutral-800 00 p-2 w-[600%] right-0 rounded-md rounded-t-none pl-4 pr-4 pb-4 z-30 max-h-[250px] overflow-y-scroll">
-                {#each countryList as country}
-                    <button on:click={() => {presetC = country.code; dropdownCountry = false}} class="text-white w-full text-sm text-left after:absolute after:bottom-[-30%] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-25%] first:before:hidden  mt-2 relative">({country.code}) - {country.name}</button>
-                {/each}
-            </div>
-        {/if}
-    </div>
+    {#if ver === "loc"}
+        <select class="input blue w-1/4 h-[38px]" bind:value={presetC}>
+            {#each countryList as country}
+            <option value={country.code} selected={presetC === country.code}>({country.code}) - {country.name}</option>
+            {/each}
+        </select>
     {/if}
 </div>
 
@@ -155,3 +148,7 @@
 
 
 </script>
+
+<style>
+    select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
+</style>
