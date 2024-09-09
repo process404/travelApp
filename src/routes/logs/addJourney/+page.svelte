@@ -94,8 +94,8 @@
                                                 {#if train.dropdown_2 === "section"}
                                                 <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", train)}>Train</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", train)}>Other</button>
                                                 </div>
                                                 {/if}
@@ -358,14 +358,15 @@
         var lon;
 
 
-        if(from || to == ''){
+        if(from === '' || to === ''){
             if(!$noLocation){
-                customAlertSummon("No location selected", "err");
-                return;
+            console.log(from,to)
+            customAlertSummon("No location selected", "err");
+            return;
             }
         }
 
-        if(inputDate == ''){
+        if(inputDateStart == '' || inputDateEnd == ''){
             customAlertSummon("No date selected", "err");
             return;
         }
@@ -375,7 +376,7 @@
             return;
         }
 
-        if(fromC || toC == ''){
+        if(fromC == '' || toC == ''){
             if(!$noLocation){
                 customAlertSummon("No country selected", "err");
                 return;
@@ -406,51 +407,49 @@
             } 
         }
 
-        let logs = localStorage.getItem('logs');
-        if (!logs) {
-            logs = JSON.stringify([]);
+        let journeys = localStorage.getItem('journeys');
+        if (!journeys) {
+            journeys = JSON.stringify([]);
         }
 
         if($preciseLocation && preciseLat && preciseLon){
             logNumbers.subscribe(numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
-                log_location: location,
-                log_date: inputDate,
-                log_time: inputTime,
+                from: from,
+                fromCountry: fromC,
+                to: to,
+                toCountry: toC,
+                start_date: inputDateStart,
+                start_time: inputTimeStart,
+                end_date: inputDateEnd,
+                end_time: inputTimeEnd,
                 log_lat: preciseLat,
                 log_lon: preciseLon
             }));
-            console.log(numbersWithLocation)
 
-            console.log(numbers)
-            const addNew = JSON.parse(logs).concat(numbersWithLocation);
-            localStorage.setItem('logs', JSON.stringify(addNew));
-            console.log(addNew);
+            const addNew = JSON.parse(journeys).concat(numbersWithLocation);
+            localStorage.setItem('journeys', JSON.stringify(addNew));
         });
         }else{
             logNumbers.subscribe(numbers => {
-                console.log("E")
                 const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                     ...train,
-                    log_location: location,
-                    log_date: inputDate,
-                    log_time: inputTime
+                    from: from,
+                    to: to,
+                    start_date: inputDateStart,
+                    start_time: inputTimeStart,
+                    end_date: inputDateEnd,
+                    end_time: inputTimeEnd,
                 }));
 
-                console.log(numbers)
-                const addNew = JSON.parse(logs).concat(numbersWithLocation);
-                localStorage.setItem('logs', JSON.stringify(addNew));
-                console.log(addNew);
+                const addNew = JSON.parse(journeys).concat(numbersWithLocation);
+                localStorage.setItem('journeys', JSON.stringify(addNew));
             });
-
-
         }
 
 
-        let logreplace = inputDate.replace('/', '-');
-        console.log(logreplace)
-        window.location.href = `../overview/${logreplace}`;
+        window.location.href = `../overview/` + inputDateStart; 
     }
 
 
@@ -518,11 +517,11 @@
         }
 
         function selectFrom(o){
-            this.from = o.detail.text;
+            from = o.detail.text;
         }
 
         function selectTo(o){
-            this.to = o.detail.text;
+            to = o.detail.text;
         }
 
 

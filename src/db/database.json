@@ -41,7 +41,8 @@
                         { "name": "SNG", "short": "NL_SNG" },
                         { "name": "SLT", "short": "NL_SLT" },
                         { "name": "ICR", "short": "NL_ICR" },
-                        { "name": "ICNG", "short": "NL_ICNG" }
+                        { "name": "ICNG", "short": "NL_ICNG" },
+                        { "name": "ICm", "short": "NL_ICM" }
                     ],
                     "pictures": []
                 },
