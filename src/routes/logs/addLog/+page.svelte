@@ -9,7 +9,7 @@
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
                             <div class="flex items-center w-full gap-3 mr-1">
-                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc" class="w-full"/>
+                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc" class="w-full" bind:presetC={sCountry}/>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -152,6 +152,7 @@
     var inputVariant = writable([])
     var inputDate = ''
     var inputTime = ''
+    var sCountry = ''
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
@@ -363,9 +364,14 @@
         var loc = localStorage.getItem('locations');
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
-            if(!parsedLoc.includes(location)){
-                var newloc = parsedLoc.concat(location);
-                localStorage.setItem('locations', JSON.stringify(newloc));
+            var found = false;
+            for(var locs in parsedLoc){
+                if(locs == from){
+                    found = true;
+                }
+            }
+            if(found = false){
+                parsedLoc.push({"name":location, "country":sCountry})
             }
         }
 

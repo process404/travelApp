@@ -10,11 +10,11 @@
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
-                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc"/>
+                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc" bind:presetC={fromC}/>
                             </div>
                             <div class="w-full">
                                 <h3 class="text-neutral-300 italic mb-2">To</h3>
-                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc"/>
+                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC}/>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -30,10 +30,15 @@
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Date / Time</h3>
+                        <h3 class="text-neutral-300 italic">Departure</h3>
                         <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
+                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateStart}>
+                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeStart}>
+                        </div>
+                        <h3 class="text-neutral-300 italic mt-4">Arrival</h3>
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateEnd}>
+                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeEnd}>
                         </div>
                     </div>
 
@@ -173,13 +178,17 @@
     var inputNumber = ''
     var inputArea = writable([])
     var inputVariant = writable([])
-    var inputDate = ''
-    var inputTime = ''
+    var inputDateStart = ''
+    var inputTimeStart = ''
+    var inputDateEnd = ''
+    var inputTimeEnd = ''
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
     var noLocation = writable(false);
     var id = 0
+    var toC = ''
+    var fromC = ''
     
     var alrtTxt  = writable('')
     var alrtAct = writable(false)
@@ -218,29 +227,11 @@
         logAreas = resolvedDbData.trainTypes;
         // console.log(logAreas)
 
-        inputDate = new Date().toISOString().split('T')[0];
+        inputDateStart = new Date().toISOString().split('T')[0];
+        inputDateEnd = new Date().toISOString().split('T')[0];
 
     });
 
-    function promptSuggestions(){
-        locationSuggestions = []
-        // console.log(combinedLocations)
-        if(location != '' && combinedLocations){
-            for(const item in combinedLocations){
-                // console.log(combinedLocations[item])
-                if (combinedLocations[item] && combinedLocations[item].toLowerCase().includes(location)) {
-                    locationSuggestions.push(combinedLocations[item]);
-                }
-            }
-        }
-        // console.log(location)
-        // console.log(locationSuggestions)
-    }
-
-    function selectLocation(name){
-        location = name
-        locationSuggestions = []
-    }
     
     function inputType(type, train) {
         // console.log(type)
@@ -367,7 +358,7 @@
         var lon;
 
 
-        if(location == ''){
+        if(from || to == ''){
             if(!$noLocation){
                 customAlertSummon("No location selected", "err");
                 return;
@@ -384,13 +375,35 @@
             return;
         }
 
+        if(fromC || toC == ''){
+            if(!$noLocation){
+                customAlertSummon("No country selected", "err");
+                return;
+            }
+        }
+
         var loc = localStorage.getItem('locations');
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
-            if(!parsedLoc.includes(location)){
-                var newloc = parsedLoc.concat(location);
-                localStorage.setItem('locations', JSON.stringify(newloc));
+            var found = false;
+            for(var locs in parsedLoc){
+                if(locs == from){
+                    found = true;
+                }
             }
+            if(found = false){
+                parsedLoc.push({"name":from, "country":fromCountry})
+            }
+
+            found = false
+            for(var locs in parsedLoc){
+                if(locs == to){
+                    found = true;
+                }
+            }
+            if(found = false){
+                parsedLoc.push({"name":to, "country":toCountry})
+            } 
         }
 
         let logs = localStorage.getItem('logs');
