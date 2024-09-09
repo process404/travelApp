@@ -3,7 +3,7 @@
     <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col">
         <div class="flex justify-between items-center">
             <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
-            <button class="button red p-1 pl-3 pr-3" on:click={close}>Cancel</button>
+            <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
         </div>
         <hr class="mt-2 mb-4 border-neutral-700">
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
