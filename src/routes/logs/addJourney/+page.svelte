@@ -6,7 +6,7 @@
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                     <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <div class="flex items-center justify-center gap-3 mr-1 sm:flex-row flex-col mb-3 sm:mb-1">
+                        <div class="flex items-center justify-center gap-3 mr-1 flex-col mb-3 sm:mb-1">
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
