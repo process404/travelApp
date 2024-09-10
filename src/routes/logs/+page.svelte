@@ -1,4 +1,4 @@
-<div style="width: 100vw; display: flex; flex-direction: column" id="app">
+<div style="width: 100vw; display: flex; flex-direction: column" id="app" class="items-center justify-center">
     <Nav ver="back" class="w-full"/>
     <div class="h-full max-w-[1000px] w-full flex flex-col">
         {#if currentPage === 'home'}

@@ -1,3 +1,4 @@
+<CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 {#if tooltip || tooltip2}   
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}} allStns={allStns}></button>
 {/if}
@@ -329,12 +330,21 @@
     
     
     import LZString from 'lz-string'
+    import CustomAlert from '../../../../lib/components/Alert.svelte'
+
+
+    var alrtTxt = writable('')
+    var alrtAct = writable(false)
+    var alrtMode = writable('success')
     
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
         // console.log(compressed);
         navigator.clipboard.writeText(compressed); 
+        $alrtTxt = 'Data copied to clipboard';
+        $alrtAct = true;
+        
     }
     
     
