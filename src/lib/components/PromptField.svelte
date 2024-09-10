@@ -35,11 +35,11 @@
     // See also: https://www.reddit.com/r/openstreetmap/comments/uxfdgo/exporting_specific_railway_data/ and https://github.com/juliuste/trainline-stations
 
     export let ds;
+    export let adDs;
     export let value;
     export let disabled;
     export let ver;
     export let presetC;
-    export let stns;
 
     let dropdownCountry = false;
 
@@ -67,7 +67,7 @@
 
                 // console.log(stns);
 
-                const filteredStations2 = stns.filter(set => {
+                const filteredStations2 = adDs.filter(set => {
                     const lowerCaseName = set.name.toLowerCase();
                     return lowerCaseName.startsWith(value.toLowerCase()) && !locationSuggestions.some(suggestion => suggestion.name === set.name) && !filteredStations.some(suggestion => suggestion.name === set.name);
                 });
@@ -169,8 +169,8 @@
 
 
     $: {
-       if(stns || ds){
-            if(stns.length > 0 || stns.length > 0 && ds.length > 0){
+       if(adDs || ds){
+            if(adDs.length > 0 || adDs.length > 0 && ds.length > 0){
                 loading = false;
             }
             else{
