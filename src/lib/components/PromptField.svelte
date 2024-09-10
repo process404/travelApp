@@ -52,22 +52,21 @@
         locationSuggestions = []
         if(ver == "loc"){
             if(value.length > 1){
-                ds.forEach(set => {
-                    if(set.name.toLowerCase().includes(value.toLowerCase())){
-                        if(value != set.name){
-                            locationSuggestions.push({ name: set.name, country: set.country })
-                        }
-                    }
-                })
-
-                console.log(stns);
-
-                const filteredStations = stns.filter(set => {
+                const filteredStations = ds.filter(set => {
                     const lowerCaseName = set.name.toLowerCase();
-                    return lowerCaseName.includes(value.toLowerCase()) && !locationSuggestions.some(suggestion => suggestion.name === set.name);
+                    return lowerCaseName.startsWith(value.toLowerCase()) && !locationSuggestions.some(suggestion => suggestion.name === set.name);
                 });
 
                 locationSuggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country })));
+
+                console.log(stns);
+
+                const filteredStations2 = stns.filter(set => {
+                    const lowerCaseName = set.name.toLowerCase();
+                    return lowerCaseName.startsWith(value.toLowerCase()) && !locationSuggestions.some(suggestion => suggestion.name === set.name);
+                });
+
+                locationSuggestions.push(...filteredStations2.map(set => ({ name: set.name, country: set.country })));
             }
         }
         else{
