@@ -7,11 +7,15 @@
         <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled}>
         {#if locationSuggestions.length != 0}
         <div class="absolute bottom-100 bg-neutral-800 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
-            {#each locationSuggestions.slice(0,5) as name}
-                {#if name.name != value}
-                    <button on:click={selectLocationFrom(name)} class="text-white w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden  mt-2 relative flex items-center gap-2">{name.name} <span><img src={`https://flagsapi.com/${name.country}/flat/64.png`} class="w-4 h-4" alt={name.country}></span></button>
-                {/if}
-            {/each}
+            {#if !loading}
+                {#each locationSuggestions.slice(0,5) as name}
+                    {#if name.name != value}
+                        <button on:click={selectLocationFrom(name)} class="text-white w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden  mt-2 relative flex items-center gap-2">{name.name} <span><img src={`https://flagsapi.com/${name.country}/flat/64.png`} class="w-4 h-4" alt={name.country}></span></button>
+                    {/if}
+                {/each}
+            {:else}
+                <span class="loader"></span>
+            {/if}
         </div>
         {/if}
     </div>
@@ -46,6 +50,8 @@
     let countryList = getCountryList()
 
     // console.log(presetC)
+
+    let loading = false;
 
     // console.log(ds)
     function promptSuggestions(){
@@ -161,8 +167,22 @@
     }
 
 
+
+    $: {
+       if(stns || ds){
+            if(stns.length > 0 || stns.length > 0 && ds.length > 0){
+                loading = false;
+            }
+            else{
+                loading = true;
+            }
+       }
+    }
+
+
 </script>
 
 <style>
     select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
