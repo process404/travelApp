@@ -45,7 +45,7 @@
 }
 
 .button.red{
-    @apply bg-red-700  before:bg-red-300 before:bg-opacity-10 text-white after:bg-red-700 after:bg-opacity-0
+    @apply bg-red-800  before:bg-red-300 before:bg-opacity-10 text-white after:bg-red-700 after:bg-opacity-0
 }
 
 .button.red.active{
@@ -76,7 +76,7 @@
     @apply after:bg-green-800 after:bg-opacity-20
 }
 .button.blue{
-    @apply bg-blue-700  before:bg-blue-300 before:bg-opacity-5 invalid:border-b-red-700 hover:invalid:border-red-700 text-white
+    @apply bg-blue-700  before:bg-blue-300 before:bg-opacity-10 invalid:border-b-red-700 hover:invalid:border-red-700 text-white
 }
 
 .button.blue.active{
@@ -84,7 +84,7 @@
 }
 
 .button.blue2{
-    @apply bg-blue-800  before:bg-blue-300 before:bg-opacity-5 text-white
+    @apply bg-blue-800  before:bg-blue-300 before:bg-opacity-10 text-white
 }
 
 .button.blue2.active{
@@ -92,7 +92,7 @@
 }
 
 .button.blue3{
-    @apply bg-blue-900 before:bg-blue-300 before:bg-opacity-5 text-white;
+    @apply bg-blue-900 before:bg-blue-300 before:bg-opacity-10 text-white;
 }
 
 .button.blue3.active{
@@ -297,7 +297,7 @@
     0%{
         width: 50%;
         opacity: 0;
-        border-radius: 100%
+        border-radius: 20%
     }
     100%{
         width: 100%;
@@ -315,7 +315,7 @@
     100%{
         width: 100%;
         opacity: 0;
-        border-radius: 100%
+        border-radius: 20%
     }
 }
 
@@ -734,7 +734,7 @@ background: #555;
 
 
 .switch{
-    @apply appearance-none dark:bg-neutral-800 w-16 h-8 rounded-2xl border-[2px] dark:border-black dark:border-opacity-50 hover:cursor-pointer relative before:w-5 before:h-5 before:absolute before:top-1 before:translate-x-1 before:duration-300 before:dark:bg-white before:rounded-full duration-200 border-neutral-600 before:bg-neutral-600 bg-neutral-300
+    @apply appearance-none dark:bg-neutral-800 w-16 h-8 rounded-2xl border-[2px] dark:border-black dark:border-opacity-50 hover:cursor-pointer relative before:w-5 before:h-5 before:absolute before:top-1 before:translate-x-1 before:duration-300 before:dark:bg-white before:rounded-md duration-200 border-neutral-600 before:bg-neutral-600 bg-neutral-300
 }
 
 .switch:checked{
