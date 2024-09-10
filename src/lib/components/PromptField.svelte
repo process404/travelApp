@@ -1,5 +1,5 @@
 {#if locationSuggestions.length != 0}
-    <button class="fixed w-screen h-screen z-40 left-0 top-0 cursor-default" on:click={() => {locationSuggestions = []}}></button>
+    <button class="fixed w-screen h-screen z-40 left-0 top-0 cursor-default p-0" on:click={() => {locationSuggestions = []}}></button>
 {/if}
 <div class="flex gap-1 w-full">
     <div class="relative w-full gap-2">
@@ -30,8 +30,6 @@
     // TO-DO: Add country selector when getting country from list of stations is unavailable, also use list of stations from github for stations
     // See also: https://www.reddit.com/r/openstreetmap/comments/uxfdgo/exporting_specific_railway_data/ and https://github.com/juliuste/trainline-stations
 
-
-
     export let ds;
     export let value;
     export let disabled;
@@ -60,6 +58,8 @@
                         }
                     }
                 })
+
+
             }
         }
         else{

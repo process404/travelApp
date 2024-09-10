@@ -1,11 +1,11 @@
 {#if tooltip || tooltip2}   
-<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}}></button>
+<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}} allStns={allStns}></button>
 {/if}
 {#if addJourney}
 <AddJourney on:message={addJourneyFinal} day={addJourneyDay}/>
 {/if}
 {#if editJourney}
-<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit}/>
+<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} allStns={allStns}/>
 {/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
@@ -147,9 +147,10 @@
     var addJourneyDay = ''
     var editJourneyDay = ''
     let storage = []
-
-
-
+    
+    
+    
+    
     onMount(() => {
         // Check if running in the browser before accessing localStorage
         if (typeof window !== 'undefined') {
@@ -157,7 +158,7 @@
             getFlags();
         }
     });
-
+    
     function getPlan(){
         for(const plan in storage){
             console.log(storage[plan])
@@ -175,16 +176,16 @@
         document.title = 'Trip';
         getPlan();
     });
-
+    
     function callEdit(){
         tripName.set(editName);
     }
-
+    
     function callEditDesc(){
         tripDescription.set(editDescription);
     }
-
-
+    
+    
     function deletePlan(){
         var plan = thisTrip;
         if(confirm("Are you sure you would like to delete plan '" + plan.name  + "'? THIS IS A PERMANENT ACTION AND CANNOT BE UNDONE.")){
@@ -198,7 +199,7 @@
             }
         }
     }
-
+    
     function submitChanges(){
         var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
@@ -208,7 +209,7 @@
             }
         }
     }
-
+    
     function submitChangesDesc(){
         var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
@@ -220,14 +221,14 @@
     }
 
     let addDay = ''
-
+    
     function addJourneyFn(day){
         addJourney = true;
         addJourneyDay = day.day;
         addDay = day;
     }
-
-
+    
+    
     function addJourneyFinal(data){
         console.log(data.detail.text);
         addJourney = false;
@@ -243,16 +244,16 @@
             }
         }
     }
-
+    
     let journeyToEdit
-
+    
     function callEditJourney(journey, day){
         editJourney = true;
         journeyToEdit = journey;
         console.log(day);
         editJourneyDay = day;
     }
-
+    
     function editJourneyFinal(data){
         console.log(data.detail.text);
         editJourney = false;
@@ -276,7 +277,7 @@
             }
         }
     }
-
+    
     function calcTime(departure, arrival){
         try{
             var dep = new Date();
@@ -297,7 +298,7 @@
             return 'Error';
         }
     }
-
+    
     function deleteJourney(journey, dayImport){
         if(confirm("Are you sure you would like to delete this journey?")){
             for (const plan of storage) {
@@ -316,24 +317,24 @@
             }
         }
     }
-
+    
     function goPrint(){
         window.location.href = '/planning/trip/' + param + '/print';
     }
-
-
+    
+    
     import LZString from 'lz-string'
-
+    
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
         console.log(compressed);
         navigator.clipboard.writeText(compressed); 
     }
-
-
+    
+    
     var countries = []
-
+    
     function getFlags() {
         for (const plan in storage) {
             for (const day of storage[plan].days) {
@@ -362,7 +363,7 @@
         console.log(countries);
         return countries;
     }
-
+    
     function getCountryEmoji(code) {
         if (countries.length === 0) {
             getFlags();
@@ -375,13 +376,23 @@
         return "";
     }
     
-
-
+    let allStns = null
+    
+    onMount(async () => {
+        try {
+            const module = await import('./page.js');
+            allStns = await module.allStations
+        } catch (error) {
+            console.error('Error fetching stations:', error);
+        }
+    });
+    
+    
 </script>
 
 <style>
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-
+    
     .triangle{
         clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }

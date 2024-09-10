@@ -1,5 +1,5 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<button class="fixed w-full h-screen bg-black z-30 bg-opacity-10 backdrop-blur-xl flex items-center justify-center overflow-y-scroll" on:mousedown|self={close}>
+<button class="fixed w-full h-screen bg-black z-30 bg-opacity-10 backdrop-blur-xl flex items-center justify-center p-0" on:mousedown|self={close}>
     <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col">
         <div class="flex justify-between items-center">
             <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
@@ -55,6 +55,7 @@ import { createEventDispatcher } from "svelte";
 const dispatch = createEventDispatcher();
 
 export let day;
+export let allStns;
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
