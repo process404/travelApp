@@ -1,5 +1,5 @@
 
-<div id="app" class="flex flex-col items-center h-screen justify-start">
+<div style="width: 100vw; display: flex; flex-direction: column" id="app">
 	<Nav ver="main"/>
 	{#if currentPage == 'main'}
 	<div class="h-full max-w-[1000px] w-full flex flex-col flex-grow">

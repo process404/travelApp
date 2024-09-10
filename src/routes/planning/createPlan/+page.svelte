@@ -1,5 +1,5 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div class="flex flex-col h-screen">
+<div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col h-full">

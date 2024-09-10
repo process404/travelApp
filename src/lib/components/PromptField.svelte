@@ -169,7 +169,7 @@
 
 
     $: {
-       if(adDs || ds){
+       if(adDs && ds){
             if(adDs.length > 0 || adDs.length > 0 && ds.length > 0){
                 loading = false;
             }
