@@ -1,11 +1,11 @@
 {#if tooltip || tooltip2}   
-<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}}></button>
+<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}} allStns={allStns}></button>
 {/if}
-{#if addJourney}
-<AddJourney on:message={addJourneyFinal} day={addJourneyDay}/>
+{#if addJourney && !loadStns}
+<AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns}/>
 {/if}
-{#if editJourney}
-<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit}/>
+{#if editJourney && !loadStns}
+<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} allStns={allStns}/>
 {/if}
 <div class="flex flex-col h-screen">
     <Nav ver="back"/>
@@ -54,7 +54,11 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                        {#if !loadStns}
+                                            <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                        {:else}
+                                            <span class="loader" style="margin-top:0px"></span>
+                                        {/if}
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
@@ -102,7 +106,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="w-1/4 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
-                                                        <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        {#if !loadStns}
+                                                            <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        {:else}
+                                                            <div class="w-full flex items-center justify-center h-[36px]">
+                                                                <span class="loader" style="margin-top:0px"></span>
+                                                            </div>
+                                                        {/if}
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
                                                 </div>
@@ -147,9 +157,10 @@
     var addJourneyDay = ''
     var editJourneyDay = ''
     let storage = []
-
-
-
+    
+    
+    
+    
     onMount(() => {
         // Check if running in the browser before accessing localStorage
         if (typeof window !== 'undefined') {
@@ -157,7 +168,7 @@
             getFlags();
         }
     });
-
+    
     function getPlan(){
         for(const plan in storage){
             console.log(storage[plan])
@@ -175,16 +186,16 @@
         document.title = 'Trip';
         getPlan();
     });
-
+    
     function callEdit(){
         tripName.set(editName);
     }
-
+    
     function callEditDesc(){
         tripDescription.set(editDescription);
     }
-
-
+    
+    
     function deletePlan(){
         var plan = thisTrip;
         if(confirm("Are you sure you would like to delete plan '" + plan.name  + "'? THIS IS A PERMANENT ACTION AND CANNOT BE UNDONE.")){
@@ -198,7 +209,7 @@
             }
         }
     }
-
+    
     function submitChanges(){
         var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
@@ -208,7 +219,7 @@
             }
         }
     }
-
+    
     function submitChangesDesc(){
         var storage = JSON.parse(localStorage.getItem('planning'));
         for(const plan in storage){
@@ -220,14 +231,14 @@
     }
 
     let addDay = ''
-
+    
     function addJourneyFn(day){
         addJourney = true;
         addJourneyDay = day.day;
         addDay = day;
     }
-
-
+    
+    
     function addJourneyFinal(data){
         console.log(data.detail.text);
         addJourney = false;
@@ -243,16 +254,16 @@
             }
         }
     }
-
+    
     let journeyToEdit
-
+    
     function callEditJourney(journey, day){
         editJourney = true;
         journeyToEdit = journey;
         console.log(day);
         editJourneyDay = day;
     }
-
+    
     function editJourneyFinal(data){
         console.log(data.detail.text);
         editJourney = false;
@@ -276,7 +287,7 @@
             }
         }
     }
-
+    
     function calcTime(departure, arrival){
         try{
             var dep = new Date();
@@ -297,7 +308,7 @@
             return 'Error';
         }
     }
-
+    
     function deleteJourney(journey, dayImport){
         if(confirm("Are you sure you would like to delete this journey?")){
             for (const plan of storage) {
@@ -316,24 +327,24 @@
             }
         }
     }
-
+    
     function goPrint(){
         window.location.href = '/planning/trip/' + param + '/print';
     }
-
-
+    
+    
     import LZString from 'lz-string'
-
+    
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
         console.log(compressed);
         navigator.clipboard.writeText(compressed); 
     }
-
-
+    
+    
     var countries = []
-
+    
     function getFlags() {
         for (const plan in storage) {
             for (const day of storage[plan].days) {
@@ -362,7 +373,7 @@
         console.log(countries);
         return countries;
     }
-
+    
     function getCountryEmoji(code) {
         if (countries.length === 0) {
             getFlags();
@@ -375,13 +386,26 @@
         return "";
     }
     
-
-
+    let allStns = null
+    let loadStns = true;
+    
+    onMount(async () => {
+        try {
+            const module = await import('./page.js');
+            allStns = await module.allStations
+        } catch (error) {
+            console.error('Error fetching stations:', error);
+        }finally{
+            loadStns = false;
+        }
+    });
+    
+    
 </script>
 
 <style>
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-
+    
     .triangle{
         clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }
