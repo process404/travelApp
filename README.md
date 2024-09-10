@@ -8,7 +8,7 @@ An intended evolution of a simple tool created to allow the creation of physical
 
 ### Data / API's
 - [Flags API](https://flagsapi.com/)
-- [European Stations Data](https://raw.githubusercontent.com/trainline-eu/stations/master/stations.csv)
+- [European Stations Data](https://raw.githubusercontent.com/trainline-eu/stations/master/stations.csv](https://github.com/juliuste/trainline-stations/blob/main/src/index.js)
 
 
 
