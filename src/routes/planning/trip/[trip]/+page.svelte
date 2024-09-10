@@ -1,3 +1,4 @@
+<CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 {#if tooltip || tooltip2}   
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}} allStns={allStns}></button>
 {/if}
@@ -7,11 +8,11 @@
 {#if editJourney && !loadStns}
 <EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} allStns={allStns}/>
 {/if}
-<div class="flex flex-col h-screen">
+<div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col h-full">
-                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4 overflow-y-scroll customScrollbar h-full">
+                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
                     {#if tripName == ''}
                         <h1 class="text-2xl text-white">Loading...</h1>
                         <span class="loader"></span>
@@ -329,12 +330,21 @@
     
     
     import LZString from 'lz-string'
+    import CustomAlert from '../../../../lib/components/Alert.svelte'
+
+
+    var alrtTxt = writable('')
+    var alrtAct = writable(false)
+    var alrtMode = writable('success')
     
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
         // console.log(compressed);
         navigator.clipboard.writeText(compressed); 
+        $alrtTxt = 'Data copied to clipboard';
+        $alrtAct = true;
+        
     }
     
     

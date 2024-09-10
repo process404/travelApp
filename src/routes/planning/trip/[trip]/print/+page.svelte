@@ -1,5 +1,5 @@
 
-<div class="w-screen h-auto pb-16 flex flex-col" style="background: rgb(255,255,255)">
+<div style="width: 100vw; display: flex; flex-direction: column; overflow-y:scroll; background: rgb(255,255,255)" class="pb-16" id="app">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
             <button class="button dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
