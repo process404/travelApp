@@ -1,10 +1,10 @@
 {#if tooltip || tooltip2}   
 <button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}} allStns={allStns}></button>
 {/if}
-{#if addJourney}
-<AddJourney on:message={addJourneyFinal} day={addJourneyDay}/>
+{#if addJourney && !loadStns}
+<AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns}/>
 {/if}
-{#if editJourney}
+{#if editJourney && !loadStns}
 <EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} allStns={allStns}/>
 {/if}
 <div class="flex flex-col h-screen">
@@ -54,7 +54,11 @@
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
-                                        <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                        {#if !loadStns}
+                                            <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                        {:else}
+                                            <span class="loader" style="margin-top:0px"></span>
+                                        {/if}
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
@@ -102,7 +106,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="w-1/4 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
-                                                        <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        {#if !loadStns}
+                                                            <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                        {:else}
+                                                            <div class="w-full flex items-center justify-center h-[36px]">
+                                                                <span class="loader" style="margin-top:0px"></span>
+                                                            </div>
+                                                        {/if}
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
                                                 </div>
@@ -377,6 +387,7 @@
     }
     
     let allStns = null
+    let loadStns = true;
     
     onMount(async () => {
         try {
@@ -384,6 +395,8 @@
             allStns = await module.allStations
         } catch (error) {
             console.error('Error fetching stations:', error);
+        }finally{
+            loadStns = false;
         }
     });
     
