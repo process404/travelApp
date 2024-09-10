@@ -29,9 +29,9 @@
 
 
 <script>
-import Nav from"../lib/components/Nav.svelte";import Footer from"../lib/components/Footer.svelte";import HomeButton from"../lib/components/HomeButtons.svelte";import{onMount as n}from"svelte";var currentPage="main";n(()=>{document.title="Trip Planner",currentPage="main",null==localStorage.getItem("storage")&&(localStorage.setItem("storage",!0),localStorage.setItem("logs",JSON.stringify([])),localStorage.setItem("journeys",JSON.stringify([])),localStorage.setItem("stations",JSON.stringify([])),localStorage.setItem("locations",JSON.stringify([])),localStorage.setItem("planning",JSON.stringify([])))});
+import Nav from"../lib/components/Nav.svelte";import Footer from"../lib/components/Footer.svelte";import HomeButton from"../lib/components/HomeButtons.svelte";import{onMount as n}from"svelte";var currentPage="main";n(()=>{document.title="Trip Planner",currentPage="main",null==localStorage.getItem("storage")&&(localStorage.setItem("storage",!0),localStorage.setItem("logs",JSON.stringify([])),localStorage.setItem("journeys",JSON.stringify([])),localStorage.setItem("stations",JSON.stringify([])),localStorage.setItem("locations",JSON.stringify([])),localStorage.setItem("planning",JSON.stringify([])),localStorage.setItem('settings', JSON.stringify({"dbStn": true})),localStorage.setItem("overview",JSON.stringify([])))})
+</script>;
 	
-</script>
 
 <style>
 .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}

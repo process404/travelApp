@@ -388,17 +388,27 @@
     
     let allStns = null
     let loadStns = true;
-    
+
     onMount(async () => {
-        try {
-            const module = await import('./page.js');
-            allStns = await module.allStations
-        } catch (error) {
-            console.error('Error fetching stations:', error);
-        }finally{
-            loadStns = false;
+        if(typeof !window !== 'undefined'){
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            if(settings.dbStn){
+                console.log("stn")
+                try {
+                    const module = await import('./page.js');
+                    allStns = await module.allStations
+                } catch (error) {
+                    console.error('Error fetching stations:', error);
+                }finally{
+                    loadStns = false;
+                }
+            }  else{
+                console.log("no stn")
+                loadStns = false;
+            }    
         }
     });
+    
     
     
 </script>
