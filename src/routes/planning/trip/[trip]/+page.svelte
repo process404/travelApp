@@ -55,7 +55,7 @@
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
                                         {#if !loadStns}
-                                            <button class="button blue p-1 text-sm pl-3 pr-3" on:click={addJourneyFn(day)}>Add</button>
+                                            <button class="button blue p-1 text-sm pl-3 pr-3 wider2" on:click={addJourneyFn(day)}>Add</button>
                                         {:else}
                                             <span class="loader" style="margin-top:0px"></span>
                                         {/if}
