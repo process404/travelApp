@@ -53,8 +53,8 @@
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.service}</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.departure}</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.arrival}</td>
-                                <td class="border border-neutral-200 p-1 text-xs">{journey.from}</td>
-                                <td class="border border-neutral-200 p-1 text-xs">{journey.to}</td>
+                                <td class="border border-neutral-200 p-1 text-xs">{journey.from} ({journey.fromCountry})</td>
+                                <td class="border border-neutral-200 p-1 text-xs">{journey.to} ({journey.toCountry})</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 text-left text-xs">{journey.operator}</td>
                                 {#if journey.description != '' && journey.description != null}
                                     <td class="border border-neutral-200 p-1 text-xs">{journey.description}</td>

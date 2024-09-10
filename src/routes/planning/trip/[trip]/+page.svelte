@@ -64,9 +64,9 @@
                                     <div class="flex flex-col gap-3 mt-3">
                                         {#each day.journeys as journey}
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
-                                                <div class="flex justify-between items-center">
-                                                    <div class="flex flex-col gap-1 items-start">
-                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col"><span class="flex gap-2 items-center">{journey.from}<img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class=" flex gap-2 items-center"><span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span><span class="flex gap-2 items-center">{journey.to}<img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`}></span></span></h3>
+                                                <div class="flex justify-between items-center sm:flex-row flex-col">
+                                                    <div class="flex flex-col gap-1 items-start w-full">
+                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col"><span class="flex gap-2 items-center">{journey.from}<img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class=" flex gap-2 items-center"><span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span><span class="flex gap-2 items-center">{journey.to}<img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`} alt={journey.toCountry}></span></span></h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -105,11 +105,11 @@
                                                             {/if}
                                                         </div>
                                                     </div>
-                                                    <div class="w-1/4 ml-4 mr-2 flex flex-col gap-2 sm:flex-row sm:w-1/5">
+                                                    <div class="sm:ml-4 ml-2 mr-2 flex sm:flex-col flex-row gap-2 mt-4 sm:mt-0 sm:w-1/5 w-full">
                                                         {#if !loadStns}
                                                             <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
                                                         {:else}
-                                                            <div class="w-full flex items-center justify-center h-[36px]">
+                                                            <div class="w-full flex items-center justify-center h-[24px]">
                                                                 <span class="loader" style="margin-top:0px"></span>
                                                             </div>
                                                         {/if}
@@ -171,7 +171,7 @@
     
     function getPlan(){
         for(const plan in storage){
-            console.log(storage[plan])
+            // console.log(storage[plan])
             if(storage[plan].tripID == param){
                 tripName.set(storage[plan].name);
                 tripDescription.set(storage[plan].description);
@@ -240,7 +240,7 @@
     
     
     function addJourneyFinal(data){
-        console.log(data.detail.text);
+        // console.log(data.detail.text);
         addJourney = false;
         for(const plan in storage){
             if(storage[plan].tripID == param){
@@ -260,30 +260,25 @@
     function callEditJourney(journey, day){
         editJourney = true;
         journeyToEdit = journey;
-        console.log(day);
+        // console.log(day);
         editJourneyDay = day;
     }
     
     function editJourneyFinal(data){
-        console.log(data.detail.text);
+        // console.log(data.detail.text);
         editJourney = false;
-        for(const plan in storage){
-            if(storage[plan].tripID == param){
-                for(const day in storage[plan].days){
-                    console.log("A", storage[plan].days[day].day, data.detail.text.day)
-                    if(storage[plan].days[day].day == data.detail.text.day){
-                        console.log("B", storage[plan].days[day].journeys)
-                        for(const journey in storage[plan].days[day].journeys){
-                            console.log("C", storage[plan].days[day].journeys[journey])
-                            if(storage[plan].days[day].journeys[journey].code === data.detail.text.journey.code){
-                                console.log("D", storage[plan].days[day].journeys[journey])
-                                storage[plan].days[day].journeys[journey] = data.detail.text.journey;
-                                localStorage.setItem('planning', JSON.stringify(storage));
-                                getPlan();
-                            }
-                        }
-                    }
+        for(const plan of storage){
+            if(plan.tripID === param){
+            for(const day of plan.days){
+                if(day.day === data.detail.text.day){
+                const journeyIndex = day.journeys.findIndex(journey => journey.code === data.detail.text.journey.code);
+                if(journeyIndex !== -1){
+                    day.journeys[journeyIndex] = data.detail.text.journey;
+                    localStorage.setItem('planning', JSON.stringify(storage));
+                    getPlan();
                 }
+                }
+            }
             }
         }
     }
@@ -312,10 +307,10 @@
     function deleteJourney(journey, dayImport){
         if(confirm("Are you sure you would like to delete this journey?")){
             for (const plan of storage) {
-                console.log(plan.tripID, param)
+                // console.log(plan.tripID, param)
                 if (plan.tripID === param) {
                     for (const day of plan.days) {
-                        console.log(day.day, dayImport)
+                        // console.log(day.day, dayImport)
                         if (day.day === dayImport) {
                             day.journeys = day.journeys.filter(j => j !== journey);
                             localStorage.setItem('planning', JSON.stringify(storage));
@@ -338,7 +333,7 @@
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
-        console.log(compressed);
+        // console.log(compressed);
         navigator.clipboard.writeText(compressed); 
     }
     
@@ -355,8 +350,8 @@
                             countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
                         }
                     } else {
-                        console.log(journey)
-                        console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+                        // console.log(journey)
+                        // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
                     }
 
                     if (journey.toCountry && typeof journey.toCountry === 'string') {
@@ -365,12 +360,12 @@
                             countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
                         }
                     } else {
-                        console.log(`Invalid toCountry code: ${journey.toCountry}`);
+                        // console.log(`Invalid toCountry code: ${journey.toCountry}`);
                     }
                 }
             }
         }
-        console.log(countries);
+        // console.log(countries);
         return countries;
     }
     
@@ -380,7 +375,7 @@
         }
         const country = countries.find(country => country.code === code);
         if (country) {
-            console.log("src", country.src);
+            // console.log("src", country.src);
             return country.src;
         }
         return "";
@@ -388,17 +383,26 @@
     
     let allStns = null
     let loadStns = true;
-    
+
     onMount(async () => {
-        try {
-            const module = await import('./page.js');
-            allStns = await module.allStations
-        } catch (error) {
-            console.error('Error fetching stations:', error);
-        }finally{
-            loadStns = false;
+        if(typeof !window !== 'undefined'){
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            if(settings.dbStn){
+                // console.log("stn")
+                try {
+                    const module = await import('./page.js');
+                    allStns = await module.allStations
+                } catch (error) {
+                    console.error('Error fetching stations:', error);
+                }finally{
+                    loadStns = false;
+                }
+            }  else{
+                loadStns = false;
+            }    
         }
     });
+    
     
     
 </script>
