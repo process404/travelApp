@@ -4,7 +4,11 @@ An intended evolution of a simple tool created to allow the creation of physical
 
 ### Technologies
 - [Svelte](https://svelte.dev/)
+- [Dexie.js](https://dexie.org/)
 - [TailwindCSS](https://tailwindcss.com/)
 
+### Data / API's
+- [Flags API](https://flagsapi.com/)
+- [European Stations Data](https://github.com/juliuste/trainline-stations)
 
 
