@@ -12,11 +12,19 @@
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
-                <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
-            </div>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
+                </div>
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">To</h3>
-                <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
@@ -64,9 +72,11 @@ export let allStns;
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
 import '../../../siteDB.js';
-import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData, test } from '../../../siteDB';
+
 
 import { writable } from "svelte/store";
+var loading = true;
 
 let from, to, arrival, departure, service, operator, description;
 let alrtMode = writable("err");
@@ -86,11 +96,16 @@ function submit(text) {
 
 let locations = [];
 
-onMount(async () => {
-    try {
-    locations = await getLocationsData();
-} catch (error) {}
-});
+async function getLocations(){
+    loading = true;
+    let locationsGet = await getLocationsData();
+    locations = locationsGet;
+    loading = false;
+}
+
+onMount(() => {
+    getLocations();
+}); 
 
 function selectFrom(event) {
     from = event.detail.text;
@@ -102,19 +117,25 @@ function selectTo(event) {
     console.log(from, to);
 }
 
-async function addLocation(location) {
-    if (await getLocationsData()) {
-        if (locations.find((loc) => loc.toLowerCase() === location.toLowerCase())) {
+async function addLocation(location, country) {
+    console.log(locations);
+    await getLocations();
+    if(locations == null){
+        locations = [];
+        locations.push({ name: location, country: country });
+        await writeLocationsData(locations);
+        await getLocations();
+        console.log("Location added");
+    }else{
+        const existingLocation = locations.find(loc => loc.name.toLowerCase() === location.toLowerCase());
+        if (existingLocation) {
             console.log("Location already exists");
         } else {
-            locations.push(location);
+            locations.push({ name: location, country: country });
             await writeLocationsData(locations);
+            await getLocations();
             console.log("Location added");
         }
-    } else {
-        locations.push(location);
-        await writeLocationsData(locations);
-        console.log("Location added");
     }
 }
 
@@ -127,7 +148,7 @@ function generateCode() {
     return code;
 }
 
-function addJourneyConfirm() {
+async function addJourneyConfirm() {
     if (from === null || to === null || arrival === null || departure === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
@@ -153,9 +174,13 @@ function addJourneyConfirm() {
             },
         };
         console.log("JI: ", journey);
+        await addLocation(from, fromCountry);
+        await addLocation(to, toCountry);
         submit(journey);
-        addLocation(from);
-        addLocation(to);
     }
 }
 </script>
+
+<style>
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    </style>

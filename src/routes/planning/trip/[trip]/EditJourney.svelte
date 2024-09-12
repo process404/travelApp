@@ -12,11 +12,19 @@
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
-                <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
-            </div>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
+                </div>
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">To</h3>
-                <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
@@ -62,6 +70,8 @@ export let day;
 export let journey;
 export let allStns;
 
+let loading = true;
+
 import '../../../siteDB.js';
 import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 
@@ -92,12 +102,17 @@ function submit(o) {
 }
 
 let locations = [];
-onMount(async () => {
-    try {
-    locations = await getLocationsData();
-} catch (error) {}
-});
 
+async function getLocations(){
+    loading = true;
+    locationsGet = await getLocationsData();
+    locations = locationsGet;
+    loading = false;
+}
+
+onMount(() => {
+    getLocations();
+}); 
 
 function selectFrom(o) {
     from = o.detail.text;
@@ -109,20 +124,29 @@ function selectTo(o) {
     console.log(from, to);
 }
 
-async function cLS(o) {
-    if (await getLocationsData()) {
-        locations.find((e) => e.toLowerCase() === o.toLowerCase())
-            ? console.log("Location already exists")
-            : (locations.push(o),
-                await writeLocationsData(locations),
-                console.log("Location added"));
-    } else
-        (locations.push(o),
-        await writeLocationsData(locations),
-        console.log("Location added"));
+async function addLocation(location, country) {
+    console.log(locations);
+    await getLocations();
+    if(locations == null){
+        locations = [];
+        locations.push({ name: location, country: country });
+        await writeLocationsData(locations);
+        await getLocations();
+        console.log("Location added");
+    }else{
+        const existingLocation = locations.find(loc => loc.name.toLowerCase() === location.toLowerCase());
+        if (existingLocation) {
+            console.log("Location already exists");
+        } else {
+            locations.push({ name: location, country: country });
+            await writeLocationsData(locations);
+            await getLocations();
+            console.log("Location added");
+        }
+    }
 }
 
-function addJourneyConfirm() {
+async function addJourneyConfirm() {
     if (
         null == from ||
         null == to ||
@@ -154,9 +178,13 @@ function addJourneyConfirm() {
             },
         };
         console.log("JI: ", o);
+        await addLocation(from, fromCountry);
+        await addLocation(to, toCountry);
         submit(o);
-        cLS(from);
-        cLS(to);
     }
 }
 </script>
+
+<style>
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+</style>
