@@ -1,11 +1,11 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<button class="fixed w-full h-screen bg-black z-30 bg-opacity-10 backdrop-blur-xl flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col">
+<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
+    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
             <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
         </div>
-        <hr class="mt-2 mb-4 border-neutral-700">
+        <hr class="mt-4 mb-2 border-neutral-700">
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
@@ -48,11 +48,12 @@
             </div>
         </div>
     </div>
-</button>
+</div>
 
 <script>
 import { createEventDispatcher } from "svelte";
 const dispatch = createEventDispatcher();
+import { fade } from "svelte/transition";
 
 export let day;
 export let allStns;
