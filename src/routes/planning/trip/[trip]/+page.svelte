@@ -113,14 +113,14 @@
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
-                                                                  <h4 class="text-white text-sm">{journey.departure} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrival}</h4>
+                                                                  <h4 class="text-white text-sm">{journey.departureTime} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrivalTime}</h4>
                                                             </div>
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
-                                                                  <h4 class="text-white text-sm">{calcTime(journey.departure, journey.arrival)}</h4>
+                                                                  <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)}</h4>
                                                             </div>
                                                             {#if journey.description != '' && journey.description != null}
                                                                 <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
@@ -321,22 +321,20 @@
         }
     }
     
-    function calcTime(departure, arrival){
+    function calcTime(departureTime, arrivalTime, departureDate, arrivalDate){
         try{
-            var dep = new Date();
-            var arr = new Date();
-            var [depHour, depMinute] = departure.split(':');
-            var [arrHour, arrMinute] = arrival.split(':');
-            dep.setHours(depHour, depMinute);
-            arr.setHours(arrHour, arrMinute);
+            var dep = new Date(`${departureDate} ${departureTime}`);
+            var arr = new Date(`${arrivalDate} ${arrivalTime}`);
             if (arr < dep) {
-                arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
+            arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
             }
             var diff = arr - dep;
-            var hours = Math.floor(diff / 1000 / 60 / 60);
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff -= days * 1000 * 60 * 60 * 24;
+            var hours = Math.floor(diff / (1000 * 60 * 60));
             diff -= hours * 1000 * 60 * 60;
-            var minutes = Math.floor(diff / 1000 / 60);
-            return `${hours}h ${minutes}m`;
+            var minutes = Math.floor(diff / (1000 * 60));
+            return `${days}d ${hours}h ${minutes}m`;
         }catch(e){
             return 'Error';
         }
