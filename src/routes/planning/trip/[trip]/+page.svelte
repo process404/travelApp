@@ -144,6 +144,8 @@
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
     import { openDB, getAllData, putData } from './indexedDB.js';
+    import '../../../siteDB.js';
+    import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
     var param = $page.params.trip;
     var tooltip = false;
     var tooltip2 = false;
@@ -160,17 +162,13 @@
     var editJourneyDay = ''
     let storage = []
     
-    
-    
-    
-    onMount(() => {
-        // Check if running in the browser before accessing localStorage
-        if (typeof window !== 'undefined') {
-            storage = JSON.parse(localStorage.getItem('planning')) || [];
-            getFlags();
-        }
+    onMount(async () => {
+        document.title = 'Trip';
+        storage = await getPlanningData();
+        getFlags();
+        getPlan();
     });
-    
+
     function getPlan(){
         for(const plan in storage){
             // console.log(storage[plan])
@@ -184,10 +182,6 @@
         }
     }
 
-    onMount(() => {
-        document.title = 'Trip';
-        getPlan();
-    });
     
     function callEdit(){
         tripName.set(editName);
@@ -198,36 +192,34 @@
     }
     
     
-    function deletePlan(){
+    async function deletePlan(){
         var plan = thisTrip;
         if(confirm("Are you sure you would like to delete plan '" + plan.name  + "'? THIS IS A PERMANENT ACTION AND CANNOT BE UNDONE.")){
-            var storage = JSON.parse(localStorage.getItem('planning'));
             for(const plan in storage){
                 if(storage[plan].tripID == param){
                     storage.splice(plan, 1);
-                    localStorage.setItem('planning', JSON.stringify(storage));
+                    await writePlanningData(storage)
                     window.location.href = '/planning';
                 }
             }
         }
     }
     
-    function submitChanges(){
-        var storage = JSON.parse(localStorage.getItem('planning'));
+    async function submitChanges(){
+        var storage = await getPlanningData();
         for(const plan in storage){
             if(storage[plan].tripID == param){
                 storage[plan].name = editName;
-                localStorage.setItem('planning', JSON.stringify(storage));
+                writePlanningData(storage);
             }
         }
     }
     
-    function submitChangesDesc(){
-        var storage = JSON.parse(localStorage.getItem('planning'));
+    async function submitChangesDesc(){
         for(const plan in storage){
             if(storage[plan].tripID == param){
                 storage[plan].name = editDescription;
-                localStorage.setItem('planning', JSON.stringify(storage));
+                await writePlanningData(storage);
             }
         }
     }
@@ -241,7 +233,7 @@
     }
     
     
-    function addJourneyFinal(data){
+    async function addJourneyFinal(data){
         // console.log(data.detail.text);
         addJourney = false;
         for(const plan in storage){
@@ -249,7 +241,7 @@
                 for(const day in storage[plan].days){
                     if(storage[plan].days[day].day == data.detail.text.day){
                         storage[plan].days[day].journeys.push(data.detail.text.journey);
-                        localStorage.setItem('planning', JSON.stringify(storage));
+                        await writePlanningData(storage);
                         getPlan();
                     }
                 }
@@ -266,7 +258,7 @@
         editJourneyDay = day;
     }
     
-    function editJourneyFinal(data){
+    async function editJourneyFinal(data){
         // console.log(data.detail.text);
         editJourney = false;
         for(const plan of storage){
@@ -276,7 +268,7 @@
                 const journeyIndex = day.journeys.findIndex(journey => journey.code === data.detail.text.journey.code);
                 if(journeyIndex !== -1){
                     day.journeys[journeyIndex] = data.detail.text.journey;
-                    localStorage.setItem('planning', JSON.stringify(storage));
+                    await writePlanningData(storage);
                     getPlan();
                 }
                 }
@@ -306,7 +298,7 @@
         }
     }
     
-    function deleteJourney(journey, dayImport){
+    async function deleteJourney(journey, dayImport){
         if(confirm("Are you sure you would like to delete this journey?")){
             for (const plan of storage) {
                 // console.log(plan.tripID, param)
@@ -315,7 +307,7 @@
                         // console.log(day.day, dayImport)
                         if (day.day === dayImport) {
                             day.journeys = day.journeys.filter(j => j !== journey);
-                            localStorage.setItem('planning', JSON.stringify(storage));
+                            await writePlanningData(storage);
                             getPlan();
                             return; 
                         }
