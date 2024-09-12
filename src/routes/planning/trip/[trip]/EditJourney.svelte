@@ -105,7 +105,7 @@ let locations = [];
 
 async function getLocations(){
     loading = true;
-    locationsGet = await getLocationsData();
+    var locationsGet = await getLocationsData();
     locations = locationsGet;
     loading = false;
 }
