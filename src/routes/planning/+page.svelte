@@ -94,7 +94,7 @@
 <script>
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { europeanCountries } from '../planning/countries.js'
+    import { countryFlags } from '../planning/countries.js'
     import { onMount } from 'svelte';
     import '../../global.css'
     var plansFromDB = []
@@ -250,11 +250,11 @@
                                 countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
                             }
                         }else{
-                            const fromCountryIndex = europeanCountries.findIndex(country => country.code === journey.fromCountry);
+                            const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
                             if (fromCountryIndex === -1) {
-                                const fromCountryIndex = europeanCountries.findIndex(country => country.code === journey.fromCountry);
+                                const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
                                 if (fromCountryIndex !== -1) {
-                                    countries.push({ "code": journey.fromCountry, "emoji": europeanCountries[fromCountryIndex].emoji });
+                                    countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
                                 }
                             }
                         }
