@@ -10,9 +10,9 @@
 {/if}
 <div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
-        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden mb-4 mt-2">
             <div class="max-w-[1000px] w-full flex flex-col h-full">
-                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-2 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
+                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-3 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
                     {#if tripName == ''}
                         <h1 class="text-2xl text-white">Loading...</h1>
                         <span class="loader"></span>
