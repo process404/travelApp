@@ -2,7 +2,7 @@
 <Nav ver="back"/>
     <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
         <div class="max-w-[1000px] w-full flex flex-col h-full">
-            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
+            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-2 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                 {#if plansFromDB.length == 0}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
                 <div class="h-full flex items-center justify-center flex-col gap-4">
@@ -15,7 +15,7 @@
                 </div>
                 {:else}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
-                <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar ml-2 sm:ml-0 items-center gap-3">
+                <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar sm:ml-0 items-center gap-3">
                         {#each plansFromDB as plan}
                         <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[700px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
@@ -65,9 +65,15 @@
                                     <h4 class="text-white text-sm">{countLocations(plan)} locations</h4>
                                 </div>
                                 <div class="bg-neutral-800 flex pl-3 pr-3 p-1 rounded-sm gap-2 items-center">
-                                    {#each countries as country}
-                                      <img src={country.src} alt={country.code} class="w-4 h-4"/>
-                                    {/each}
+                                    {#if !isMobileDevice}
+                                        {#each countries as country}
+                                            <img src={country.src} alt={country.code} class="w-4 h-4"/>
+                                        {/each}
+                                    {:else}
+                                        {#each countries as country}
+                                            <h4 class="">{country.emoji}</h4>
+                                        {/each}
+                                    {/if}
                                 </div>
                             </div>
                             <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
@@ -88,6 +94,7 @@
 <script>
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
+    import { europeanCountries } from '../planning/countries.js'
     import { onMount } from 'svelte';
     import '../../global.css'
     var plansFromDB = []
@@ -95,6 +102,20 @@
     import '../siteDB.js'
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../siteDB';
 
+    let isMobile = false;
+    let isAndroid = false;
+    let isIOS = false;
+    let isMobileDevice = isMobile || isAndroid || isIOS;
+
+    onMount(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        isMobile = /mobile/.test(userAgent);
+        isAndroid = /android/.test(userAgent);
+        isIOS = /iphone|ipad|ipod/.test(userAgent);
+        isMobileDevice = isMobile || isAndroid || isIOS;
+    });
+
+    
     onMount(async () => {
         document.title = 'Planning';
         if (await getPlanningData()) {
@@ -160,6 +181,7 @@
     // }
 
     import LZString from 'lz-string';
+	import { offset } from '@floating-ui/dom';
 
     async function loadFromData(){
         let data = prompt('Please enter the data string');
@@ -212,16 +234,29 @@
         return countries.size;
     }
 
+    
+    
     var countries = []
+    
 
     function getFlags() {
         for (const plan in plansFromDB) {
             for (const day of plansFromDB[plan].days) {
                 for (const journey of day.journeys) {
                     if (journey.fromCountry && typeof journey.fromCountry === 'string') {
-                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
-                        if (fromCountryIndex === -1) {
-                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        if(!isMobileDevice){
+                            const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                            if (fromCountryIndex === -1) {
+                                countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                            }
+                        }else{
+                            const fromCountryIndex = europeanCountries.findIndex(country => country.code === journey.fromCountry);
+                            if (fromCountryIndex === -1) {
+                                const fromCountryIndex = europeanCountries.findIndex(country => country.code === journey.fromCountry);
+                                if (fromCountryIndex !== -1) {
+                                    countries.push({ "code": journey.fromCountry, "emoji": europeanCountries[fromCountryIndex].emoji });
+                                }
+                            }
                         }
                     } else {
                         console.log(journey)
@@ -247,12 +282,13 @@
         if (countries.length === 0) {
             getFlags();
         }
-        const country = countries.find(country => country.code === code);
+        const country = countryFlags.find(country => country.code === code);
         if (country) {
             console.log("src", country.src);
             return country.src;
         }
         return "";
     }
+    
     
 </script>
