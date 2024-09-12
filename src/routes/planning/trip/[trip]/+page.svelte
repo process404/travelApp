@@ -149,8 +149,8 @@
                                 </div>
                             {/each} 
                             <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
-                                <button class="button green p-2 w-full" on:click={copyData}>Copy plan data</button>
-                                <button class="button blue p-2 w-full" on:click={goPrint}>Print</button>
+                                <button class="button green p-2 w-full taller" on:click={copyData}>Copy plan data</button>
+                                <button class="button blue p-2 w-full taller" on:click={goPrint}>Print</button>
                             </div>
                         </div>
                     {/if}

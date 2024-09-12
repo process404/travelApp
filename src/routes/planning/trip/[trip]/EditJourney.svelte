@@ -55,7 +55,7 @@
         </div>
         <div class="flex gap-3 sm:mt-auto mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
             <div class="w-full flex">
-                <button class="button green w-full p-2" on:click={addJourneyConfirm}>Edit Journey</button>
+                <button class="button green w-full taller" on:click={addJourneyConfirm}>Edit Journey</button>
             </div>
         </div>
     </div>
