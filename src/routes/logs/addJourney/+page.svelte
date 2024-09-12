@@ -168,7 +168,10 @@
     import '../../../global.css'
     import PromptField from '../../../lib/components/PromptField.svelte';
 
-    import { writable } from 'svelte/store';
+    import '../../siteDB.js'
+    import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../siteDB';
+
+    import { get, writable } from 'svelte/store';
     var combinedLocations = null;
     var locationSuggestions = []
     var logNumbers = writable([])
@@ -202,24 +205,13 @@
     var to = ''
     let locations = ''
 
-    if (typeof window !== 'undefined') {
-        locations = JSON.parse(localStorage.getItem('locations')) || [];
-    }
-
+    
     onMount(async () => {
         document.title = 'Add Log';
-        const stn = localStorage.getItem('stations');
-        const loc = localStorage.getItem('locations');
-        if(loc != null && stn != null){
-            let joined = null
-            if(stn.length == 0){
-                joined = JSON.parse(loc);
-            }else if(loc.length == 0){
-                joined = JSON.parse(stn)
-            }else{
-                joined = JSON.parse(stn).concat(JSON.parse(loc));
-            }
-            combinedLocations = joined;
+        locations = await getAllLocations();
+        const loc = locations;
+        if(loc != null){
+            combinedLocations = JSON.parse(loc);
         }
     
         const dbData = await db;
@@ -250,7 +242,7 @@
         });
     }
 
-    function inputVariantBtn(variant, train) {
+    async function inputVariantBtn(variant, train) {
         logNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === train.id) {
@@ -262,7 +254,7 @@
             });
         });
 
-        let logs = localStorage.getItem('logs')
+        let logs = await getAllLogs();
         // console.log(logs)
         if (logs) {
             const parsedLogs = JSON.parse(logs);
@@ -272,7 +264,7 @@
                     item.variant = train.variant;
                 }
             });
-            localStorage.setItem('logs', JSON.stringify(parsedLogs));
+            await writeLogsData(parsedLogs);
         }
     }
     
@@ -295,10 +287,10 @@
         locationSuggestions = []
     }
 
-    function addNumber(){
+    async function addNumber(){
         id++;
         // check local storage to see if train is already in logs
-        let logs = localStorage.getItem('logs')
+        let logs = await getAllLogs();
         let vehFound = false
         let veh = null;
         // console.log(logs)
@@ -351,7 +343,7 @@
         });
     }
 
-    function confirmLog(){
+    async function confirmLog(){
         // stuff here
 
         var lat;
@@ -383,7 +375,7 @@
             }
         }
 
-        var loc = localStorage.getItem('locations');
+        var loc = await getAllLocations()
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
             var found = false;
@@ -407,13 +399,13 @@
             } 
         }
 
-        let journeys = localStorage.getItem('journeys');
+        let journeys = await getAllJourneys();
         if (!journeys) {
             journeys = JSON.stringify([]);
         }
 
         if($preciseLocation && preciseLat && preciseLon){
-            logNumbers.subscribe(numbers => {
+            logNumbers.subscribe(async numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
                 from: from,
@@ -429,10 +421,10 @@
             }));
 
             const addNew = JSON.parse(journeys).concat(numbersWithLocation);
-            localStorage.setItem('journeys', JSON.stringify(addNew));
+            await writeAllJourneys(addNew);
         });
         }else{
-            logNumbers.subscribe(numbers => {
+            logNumbers.subscribe(async numbers => {
                 const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                     ...train,
                     from: from,
@@ -444,7 +436,7 @@
                 }));
 
                 const addNew = JSON.parse(journeys).concat(numbersWithLocation);
-                localStorage.setItem('journeys', JSON.stringify(addNew));
+                await writeAllJourneys(addNew);
             });
         }
 

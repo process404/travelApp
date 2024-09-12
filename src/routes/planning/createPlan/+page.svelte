@@ -43,6 +43,8 @@
         import '../../../global.css'
         import { writable } from 'svelte/store';
         import { onMount } from 'svelte';
+        import '../../siteDB.js'
+        import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../siteDB';
         var plansFromDB = []
         var currentPG = 'home'
         
@@ -55,14 +57,14 @@
         var alrtAct = writable(false)
         var alrtMode = writable('err')
     
-        onMount(() => {
+        onMount(async () => {
             document.title = 'Create [Plan';
-            if(localStorage.getItem('plans')){
-                plansFromDB = JSON.parse(localStorage.getItem('plans'))
+            if(await getPlanningData()){
+                plansFromDB = await getPlanningData()
             }
         });
 
-        function createPlan(){
+        async function createPlan(){
             if(tripName.length < 3){
                 $alrtTxt = 'Please enter a valid name'
                 $alrtAct = true
@@ -106,7 +108,7 @@
                 tripName = '';
                 tripStart = '';
                 tripEnd = '';
-                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                await writePlanningData(plansFromDB);
                 window.location.href = '/planning';
 
             }

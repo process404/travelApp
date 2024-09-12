@@ -92,10 +92,13 @@
     import '../../global.css'
     var plansFromDB = []
 
-    onMount(() => {
+    import '../siteDB.js'
+    import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../siteDB';
+
+    onMount(async () => {
         document.title = 'Planning';
-        if (localStorage.getItem('planning')) {
-            plansFromDB = JSON.parse(localStorage.getItem('planning'));
+        if (await getPlanningData()) {
+            plansFromDB = await getPlanningData();
             getFlags();
         }
     });
@@ -147,17 +150,18 @@
     }
     
 
-    function deletePlan(plan, event){
-        if (confirm("Are you sure you want to delete this plan? This action is permanent.")) {
-            let newPlans = plansFromDB.filter(p => p.tripID != plan.tripID);
-            localStorage.setItem('planning', JSON.stringify(newPlans));
-            window.location.href = '/planning';
-        }
-    }
+    // Not used as within individual trip instead
+    // async function deletePlan(plan, event){
+    //     if (confirm("Are you sure you want to delete this plan? This action is permanent.")) {
+    //         let newPlans = plansFromDB.filter(p => p.tripID != plan.tripID);
+    //         writePlanningData(newPlans);
+    //         window.location.href = '/planning';
+    //     }
+    // }
 
     import LZString from 'lz-string';
 
-    function loadFromData(){
+    async function loadFromData(){
         let data = prompt('Please enter the data string');
         if(data){
             var decompressed = LZString.decompressFromBase64(data);
@@ -171,12 +175,12 @@
                 }).join('');
 
                 plansFromDB.push(parsed);
-                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                await writePlanningData(plansFromDB);
                 window.location.href = '/planning';
 
             } else {
                 plansFromDB.push(parsed);
-                localStorage.setItem('planning', JSON.stringify(plansFromDB));
+                await writePlanningData(plansFromDB);
                 window.location.href = '/planning';
             }
         }
@@ -191,7 +195,7 @@
                 locations.add(journey.to);
             }
         }
-        console.log(locations);
+        // console.log(locations);
         return locations.size;
     }
 
@@ -235,7 +239,7 @@
                 }
             }
         }
-        console.log(countries);
+        // console.log(countries);
         return countries;
     }
 

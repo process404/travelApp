@@ -29,7 +29,35 @@
 
 
 <script>
-import Nav from"../lib/components/Nav.svelte";import Footer from"../lib/components/Footer.svelte";import HomeButton from"../lib/components/HomeButtons.svelte";import{onMount as n}from"svelte";var currentPage="main";n(()=>{document.title="Trip Planner",currentPage="main",null==localStorage.getItem("storage")&&(localStorage.setItem("storage",!0),localStorage.setItem("logs",JSON.stringify([])),localStorage.setItem("journeys",JSON.stringify([])),localStorage.setItem("stations",JSON.stringify([])),localStorage.setItem("locations",JSON.stringify([])),localStorage.setItem("planning",JSON.stringify([])),localStorage.setItem('settings', JSON.stringify({"dbStn": true})),localStorage.setItem("overview",JSON.stringify([])))})
+import Nav from "../lib/components/Nav.svelte";
+import Footer from "../lib/components/Footer.svelte";
+import HomeButton from "../lib/components/HomeButtons.svelte";
+import { onMount } from "svelte";
+import './siteDB.js'
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from './siteDB';
+
+var currentPage = "main";
+
+onMount(() => {
+	document.title = "Trip Planner";
+	currentPage = "main";
+
+	if (localStorage.getItem("settings") == null) {
+		localStorage.setItem('settings', JSON.stringify({"dbStn": true}));
+	}
+	if (getLogsData() == null) {
+		setLogsData([]);
+	}
+	if (getJourneysData() == null) {
+		setJourneysData([]);
+	}
+	if (getLocationsData() == null) {
+		setLocationsData([]);
+	}
+	if (getPlanningData() == null) {
+		setPlanningData([]);
+	}
+});
 </script>;
 	
 
