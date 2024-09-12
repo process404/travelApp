@@ -31,11 +31,13 @@
             <div class="w-full flex gap-3">
                 <div class="md:w-2/4 w-full">
                     <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={departure}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={departureDate}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
                     <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={arrival}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalDate}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalTime}/>                
                 </div>
             </div>
             <div class="md:w-1/2 w-full">
@@ -83,8 +85,10 @@ let from = journey.from,
 fromCountry = journey.fromCountry,
     to = journey.to,
     toCountry = journey.toCountry,
-    arrival = journey.arrival,
-    departure = journey.departure,
+    arrivalDate = journey.arrivalDate,
+    departureDate = journey.departureDate,
+    arrivalTime = journey.arrival,
+    departureTime = journey.departure,
     service = journey.service,
     operator = journey.operator,
     description = journey.description,
@@ -170,8 +174,10 @@ async function addJourneyConfirm() {
                 fromCountry: fromCountry,
                 to: to,
                 toCountry: toCountry,
-                arrival: arrival,
-                departure: departure,
+                arrivalTime: arrival,
+                departureTime: departure,
+                arrivalDate: arrivalDate,
+                departureDate: departureDate,
                 service: service,
                 operator: operator,
                 description: description,

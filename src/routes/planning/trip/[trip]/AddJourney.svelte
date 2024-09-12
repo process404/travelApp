@@ -31,11 +31,11 @@
             <div class="w-full flex gap-3">
                 <div class="md:w-2/4 w-full">
                     <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={departure}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
                     <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={arrival}/>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalTime}/>
                 </div>
             </div>
             <div class="md:w-1/2 w-full">
@@ -78,7 +78,7 @@ import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData
 import { writable } from "svelte/store";
 var loading = true;
 
-let from, to, arrival, departure, service, operator, description;
+let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime;
 let alrtMode = writable("err");
 let alrtTxt = writable("");
 let alrtAct = writable(false);
@@ -166,8 +166,10 @@ async function addJourneyConfirm() {
                 fromCountry: fromCountry,
                 to: to,
                 toCountry: toCountry,
-                arrival: arrival,
-                departure: departure,
+                arrivalTime: arrival,
+                departureTime: departure,
+                departureDate: departureDate,
+                arrivalDate: arrivalDate,
                 service: service,
                 operator: operator,
                 description: description,
