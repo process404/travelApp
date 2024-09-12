@@ -1,8 +1,11 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-70 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[95%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col"  in:fade={{duration:100}} out:fade={{duration:100}}>
+<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-70 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
+    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[95%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col"  in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
-            <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
+            <div>
+                <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
+                <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
+            </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
         </div>
         <hr class="mt-4 mb-2 border-neutral-700">
@@ -42,7 +45,7 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
-        <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
+        <div class="flex gap-3 sm:mt-auto mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
             <div class="w-full flex">
                 <button class="button green w-full p-2" on:click={addJourneyConfirm}>Edit Journey</button>
             </div>
@@ -58,6 +61,9 @@ const dispatch = createEventDispatcher();
 export let day;
 export let journey;
 export let allStns;
+
+import '../../../siteDB.js';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
@@ -86,10 +92,12 @@ function submit(o) {
 }
 
 let locations = [];
-try {
-    const o = localStorage.getItem("locations");
-    locations = JSON.parse(o) || [];
-} catch (o) {}
+onMount(async () => {
+    try {
+    locations = await getLocationsData();
+} catch (error) {}
+});
+
 
 function selectFrom(o) {
     from = o.detail.text;
@@ -101,16 +109,16 @@ function selectTo(o) {
     console.log(from, to);
 }
 
-function cLS(o) {
-    if (localStorage.getItem("locations")) {
+async function cLS(o) {
+    if (await getLocationsData()) {
         locations.find((e) => e.toLowerCase() === o.toLowerCase())
             ? console.log("Location already exists")
             : (locations.push(o),
-                localStorage.setItem("locations", JSON.stringify(locations)),
+                await writeLocationsData(locations),
                 console.log("Location added"));
     } else
         (locations.push(o),
-        localStorage.setItem("locations", JSON.stringify(locations)),
+        await writeLocationsData(locations),
         console.log("Location added"));
 }
 

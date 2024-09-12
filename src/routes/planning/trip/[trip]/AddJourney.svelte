@@ -1,8 +1,11 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
+<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
+    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
-            <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
+            <div>
+                <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
+                <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
+            </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
         </div>
         <hr class="mt-4 mb-2 border-neutral-700">
@@ -42,7 +45,7 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
-        <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
+        <div class="flex gap-3 sm:mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-4">
             <div class="w-full flex">
                 <button class="button green w-full p-2" on:click={addJourneyConfirm}>Add Journey</button>
             </div>
@@ -51,7 +54,7 @@
 </div>
 
 <script>
-import { createEventDispatcher } from "svelte";
+import { createEventDispatcher, onMount } from "svelte";
 const dispatch = createEventDispatcher();
 import { fade } from "svelte/transition";
 
@@ -60,6 +63,9 @@ export let allStns;
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
+import '../../../siteDB.js';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
+
 import { writable } from "svelte/store";
 
 let from, to, arrival, departure, service, operator, description;
@@ -79,10 +85,12 @@ function submit(text) {
 }
 
 let locations = [];
-try {
-    const storedLocations = localStorage.getItem("locations");
-    locations = JSON.parse(storedLocations) || [];
+
+onMount(async () => {
+    try {
+    locations = await getLocationsData();
 } catch (error) {}
+});
 
 function selectFrom(event) {
     from = event.detail.text;
@@ -94,18 +102,18 @@ function selectTo(event) {
     console.log(from, to);
 }
 
-function addLocation(location) {
-    if (localStorage.getItem("locations")) {
+async function addLocation(location) {
+    if (await getLocationsData()) {
         if (locations.find((loc) => loc.toLowerCase() === location.toLowerCase())) {
             console.log("Location already exists");
         } else {
             locations.push(location);
-            localStorage.setItem("locations", JSON.stringify(locations));
+            await writeLocationsData(locations);
             console.log("Location added");
         }
     } else {
         locations.push(location);
-        localStorage.setItem("locations", JSON.stringify(locations));
+        await writeLocationsData(locations);
         console.log("Location added");
     }
 }
