@@ -12,7 +12,7 @@
     <Nav ver="back"/>
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col h-full">
-                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
+                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-2 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
                     {#if tripName == ''}
                         <h1 class="text-2xl text-white">Loading...</h1>
                         <span class="loader"></span>
@@ -67,7 +67,33 @@
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center sm:flex-row flex-col">
                                                     <div class="flex flex-col gap-1 items-start w-full">
-                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col"><span class="flex gap-2 items-center">{journey.from}<img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></span> <span class=" flex gap-2 items-center"><span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span><span class="flex gap-2 items-center">{journey.to}<img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`} alt={journey.toCountry}></span></span></h3>
+                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col">
+                                                            {#if isMobileDevice}
+                                                                <span class="flex gap-2 items-center">
+                                                                    {journey.from}
+                                                                   <span>{getCountryEmoji(journey.fromCountry)}</span>
+                                                                </span>
+                                                                <span class="flex gap-2 items-center">
+                                                                    <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span>
+                                                                    <span class="flex gap-2 items-center">
+                                                                        {journey.to}
+                                                                        <span>{getCountryEmoji(journey.toCountry)}</span>
+                                                                    </span>
+                                                                </span>
+                                                            {:else}
+                                                                <span class="flex gap-2 items-center">
+                                                                    {journey.from}
+                                                                    <img class="w-5 h-5" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}>
+                                                                </span>
+                                                                <span class="flex gap-2 items-center">
+                                                                    <span class="text-sm italic sm:ml-2 sm:mr-2 mr-1 opacity-30">to</span>
+                                                                    <span class="flex gap-2 items-center">
+                                                                        {journey.to}
+                                                                        <img class="w-5 h-5" src={`https://flagsapi.com/${journey.toCountry}/flat/64.png`} alt={journey.toCountry}>
+                                                                    </span>
+                                                                </span>
+                                                            {/if}
+                                                        </h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
@@ -146,6 +172,7 @@
     import { openDB, getAllData, putData } from './indexedDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
+    import { countryFlags } from '../../countries.js'
     var param = $page.params.trip;
     var tooltip = false;
     var tooltip2 = false;
@@ -168,6 +195,22 @@
         getFlags();
         getPlan();
     });
+
+
+
+    let isMobile = false;
+    let isAndroid = false;
+    let isIOS = false;
+    let isMobileDevice = false
+
+    onMount(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        isMobile = /mobile/.test(userAgent);
+        isAndroid = /android/.test(userAgent);
+        isIOS = /iphone|ipad|ipod/.test(userAgent);
+        isMobileDevice = isMobile || isAndroid || isIOS; 
+    });
+
 
     function getPlan(){
         for(const plan in storage){
@@ -348,23 +391,33 @@
             for (const day of storage[plan].days) {
                 for (const journey of day.journeys) {
                     if (journey.fromCountry && typeof journey.fromCountry === 'string') {
-                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
-                        if (fromCountryIndex === -1) {
-                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        if(!isMobileDevice){
+                            const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                            if (fromCountryIndex === -1) {
+                                countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                            }
+                        }else{
+                            const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
+                            if (fromCountryIndex === -1) {
+                                const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
+                                if (fromCountryIndex !== -1) {
+                                    countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
+                                }
+                            }
                         }
                     } else {
                         // console.log(journey)
                         // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
                     }
 
-                    if (journey.toCountry && typeof journey.toCountry === 'string') {
-                        const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
-                        if (toCountryIndex === -1) {
-                            countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
-                        }
-                    } else {
-                        // console.log(`Invalid toCountry code: ${journey.toCountry}`);
-                    }
+                    // if (journey.toCountry && typeof journey.toCountry === 'string') {
+                    //     const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                    //     if (toCountryIndex === -1) {
+                    //         countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                    //     }
+                    // } else {
+                    //     // console.log(`Invalid toCountry code: ${journey.toCountry}`);
+                    // }
                 }
             }
         }
@@ -376,12 +429,20 @@
         if (countries.length === 0) {
             getFlags();
         }
-        const country = countries.find(country => country.code === code);
-        if (country) {
-            // console.log("src", country.src);
-            return country.src;
+        if(!isMobileDevice){
+            const country = countries.find(country => country.code === code);
+            if (country) {
+                // console.log("src", country.src);
+                return country.src;
+            }
+            return "";
+        }else{
+            const country = countryFlags.find(country => country.code === code);
+            if (country) {
+                return country.emoji;
+            }
+            return "";
         }
-        return "";
     }
     
     let allStns = null
@@ -408,6 +469,10 @@
                         allStns = event.data;
                         await putData(db, 'stations', { id: 1, data: allStns });
                         loadStns = false;
+                    };
+                    worker.onerror = (error) => {
+                        console.error('Error in worker:', error);
+                        loadStns = false; 
                     };
                     worker.postMessage('fetchStations');
                 }

@@ -8,24 +8,24 @@
                         <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Create Plan</h2>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                             <h3 class="text-neutral-300 italic text-left mb-2">Title</h3>
-                            <input minlength="3" maxlength="20" class="standardInput" bind:value={tripName}>
+                            <input minlength="3" maxlength="20" class="input w-full" bind:value={tripName}>
                             <h3 class="text-neutral-300 italic text-left mt-4">Description</h3>
-                            <textarea class="standardInput mt-2 text-xs resize-none" minlength="5" maxlength="175" rows="4" bind:value={description}></textarea>
+                            <textarea class="input w-full mt-2 text-xs resize-none" minlength="5" maxlength="175" rows="4" bind:value={description}></textarea>
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                             <div class="flex gap-2 sm:gap-3 sm:flex-row flex-col">
                                 <div class="w-full">
                                     <h3 class="text-neutral-300 italic text-left mb-1">Start</h3>
-                                    <input type="date" class="standardInput ml-auto iconEdit" bind:value={tripStart}>
+                                    <input type="date" class="input ml-auto iconEdit w-full" bind:value={tripStart}>
                                 </div>
                                 <div class="w-full">
                                     <h3 class="text-neutral-300 italic text-left mb-1">End</h3>
-                                    <input type="date" class="standardInput ml-auto iconEdit" bind:value={tripEnd}>
+                                    <input type="date" class="input ml-auto iconEdit w-full" bind:value={tripEnd}>
                                 </div>
                             </div>
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                            <button class="fadeButton blue w-full p-2" on:click={createPlan}>Create plan</button>
+                            <button class="button blue w-full p-2" on:click={createPlan}>Create plan</button>
                         </div>
                 
                         
