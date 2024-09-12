@@ -10,7 +10,7 @@
             {#if !loading}
                 {#each locationSuggestions.slice(0,5) as name}
                     {#if name.name != value}
-                        <button on:click={selectLocationFrom(name)} class="text-white w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden  mt-2 relative flex items-center gap-2">{name.name} <span><img src={`https://flagsapi.com/${name.country}/flat/64.png`} class="w-4 h-4" alt={name.country}></span></button>
+                        <button on:click={selectLocationFrom(name)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden  mt-2 relative flex items-center gap-2 font-light"><span><b class="font-bold text-white">{value.charAt(0).toUpperCase() + value.slice(1)}</b>{name.name.slice(value.length)}</span> <span><img src={`https://flagsapi.com/${name.country}/flat/64.png`} class="w-4 h-4" alt={name.country}></span></button>
                     {/if}
                 {/each}
             {:else}

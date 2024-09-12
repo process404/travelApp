@@ -27,8 +27,8 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Date / Time</h3>
                         <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit" bind:value={inputDate}>
-                            <input type="time" class="input blue mt-2 iconEdit" bind:value={inputTime}>
+                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDate}>
+                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTime}>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
