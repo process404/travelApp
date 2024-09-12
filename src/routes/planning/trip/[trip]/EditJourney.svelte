@@ -1,5 +1,5 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<button class="fixed w-full h-screen bg-black z-30 bg-opacity-70 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
+<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-70 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
     <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[95%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col"  in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
             <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-</button>
+</div>
 
 <script>
 import { fade, fly } from 'svelte/transition';
