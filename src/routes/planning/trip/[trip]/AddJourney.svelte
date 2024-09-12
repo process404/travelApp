@@ -1,19 +1,30 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 backdrop-blur-md flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 ml-3 pl-6 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
+<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
+    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
-            <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2">( Day {day} )</h4></h2>
+            <div>
+                <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
+                <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
+            </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
         </div>
         <hr class="mt-4 mb-2 border-neutral-700">
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
-                <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
-            </div>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
+                </div>
             <div class="w-full">
                 <h3 class="text-neutral-300 italic text-left mb-1">To</h3>
-                <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {#if !loading}
+                    <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
+                {:else}
+                    <span class="loader"></span>
+                {/if}
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
@@ -42,16 +53,16 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>
-        <div class="flex gap-3 mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
+        <div class="flex gap-3 sm:mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-4">
             <div class="w-full flex">
-                <button class="button green w-full p-2" on:click={addJourneyConfirm}>Add Journey</button>
+                <button class="button green w-full taller" on:click={addJourneyConfirm}>Add Journey</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-import { createEventDispatcher } from "svelte";
+import { createEventDispatcher, onMount } from "svelte";
 const dispatch = createEventDispatcher();
 import { fade } from "svelte/transition";
 
@@ -60,7 +71,12 @@ export let allStns;
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
+import '../../../siteDB.js';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData, test } from '../../../siteDB';
+
+
 import { writable } from "svelte/store";
+var loading = true;
 
 let from, to, arrival, departure, service, operator, description;
 let alrtMode = writable("err");
@@ -79,10 +95,17 @@ function submit(text) {
 }
 
 let locations = [];
-try {
-    const storedLocations = localStorage.getItem("locations");
-    locations = JSON.parse(storedLocations) || [];
-} catch (error) {}
+
+async function getLocations(){
+    loading = true;
+    let locationsGet = await getLocationsData();
+    locations = locationsGet;
+    loading = false;
+}
+
+onMount(() => {
+    getLocations();
+}); 
 
 function selectFrom(event) {
     from = event.detail.text;
@@ -94,19 +117,25 @@ function selectTo(event) {
     console.log(from, to);
 }
 
-function addLocation(location) {
-    if (localStorage.getItem("locations")) {
-        if (locations.find((loc) => loc.toLowerCase() === location.toLowerCase())) {
+async function addLocation(location, country) {
+    console.log(locations);
+    await getLocations();
+    if(locations == null){
+        locations = [];
+        locations.push({ name: location, country: country });
+        await writeLocationsData(locations);
+        await getLocations();
+        console.log("Location added");
+    }else{
+        const existingLocation = locations.find(loc => loc.name.toLowerCase() === location.toLowerCase());
+        if (existingLocation) {
             console.log("Location already exists");
         } else {
-            locations.push(location);
-            localStorage.setItem("locations", JSON.stringify(locations));
+            locations.push({ name: location, country: country });
+            await writeLocationsData(locations);
+            await getLocations();
             console.log("Location added");
         }
-    } else {
-        locations.push(location);
-        localStorage.setItem("locations", JSON.stringify(locations));
-        console.log("Location added");
     }
 }
 
@@ -119,7 +148,7 @@ function generateCode() {
     return code;
 }
 
-function addJourneyConfirm() {
+async function addJourneyConfirm() {
     if (from === null || to === null || arrival === null || departure === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
@@ -145,9 +174,13 @@ function addJourneyConfirm() {
             },
         };
         console.log("JI: ", journey);
+        await addLocation(from, fromCountry);
+        await addLocation(to, toCountry);
         submit(journey);
-        addLocation(from);
-        addLocation(to);
     }
 }
 </script>
+
+<style>
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    </style>

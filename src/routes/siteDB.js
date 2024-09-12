@@ -24,6 +24,7 @@ export async function writePlanningData(newData) {
 
 export async function writeLocationsData(newData) {
     try {
+        console.log("Doing")
         const compressedData = LZString.compress(JSON.stringify(newData));
         await db.locations.put({ id: 1, data: compressedData });
         console.log("New data written to locations store");
@@ -123,37 +124,6 @@ export async function getLogsData() {
     }
 }
 
-async function compressAllData() {
-    try {
-        const planningData = await getPlanningData();
-        const locationsData = await getLocationsData();
-        const journeysData = await getJourneysData();
-        const logsData = await getLogsData();
-
-        if (planningData) {
-            const compressedPlanningData = LZString.compress(JSON.stringify(planningData));
-            await db.planning.put({ id: 1, data: compressedPlanningData });
-            console.log("Planning data compressed and updated");
-        }
-
-        if (locationsData) {
-            const compressedLocationsData = LZString.compress(JSON.stringify(locationsData));
-            await db.locations.put({ id: 1, data: compressedLocationsData });
-            console.log("Locations data compressed and updated");
-        }
-
-        if (journeysData) {
-            const compressedJourneysData = LZString.compress(JSON.stringify(journeysData));
-            await db.journeys.put({ id: 1, data: compressedJourneysData });
-            console.log("Journeys data compressed and updated");
-        }
-
-        if (logsData) {
-            const compressedLogsData = LZString.compress(JSON.stringify(logsData));
-            await db.logs.put({ id: 1, data: compressedLogsData });
-            console.log("Logs data compressed and updated");
-        }
-    } catch (error) {
-        console.error("Failed to compress and update data:", error);
-    }
+export function test(){
+    console.log("Hi I work")
 }
