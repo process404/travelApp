@@ -50,7 +50,7 @@
                         <span class="loader"></span>
                     </div>
                     {:else}
-                        <div class="w-full pl-1 flex-col justify-center items-center  max-w-[600px]">
+                        <div class="w-full pl-1 flex-col justify-center items-center  max-w-[800px]">
                             {#each thisTrip.days as day}
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
@@ -143,6 +143,7 @@
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
+    import { openDB, getAllData, putData } from './indexedDB.js';
     var param = $page.params.trip;
     var tooltip = false;
     var tooltip2 = false;
@@ -393,25 +394,37 @@
     
     let allStns = null
     let loadStns = true;
-
     onMount(async () => {
-        if(typeof !window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             const settings = JSON.parse(localStorage.getItem('settings'));
-            if(settings.dbStn){
-                // console.log("stn")
-                try {
-                    const module = await import('./page.js');
-                    allStns = await module.allStations
-                } catch (error) {
-                    console.error('Error fetching stations:', error);
-                }finally{
+            if (settings.dbStn) {
+                const db = await openDB('stationsDB', 1, (db) => {
+                    if (!db.objectStoreNames.contains('stations')) {
+                        db.createObjectStore('stations', { keyPath: 'id' });
+                    }
+                });
+
+                // Check if stations are already cached
+                const cachedStations = await getAllData(db, 'stations');
+                if (cachedStations.length > 0) {
+                    allStns = cachedStations[0].data;
                     loadStns = false;
+                } else {
+                    // Use a web worker to fetch stations
+                    const worker = new Worker(new URL('./stationWorker.js', import.meta.url), { type: 'module' });
+                    worker.onmessage = async (event) => {
+                        allStns = event.data;
+                        await putData(db, 'stations', { id: 1, data: allStns });
+                        loadStns = false;
+                    };
+                    worker.postMessage('fetchStations');
                 }
-            }  else{
+            } else {
                 loadStns = false;
-            }    
+            }
         }
     });
+
     
     
     
