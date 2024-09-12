@@ -195,7 +195,7 @@
                 locations.add(journey.to);
             }
         }
-        console.log(locations);
+        // console.log(locations);
         return locations.size;
     }
 
@@ -239,7 +239,7 @@
                 }
             }
         }
-        console.log(countries);
+        // console.log(countries);
         return countries;
     }
 
