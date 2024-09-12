@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <div class="border-[1px] border-neutral-700 rounded-md sm:mt-12 mt-8 w-full max-w-[500px] p-4">
                             <button class="button blue w-full p-2" on:click={createPlan}>Create plan</button>
                         </div>
                 
