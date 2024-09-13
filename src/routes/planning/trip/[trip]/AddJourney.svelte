@@ -3,7 +3,7 @@
     <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
+                <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
                 <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
             </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
@@ -30,12 +30,16 @@
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full flex gap-3">
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={departure}/>
+                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
+                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateStart}/>
+                    <h3 class="text-neutral-300 italic text-left mb-2  mt-2 text-sm">Departure Time</h3>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={arrival}/>
+                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Date</h3>
+                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateEnd}/>
+                    <h3 class="text-neutral-300 italic text-left mb-2 mt-2 text-sm">Arrival Time</h3>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalTime}/>                
                 </div>
             </div>
             <div class="md:w-1/2 w-full">
@@ -68,17 +72,23 @@ import { fade } from "svelte/transition";
 
 export let day;
 export let allStns;
+export let tripDateStart;
+export let tripDateEnd;
+
+console.log(tripDateStart, tripDateEnd);
+
+
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
 import '../../../siteDB.js';
-import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData, test } from '../../../siteDB';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 
 
 import { writable } from "svelte/store";
 var loading = true;
 
-let from, to, arrival, departure, service, operator, description;
+let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime;
 let alrtMode = writable("err");
 let alrtTxt = writable("");
 let alrtAct = writable(false);
@@ -166,8 +176,10 @@ async function addJourneyConfirm() {
                 fromCountry: fromCountry,
                 to: to,
                 toCountry: toCountry,
-                arrival: arrival,
-                departure: departure,
+                arrivalTime: arrival,
+                departureTime: departure,
+                departureDate: departureDate,
+                arrivalDate: arrivalDate,
                 service: service,
                 operator: operator,
                 description: description,

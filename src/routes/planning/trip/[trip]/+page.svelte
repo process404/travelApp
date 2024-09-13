@@ -3,10 +3,10 @@
 <button class="w-screen h-screen fixed z-10 hover:cursor-default backdrop-blur-sm" on:click={() => {tooltip = false; tooltip2 = false}}></button>
 {/if}
 {#if addJourney && !loadStns}
-<AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns}/>
+<AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd}/>
 {/if}
 {#if editJourney && !loadStns}
-<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} allStns={allStns}/>
+<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd}/>
 {/if}
 <div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
@@ -56,7 +56,7 @@
                                     <div class="flex justify-between w-full items-center flex-wrap">
                                         <h2 class="text-white italic">Day {day.day}</h2>
                                         {#if !loadStns}
-                                            <button class="button blue p-1 text-sm pl-3 pr-3 wider2" on:click={addJourneyFn(day)}>Add</button>
+                                            <button class="button blue p-1 text-sm pl-3 pr-3 wider2" on:click={addJourneyFn(day, thisTrip.start, thisTrip.end)}>Add</button>
                                         {:else}
                                             <span class="loader" style="margin-top:0px"></span>
                                         {/if}
@@ -113,15 +113,23 @@
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
-                                                                  <h4 class="text-white text-sm">{journey.departure} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrival}</h4>
+                                                                  <h4 class="text-white text-sm">{journey.departureTime} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrivalTime}</h4>
                                                             </div>
                                                             <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
-                                                                  <h4 class="text-white text-sm">{calcTime(journey.departure, journey.arrival)}</h4>
-                                                            </div>
+                                                                  {#if journey.departureDate != journey.arrivalDate}
+                                                                    {#if calcDays(journey.departureDate, journey.arrivalDate) > 1}
+                                                                        <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} days</span></h4>
+                                                                    {:else}
+                                                                        <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} day</span></h4>
+                                                                    {/if}
+                                                                  {:else}
+                                                                    <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)}</h4>
+                                                                  {/if}
+                                                                </div>
                                                             {#if journey.description != '' && journey.description != null}
                                                                 <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky fill-white opacity-30 min-w-3" viewBox="0 0 16 16">
@@ -134,7 +142,7 @@
                                                     </div>
                                                     <div class="sm:ml-4 ml-2 mr-2 flex sm:flex-col flex-row gap-2 mt-4 sm:mt-0 sm:w-1/5 w-full">
                                                         {#if !loadStns}
-                                                            <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day)}>Edit</button>
+                                                            <button class="button blue2 p-1 text-xs w-full" on:click={callEditJourney(journey, day.day, thisTrip.start, thisTrip.end)}>Edit</button>
                                                         {:else}
                                                             <div class="w-full flex items-center justify-center h-[24px]">
                                                                 <span class="loader" style="margin-top:0px"></span>
@@ -169,7 +177,7 @@
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
-    import { openDB, getAllData, putData } from './indexedDB.js';
+    import { openDB, getAllData, putData } from './stationsDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
     import { countryFlags } from '../../countries.js'
@@ -185,6 +193,8 @@
 
     var tripName = writable('');
     var tripDescription = writable('');
+    var tripStart = writable('');
+    var tripEnd = writable('');
     var thisTrip = null;
     var addJourneyDay = ''
     var editJourneyDay = ''
@@ -213,12 +223,15 @@
     });
 
 
-    function getPlan(){
+    async function getPlan(){
+        storage = await getPlanningData();
         for(const plan in storage){
             // console.log(storage[plan])
             if(storage[plan].tripID == param){
                 tripName.set(storage[plan].name);
                 tripDescription.set(storage[plan].description);
+                tripStart.set(storage[plan].startDate);
+                tripEnd.set(storage[plan].endDate);
                 thisTrip = storage[plan];
                 editName = storage[plan].name;
                 editDescription = storage[plan].description;
@@ -254,7 +267,7 @@
         for(const plan in storage){
             if(storage[plan].tripID == param){
                 storage[plan].name = editName;
-                writePlanningData(storage);
+                await writePlanningData(storage);
             }
         }
     }
@@ -269,8 +282,27 @@
     }
 
     let addDay = ''
+    var thisTripDateStart = ''
+    var thisTripDateEnd = ''
     
-    function addJourneyFn(day){
+    function addJourneyFn(day, sd, ed){
+
+        const startDate = new Date(sd);
+
+        // Calculate the target date by adding (day - 1) days to the start date
+        const targetDate = new Date(startDate);
+        targetDate.setDate(startDate.getDate() + (day.day - 1));
+
+        // Format the target date as a string (e.g., "YYYY-MM-DD")
+        const year = targetDate.getFullYear();
+        const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+        const date = String(targetDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${date}`;
+        console.log(formattedDate);
+
+        thisTripDateStart = formattedDate;
+        thisTripDateEnd = formattedDate;
+
         addJourney = true;
         addJourneyDay = day.day;
         addDay = day;
@@ -295,7 +327,31 @@
     
     let journeyToEdit
     
-    function callEditJourney(journey, day){
+    function callEditJourney(journey, day,sd, ed){
+        if(journey.departureDate == '' || journey.arrivalDate == ''){
+            console.log(sd, ed, day)
+            const startDate = new Date(sd);
+            
+            // Calculate the target date by adding (day - 1) days to the start date
+            const targetDate = new Date(startDate);
+            targetDate.setDate(startDate.getDate() + (day - 1));
+            
+            // Format the target date as a string (e.g., "YYYY-MM-DD")
+            const year = targetDate.getFullYear();
+            const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const date = String(targetDate.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${date}`;
+            console.log(formattedDate);
+            
+            thisTripDateStart = formattedDate;
+            thisTripDateEnd = formattedDate;
+            console.log("gen")
+        }else{
+            thisTripDateStart = journey.departureDate;
+            thisTripDateEnd = journey.arrivalDate;
+            console.log("preset")
+        }
+
         editJourney = true;
         journeyToEdit = journey;
         // console.log(day);
@@ -321,22 +377,32 @@
         }
     }
     
-    function calcTime(departure, arrival){
+    function calcTime(departureTime, arrivalTime, departureDate, arrivalDate){
         try{
-            var dep = new Date();
-            var arr = new Date();
-            var [depHour, depMinute] = departure.split(':');
-            var [arrHour, arrMinute] = arrival.split(':');
-            dep.setHours(depHour, depMinute);
-            arr.setHours(arrHour, arrMinute);
+            var dep = new Date(`${departureDate} ${departureTime}`);
+            var arr = new Date(`${arrivalDate} ${arrivalTime}`);
             if (arr < dep) {
                 arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
             }
             var diff = arr - dep;
-            var hours = Math.floor(diff / 1000 / 60 / 60);
+            var hours = Math.floor(diff / (1000 * 60 * 60));
             diff -= hours * 1000 * 60 * 60;
-            var minutes = Math.floor(diff / 1000 / 60);
-            return `${hours}h ${minutes}m`;
+            var minutes = Math.floor(diff / (1000 * 60));
+            var days = Math.floor(hours / 24);
+            hours -= days * 24;
+            return `${days > 0 ? days + 'd ' : ''}${hours}h ${minutes}m`;
+        }catch(e){
+            return 'Error';
+        }
+    } 
+
+    function calcDays(departureDate, arrivalDate){
+        try{
+            var dep = new Date(departureDate);
+            var arr = new Date(arrivalDate);
+            var diff = arr - dep;
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            return days;
         }catch(e){
             return 'Error';
         }
@@ -377,7 +443,7 @@
     function copyData(){
         var data = JSON.stringify(thisTrip);
         var compressed = LZString.compressToBase64(data);
-        // console.log(compressed);
+        console.log(compressed);
         navigator.clipboard.writeText(compressed); 
         $alrtTxt = 'Data copied to clipboard';
         $alrtAct = true;

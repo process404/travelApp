@@ -36,6 +36,15 @@ import { onMount } from "svelte";
 import './siteDB.js'
 import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from './siteDB';
 
+
+// window.wData = () => {
+// 	doThing();
+// }
+
+async function doThing(){
+	await writePlanningData()
+}
+
 var currentPage = "main";
 
 onMount(() => {

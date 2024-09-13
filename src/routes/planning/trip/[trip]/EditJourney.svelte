@@ -28,17 +28,21 @@
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
-            <div class="w-full flex gap-3">
+            <div class="w-full flex gap-4">
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={departure}/>
+                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
+                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateStart}/>
+                    <h3 class="text-neutral-300 italic text-left mb-2  mt-2 text-sm">Departure Time</h3>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={arrival}/>
+                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Date</h3>
+                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateEnd}/>
+                    <h3 class="text-neutral-300 italic text-left mb-2 mt-2 text-sm">Arrival Time</h3>
+                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalTime}/>                
                 </div>
             </div>
-            <div class="md:w-1/2 w-full">
+            <div class="md:w-1/2 w-full sm:ml-3 ml-0">
                 <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Service</h3>
                 <input class="input blue w-full"  bind:value={service}/>
             </div>
@@ -69,6 +73,8 @@ const dispatch = createEventDispatcher();
 export let day;
 export let journey;
 export let allStns;
+export let tripDateStart;
+export let tripDateEnd;
 
 let loading = true;
 
@@ -83,8 +89,10 @@ let from = journey.from,
 fromCountry = journey.fromCountry,
     to = journey.to,
     toCountry = journey.toCountry,
-    arrival = journey.arrival,
-    departure = journey.departure,
+    arrivalDate = journey.arrivalDate,
+    departureDate = journey.departureDate,
+    arrivalTime = journey.arrivalTime,
+    departureTime = journey.departureTime,
     service = journey.service,
     operator = journey.operator,
     description = journey.description,
@@ -150,8 +158,10 @@ async function addJourneyConfirm() {
     if (
         null == from ||
         null == to ||
-        null == arrival ||
-        null == departure
+        null == arrivalTime ||
+        null == departureTime ||
+        null == arrivalDate ||
+        null == departureDate 
     ) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
@@ -170,8 +180,10 @@ async function addJourneyConfirm() {
                 fromCountry: fromCountry,
                 to: to,
                 toCountry: toCountry,
-                arrival: arrival,
-                departure: departure,
+                arrivalTime: arrivalTime,
+                departureTime: departureTime,
+                arrivalDate: arrivalDate,
+                departureDate: departureDate,
                 service: service,
                 operator: operator,
                 description: description,
