@@ -4,27 +4,31 @@
         "country":"GB",
         "code":"RSN",
         "lat": 55.849720,
-        "long": -2.192615
+        "long": -2.192615,
+        "id":"c_lev_196929"
     },
     {
         "name":"Cameron Bridge",
         "country":"GB",
         "code":"CBX",
         "lat": 56.202500,
-        "long": -3.047095
+        "long": -3.047095,
+        "id":"c_cbx_793491"
     },
     {
         "name":"Leven",
         "country":"GB",
         "code":"LEV",
         "lat": 56.192355,
-        "long": -3.001926
+        "long": -3.001926,
+        "id":"c_lev_143525"
     },
     {
         "name":"Ashley Down",
         "country":"GB",
         "code":"ASD",
         "lat": 51.479047,
-        "long": -2.576521
+        "long": -2.576521,
+        "id":"c_asd_48638643"
     }
 ]

@@ -95,9 +95,30 @@
     }
 
     function selectLocationFrom(name) {
-        value = name.name;
-        presetC = name.country;
-        locationSuggestions = []
+        value = name;
+        const selectedStation = adDs.find(station => station.name === name.name);
+        if (selectedStation) {
+            console.log("test")
+            value = selectedStation.name;
+            presetC = selectedStation.country;
+            const stationInfo = {
+                name: selectedStation.name,
+                country: selectedStation.country,
+                id: selectedStation.id,
+                lat: selectedStation.latitude,
+                long: selectedStation.longitude,
+            };
+            console.log(stationInfo);
+            value = stationInfo;
+        }else{
+            const locSearch = ds.find(station => station.name === name.name);
+            if(locSearch){
+                value = locSearch;
+                presetC = locSearch.country;
+                console.log(value)
+            }
+        }
+        locationSuggestions = [];
         dispatch('select', {
             text: value
         });

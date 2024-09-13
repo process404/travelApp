@@ -86,7 +86,7 @@ import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
 import { writable } from "svelte/store";
 
-let from = journey.from,
+let from = journey.from, fromId = null, toId = null,
 fromCountry = journey.fromCountry,
     to = journey.to,
     toCountry = journey.toCountry,
@@ -114,9 +114,14 @@ let locations = [];
 
 async function getLocations(){
     loading = true;
-    var locationsGet = await getLocationsData();
-    locations = locationsGet.concat(extraStationsNonDs);
-    loading = false;
+    let locationsGet = await getLocationsData();
+    if(locationsGet != null){
+        locations = locationsGet.concat(extraStationsNonDs);
+        loading = false;
+    }else{
+        locations = extraStationsNonDs;
+        loading = false;
+    }
 }
 
 onMount(() => {
@@ -124,12 +129,14 @@ onMount(() => {
 }); 
 
 function selectFrom(o) {
-    from = o.detail.text;
+    from = o.detail.text.name;
+    fromId = o.detail.id;
     console.log(from, to);
 }
 
 function selectTo(o) {
-    to = o.detail.text;
+    to = o.detail.text.name;
+    toId = o.detail.id;
     console.log(from, to);
 }
 
@@ -159,6 +166,8 @@ async function addJourneyConfirm() {
     if (
         null == from ||
         null == to ||
+        null == fromId ||
+        null == toId ||
         null == arrivalTime ||
         null == departureTime ||
         null == arrivalDate ||
@@ -179,8 +188,10 @@ async function addJourneyConfirm() {
                 code: code,
                 from: from,
                 fromCountry: fromCountry,
+                fromId: fromId,
                 to: to,
                 toCountry: toCountry,
+                toId: toId,
                 arrivalTime: arrivalTime,
                 departureTime: departureTime,
                 arrivalDate: arrivalDate,

@@ -219,6 +219,8 @@
 
     var from = ''
     var to = ''
+    var fromId = null;
+    var toId = null;
     let locations = ''
 
     
@@ -226,7 +228,11 @@
     let loadStns = true;
     onMount(async () => {
         locations = await getLocationsData();
-        locations = locations.concat(additionalStns);
+        if (locations != null) {
+            locations = locations.concat(additionalStns);
+        }else{
+            locations = additionalStns;
+        }
 
         if (typeof window !== 'undefined') {
             const settings = JSON.parse(localStorage.getItem('settings'));
@@ -542,11 +548,14 @@
         }
 
         function selectFrom(o){
-            from = o.detail.text;
+            from = o.detail.text.name;
+            fromId = o.detail.text.id;
         }
 
         function selectTo(o){
-            to = o.detail.text;
+            to = o.detail.text.name;
+            toId = o.detail.text.id;
+            console.log(from, to, fromId, toId);
         }
 
 

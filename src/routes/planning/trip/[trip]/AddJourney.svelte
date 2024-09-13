@@ -88,7 +88,7 @@ import extraStationsNonDs from '../../../../db/additionalStations.json'
 import { writable } from "svelte/store";
 var loading = true;
 
-let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime;
+let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId;
 let alrtMode = writable("err");
 let alrtTxt = writable("");
 let alrtAct = writable(false);
@@ -109,21 +109,28 @@ let locations = [];
 async function getLocations(){
     loading = true;
     let locationsGet = await getLocationsData();
-    locations = locationsGet.concat(extraStationsNonDs);
-    loading = false;
+    if(locationsGet != null){
+        locations = locationsGet.concat(extraStationsNonDs);
+        loading = false;
+    }else{
+        locations = extraStationsNonDs;
+        loading = false;
+    }
 }
 
 onMount(() => {
     getLocations();
 }); 
 
-function selectFrom(event) {
-    from = event.detail.text;
+function selectFrom(o) {
+    from = o.detail.text.name;
+    fromId = o.detail.id;
     console.log(from, to);
 }
 
-function selectTo(event) {
-    to = event.detail.text;
+function selectTo(o) {
+    to = o.detail.text.name;
+    toId = o.detail.id;
     console.log(from, to);
 }
 
@@ -159,7 +166,7 @@ function generateCode() {
 }
 
 async function addJourneyConfirm() {
-    if (from === null || to === null || arrival === null || departure === null) {
+    if (from === null || to === null || arrival === null || departure === null || fromId === null || toId === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
         console.log("Please fill in all fields");
@@ -174,8 +181,10 @@ async function addJourneyConfirm() {
                 code: generateCode(),
                 from: from,
                 fromCountry: fromCountry,
+                fromId: fromId,
                 to: to,
                 toCountry: toCountry,
+                toId: toId,
                 arrivalTime: arrival,
                 departureTime: departure,
                 departureDate: departureDate,
