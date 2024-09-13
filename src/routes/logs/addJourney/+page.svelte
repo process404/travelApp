@@ -10,11 +10,24 @@
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
-                                <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc" bind:presetC={fromC}/>
+                                {#if loadStns}
+                                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
+                                        <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                                    </div>
+                                {:else}
+                                    <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc" bind:presetC={fromC} adDs={allStns}/>
+                                {/if}
                             </div>
                             <div class="w-full">
                                 <h3 class="text-neutral-300 italic mb-2">To</h3>
-                                <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC}/>
+                                {#if loadStns}
+                                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
+                                        <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                                    </div>
+                                {:else}
+                                    <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC} adDs={allStns}/>
+                                {/if}
+                
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -197,7 +210,9 @@
     var alrtAct = writable(false)
     var alrtMode = writable('err')
 
-    var db = import ('../../../db/database.json');
+    var db = import ('../../../db/vehicles.json');
+    import { openDB, getAllData, putData } from '../../stationsDB.js';
+    import additionalStns from '../../../db/additionalStations.json'
     var logAreas = []
     dbWriteable.set(db)
 
@@ -206,23 +221,51 @@
     let locations = ''
 
     
+    let allStns = null
+    let loadStns = true;
     onMount(async () => {
-        document.title = 'Add Log';
-        locations = await getAllLocations();
-        const loc = locations;
-        if(loc != null){
-            combinedLocations = JSON.parse(loc);
+
+        locations = await getLocationsData();
+        locations = locations.concat(additionalStns)
+
+        if (typeof window !== 'undefined') {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            if (settings.dbStn) {
+                const db = await openDB('stationsDB', 1, (db) => {
+                    if (!db.objectStoreNames.contains('stations')) {
+                        // console.log('Creating object store');
+                        db.createObjectStore('stations', { keyPath: 'id' });
+                    }
+                });
+
+                // Check if stations are already cached
+                const cachedStations = await getAllData(db, 'stations');
+                if (cachedStations.length > 0) {
+                    allStns = cachedStations[0].data;
+                    loadStns = false;
+                } else {
+                    // console.log("ww")
+                    // Use a web worker to fetch stations
+                    const worker = new Worker(new URL('../../stationWorker.js', import.meta.url), { type: 'module' });
+                    worker.onmessage = async (event) => {
+                        allStns = event.data;
+                        await putData(db, 'stations', { id: 1, data: allStns });
+                        // console.log('Stations fetched');
+                        // console.log(allStns);
+                        loadStns = false;
+                    };
+                    worker.onerror = (error) => {
+                        console.error('Error in worker:', error);
+                        loadStns = false; 
+                    };
+                    worker.postMessage('fetchStations');
+                }
+            } else {
+                loadStns = false;
+            }
         }
-    
-        const dbData = await db;
-        const resolvedDbData = await dbData.default;
-        logAreas = resolvedDbData.trainTypes;
-        // console.log(logAreas)
-
-        inputDateStart = new Date().toISOString().split('T')[0];
-        inputDateEnd = new Date().toISOString().split('T')[0];
-
     });
+
 
     
     function inputType(type, train) {
@@ -520,4 +563,8 @@
 
     
 </script>
+
+<style>
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+</style>
 
