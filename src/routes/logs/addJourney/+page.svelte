@@ -197,7 +197,7 @@
     var alrtAct = writable(false)
     var alrtMode = writable('err')
 
-    var db = import ('../../../db/database.json');
+    var db = import ('../../../db/vehicles.json');
     var logAreas = []
     dbWriteable.set(db)
 
