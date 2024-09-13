@@ -180,7 +180,7 @@
     import { openDB, getAllData, putData } from '../../../stationsDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
-    import { countryFlags } from '../../countries.js'
+    import { countryFlags } from '../../../countries.js'
     var param = $page.params.trip;
     var tooltip = false;
     var tooltip2 = false;

@@ -11,7 +11,9 @@
                                 <!--TO-DO - country selector ?-->
                                 <h3 class="text-neutral-300 italic mb-2">From</h3>
                                 {#if loadStns}
-                                    <span class="loader"></span>
+                                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
+                                        <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                                    </div>
                                 {:else}
                                     <PromptField ds={locations} on:select={selectFrom} bind:value={from} disabled={$noLocation} ver="loc" bind:presetC={fromC} adDs={allStns}/>
                                 {/if}
@@ -19,7 +21,9 @@
                             <div class="w-full">
                                 <h3 class="text-neutral-300 italic mb-2">To</h3>
                                 {#if loadStns}
-                                    <span class="loader"></span>
+                                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
+                                        <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                                    </div>
                                 {:else}
                                     <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC} adDs={allStns}/>
                                 {/if}
@@ -559,4 +563,8 @@
 
     
 </script>
+
+<style>
+    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+</style>
 
