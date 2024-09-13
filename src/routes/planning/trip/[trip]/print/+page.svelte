@@ -2,8 +2,8 @@
 <div style="width: 100vw; display: flex; flex-direction: column; overflow-y:scroll; background: rgb(255,255,255)" class="pb-16" id="app">
     <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
-            <button class="button dark p-3 text-sm" on:click={() => window.history.back()}>Go Back</button>
-            <button class="button green p-3 text-sm pl-6 pr-6" on:click={print}>Print</button>
+            <button class="button dark p-3 text-sm wider2 taller" on:click={() => window.history.back()}>Go Back</button>
+            <button class="button green p-3 text-sm pl-6 pr-6 wider2 taller" on:click={print}>Print</button>
         </div>
         <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
     </div>
@@ -48,7 +48,7 @@
                         <tr class="border-[1px] border-neutral-200">
                             <td colspan="7" class="bg-gray-200 font-semibold italic p-1 text-sm">Day {day.day}</td>
                         </tr>
-                        {#each day.journeys as journey}
+                        {#each sortJourneys(day.journeys) as journey}
                             <tr>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.service}</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.departure}</td>
@@ -96,6 +96,16 @@
 
 <script>
     import{page}from"$app/stores";import"../../../../../global.css";var param=$page.params.trip;let calcDaysWr=writable(""),titleSet=writable("No title set"),descriptionSet=writable("No description set"),plan={};function print(){window.print()}import{onMount}from"svelte";import{writable}from"svelte/store";function UC(t){return t?t.toUpperCase():""}function formatDate(t){let e=new Date(t);return`${e.getDate()}/${e.getMonth()+1}/${e.getFullYear()}`}function calcDays(t,e){let a=new Date(t),n=new Date(e),r=Math.abs(n.getTime()-a.getTime()),i=Math.ceil(r/864e5)+1;return calcDaysWr.set(i),i}function GD(){const t=new Date;return`Generated ${String(t.getDate()).padStart(2,"0")}/${String(t.getMonth()+1).padStart(2,"0")}/${t.getFullYear()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}:${String(t.getSeconds()).padStart(2,"0")}`}onMount((()=>{if(document.title="Print Window",localStorage.getItem("planning")){let t=JSON.parse(localStorage.getItem("planning"));plan=t.find((t=>t.tripID===param)),plan&&(calcDays(plan.start,plan.end),titleSet.set(UC(plan.name)),descriptionSet.set(UC(plan.description)),document.title="Print ("+plan.name+")")}}));
+    
+    function sortJourneys(journeys){
+        journeys.sort((a, b) => {
+            const departureTimeA = new Date(`2000-01-01 ${a.departureTime}`);
+            const departureTimeB = new Date(`2000-01-01 ${b.departureTime}`);
+            return departureTimeA - departureTimeB;
+        });
+    return journeys;
+}
+
 </script>
 
 <style>
