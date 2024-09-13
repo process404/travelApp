@@ -80,6 +80,7 @@ let loading = true;
 
 import '../../../siteDB.js';
 import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
+import extraStationsNonDs from '../../../../db/additionalStations.json'
 
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
@@ -114,7 +115,7 @@ let locations = [];
 async function getLocations(){
     loading = true;
     var locationsGet = await getLocationsData();
-    locations = locationsGet;
+    locations = locationsGet.concat(extraStationsNonDs);
     loading = false;
 }
 

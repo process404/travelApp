@@ -1,0 +1,30 @@
+[
+    {
+        "name":"Reston",
+        "country":"GB",
+        "code":"RSN",
+        "lat": 55.849720,
+        "long": -2.192615
+    },
+    {
+        "name":"Cameron Bridge",
+        "country":"GB",
+        "code":"CBX",
+        "lat": 56.202500,
+        "long": -3.047095
+    },
+    {
+        "name":"Leven",
+        "country":"GB",
+        "code":"LEV",
+        "lat": 56.192355,
+        "long": -3.001926
+    },
+    {
+        "name":"Ashley Down",
+        "country":"GB",
+        "code":"ASD",
+        "lat": 51.479047,
+        "long": -2.576521
+    }
+]
