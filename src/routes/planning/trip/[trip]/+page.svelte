@@ -63,7 +63,7 @@
                                     </div>
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
-                                        {#each day.journeys as journey}
+                                        {#each sortJourneys(day.journeys) as journey}
                                             <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center sm:flex-row flex-col">
                                                     <div class="flex flex-col gap-1 items-start w-full">
@@ -542,6 +542,15 @@
             }
         }
     });
+
+function sortJourneys(journeys){
+    journeys.sort((a, b) => {
+        const departureTimeA = new Date(`2000-01-01 ${a.departureTime}`);
+        const departureTimeB = new Date(`2000-01-01 ${b.departureTime}`);
+        return departureTimeA - departureTimeB;
+    });
+    return journeys;
+}
 
     
     
