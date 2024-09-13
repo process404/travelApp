@@ -211,47 +211,43 @@
     var alrtMode = writable('err')
 
     var db = import ('../../../db/vehicles.json');
-    import { openDB, getAllData, putData } from '../../stationsDB.js';
     import additionalStns from '../../../db/additionalStations.json'
+    import { tl_getAllData, tl_putData } from '../../tl_stationsDB';
+	import { add } from 'dexie';
     var logAreas = []
     dbWriteable.set(db)
 
     var from = ''
     var to = ''
+    var fromId = null;
+    var toId = null;
     let locations = ''
 
     
     let allStns = null
     let loadStns = true;
     onMount(async () => {
-
         locations = await getLocationsData();
-        locations = locations.concat(additionalStns)
+        if (locations != null) {
+            locations = locations.concat(additionalStns);
+        }else{
+            locations = additionalStns;
+        }
 
         if (typeof window !== 'undefined') {
             const settings = JSON.parse(localStorage.getItem('settings'));
-            if (settings.dbStn) {
-                const db = await openDB('stationsDB', 1, (db) => {
-                    if (!db.objectStoreNames.contains('stations')) {
-                        // console.log('Creating object store');
-                        db.createObjectStore('stations', { keyPath: 'id' });
-                    }
-                });
-
+            if (settings && settings.dbStn) {
                 // Check if stations are already cached
-                const cachedStations = await getAllData(db, 'stations');
+                const cachedStations = await tl_getAllData();
                 if (cachedStations.length > 0) {
                     allStns = cachedStations[0].data;
                     loadStns = false;
                 } else {
-                    // console.log("ww")
                     // Use a web worker to fetch stations
-                    const worker = new Worker(new URL('../../stationWorker.js', import.meta.url), { type: 'module' });
+                    const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
                         allStns = event.data;
-                        await putData(db, 'stations', { id: 1, data: allStns });
-                        // console.log('Stations fetched');
-                        // console.log(allStns);
+                        await tl_putData(allStns);
                         loadStns = false;
                     };
                     worker.onerror = (error) => {
@@ -552,11 +548,14 @@
         }
 
         function selectFrom(o){
-            from = o.detail.text;
+            from = o.detail.text.name;
+            fromId = o.detail.text.id;
         }
 
         function selectTo(o){
-            to = o.detail.text;
+            to = o.detail.text.name;
+            toId = o.detail.text.id;
+            console.log(from, to, fromId, toId);
         }
 
 
