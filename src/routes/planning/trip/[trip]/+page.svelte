@@ -177,7 +177,7 @@
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
-    import { openDB, getAllData, putData } from './stationsDB.js';
+    import { openDB, getAllData, putData } from '../../../stationsDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
     import { countryFlags } from '../../countries.js'
@@ -509,6 +509,7 @@
             return "";
         }
     }
+
     
     let allStns = null
     let loadStns = true;
@@ -529,7 +530,7 @@
                     loadStns = false;
                 } else {
                     // Use a web worker to fetch stations
-                    const worker = new Worker(new URL('./stationWorker.js', import.meta.url), { type: 'module' });
+                    const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
                         allStns = event.data;
                         await putData(db, 'stations', { id: 1, data: allStns });
