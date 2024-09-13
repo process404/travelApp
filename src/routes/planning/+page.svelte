@@ -94,7 +94,7 @@
 <script>
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { countryFlags } from '../planning/countries.js'
+    import { countryFlags } from '../countries.js'
     import { onMount } from 'svelte';
     import '../../global.css'
     var plansFromDB = [];
@@ -184,7 +184,8 @@
     async function loadFromData(){
         let data = prompt('Please enter the data string');
         if(data){
-            let parsed = JSON.parse(data);
+            let decompressed = LZString.decompressFromBase64(data);
+            let parsed = JSON.parse(decompressed);
 
             if (plansFromDB != null && plansFromDB.some(p => p.tripID === parsed.tripID)) {
                 alert('Journey with tripID already exists');

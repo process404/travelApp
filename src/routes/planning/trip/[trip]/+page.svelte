@@ -177,10 +177,10 @@
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
-    import { openDB, getAllData, putData } from '../../../stationsDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
     import { countryFlags } from '../../../countries.js'
+    import  { tl_getAllData, tl_putData } from '../../../tl_stationsDB.js';
     var param = $page.params.trip;
     var tooltip = false;
     var tooltip2 = false;
@@ -514,17 +514,12 @@
     let allStns = null
     let loadStns = true;
     onMount(async () => {
+        
         if (typeof window !== 'undefined') {
             const settings = JSON.parse(localStorage.getItem('settings'));
-            if (settings.dbStn) {
-                const db = await openDB('stationsDB', 1, (db) => {
-                    if (!db.objectStoreNames.contains('stations')) {
-                        db.createObjectStore('stations', { keyPath: 'id' });
-                    }
-                });
-
+            if (settings && settings.dbStn) {
                 // Check if stations are already cached
-                const cachedStations = await getAllData(db, 'stations');
+                const cachedStations = await tl_getAllData();
                 if (cachedStations.length > 0) {
                     allStns = cachedStations[0].data;
                     loadStns = false;
@@ -533,7 +528,7 @@
                     const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
                         allStns = event.data;
-                        await putData(db, 'stations', { id: 1, data: allStns });
+                        await tl_putData(allStns);
                         loadStns = false;
                     };
                     worker.onerror = (error) => {
