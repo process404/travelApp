@@ -97,7 +97,7 @@
     import { countryFlags } from '../planning/countries.js'
     import { onMount } from 'svelte';
     import '../../global.css'
-    var plansFromDB = []
+    var plansFromDB = [];
 
     import '../siteDB.js'
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../siteDB';
@@ -118,10 +118,8 @@
     
     onMount(async () => {
         document.title = 'Planning';
-        if (await getPlanningData()) {
-            plansFromDB = await getPlanningData();
-            getFlags();
-        }
+        plansFromDB = await getPlanningData();
+        getFlags();
     });
 
     function createPlanPg() {
@@ -186,23 +184,23 @@
     async function loadFromData(){
         let data = prompt('Please enter the data string');
         if(data){
-            var decompressed = LZString.decompressFromBase64(data);
-            let parsed = JSON.parse(decompressed);
+            let parsed = JSON.parse(data);
 
-            if (plansFromDB.some(p => p.tripID === parsed.tripID)) {
+            if (plansFromDB != null && plansFromDB.some(p => p.tripID === parsed.tripID)) {
                 alert('Journey with tripID already exists');
                 parsed.tripID = [...Array(20)].map(() => {
                     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                     return characters[Math.floor(Math.random() * characters.length)];
                 }).join('');
 
+                let compress = LZString.compressToBase64(JSON.stringify(parsed));
+
                 plansFromDB.push(parsed);
-                await writePlanningData(plansFromDB);
+                await writePlanningData(compress);
                 window.location.href = '/planning';
 
             } else {
-                plansFromDB.push(parsed);
-                await writePlanningData(plansFromDB);
+                await writePlanningData(parsed);
                 window.location.href = '/planning';
             }
         }

@@ -123,7 +123,3 @@ export async function getLogsData() {
         return null;
     }
 }
-
-export function test(){
-    console.log("Hi I work")
-}

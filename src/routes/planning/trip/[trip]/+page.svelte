@@ -169,7 +169,7 @@
     import '../../../../global.css';
     import { page } from '$app/stores';
 	import { writable } from 'svelte/store';
-    import { openDB, getAllData, putData } from './indexedDB.js';
+    import { openDB, getAllData, putData } from './stationsDB.js';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
     import { countryFlags } from '../../countries.js'
@@ -213,7 +213,8 @@
     });
 
 
-    function getPlan(){
+    async function getPlan(){
+        storage = await getPlanningData();
         for(const plan in storage){
             // console.log(storage[plan])
             if(storage[plan].tripID == param){
@@ -254,7 +255,7 @@
         for(const plan in storage){
             if(storage[plan].tripID == param){
                 storage[plan].name = editName;
-                writePlanningData(storage);
+                await writePlanningData(storage);
             }
         }
     }
@@ -329,12 +330,22 @@
             arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
             }
             var diff = arr - dep;
-            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            diff -= days * 1000 * 60 * 60 * 24;
             var hours = Math.floor(diff / (1000 * 60 * 60));
             diff -= hours * 1000 * 60 * 60;
             var minutes = Math.floor(diff / (1000 * 60));
-            return `${days}d ${hours}h ${minutes}m`;
+            return `${hours}h ${minutes}m`;
+        }catch(e){
+            return 'Error';
+        }
+    } 
+
+    function calcDays(departureDate, arrivalDate){
+        try{
+            var dep = new Date(departureDate);
+            var arr = new Date(arrivalDate);
+            var diff = arr - dep;
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            return days;
         }catch(e){
             return 'Error';
         }
@@ -374,9 +385,9 @@
     
     function copyData(){
         var data = JSON.stringify(thisTrip);
-        var compressed = LZString.compressToBase64(data);
+        // var compressed = LZString.compressToBase64(data);
         // console.log(compressed);
-        navigator.clipboard.writeText(compressed); 
+        navigator.clipboard.writeText(data); 
         $alrtTxt = 'Data copied to clipboard';
         $alrtAct = true;
         

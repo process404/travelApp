@@ -72,7 +72,7 @@ export let allStns;
 import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
 import '../../../siteDB.js';
-import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData, test } from '../../../siteDB';
+import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 
 
 import { writable } from "svelte/store";
