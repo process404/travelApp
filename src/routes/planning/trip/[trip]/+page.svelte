@@ -442,9 +442,9 @@
     
     function copyData(){
         var data = JSON.stringify(thisTrip);
-        // var compressed = LZString.compressToBase64(data);
-        // console.log(compressed);
-        navigator.clipboard.writeText(data); 
+        var compressed = LZString.compressToBase64(data);
+        console.log(compressed);
+        navigator.clipboard.writeText(compressed); 
         $alrtTxt = 'Data copied to clipboard';
         $alrtAct = true;
         

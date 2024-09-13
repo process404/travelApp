@@ -24,7 +24,7 @@ export async function writePlanningData(newData) {
 
 export async function writeLocationsData(newData) {
     try {
-        console.log("Doing")
+        // console.log("Doing")
         const compressedData = LZString.compress(JSON.stringify(newData));
         await db.locations.put({ id: 1, data: compressedData });
         console.log("New data written to locations store");
