@@ -6,7 +6,7 @@
 <AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd}/>
 {/if}
 {#if editJourney && !loadStns}
-<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd}/>
+<EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd} allStns={allStns}/>
 {/if}
 <div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
