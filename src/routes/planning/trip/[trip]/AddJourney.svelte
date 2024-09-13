@@ -166,7 +166,7 @@ function generateCode() {
 }
 
 async function addJourneyConfirm() {
-    if (from === null || to === null || arrival === null || departure === null || fromId === null || toId === null) {
+    if (from === null || to === null || arrivalDate === null || departureDate === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
         console.log("Please fill in all fields");
