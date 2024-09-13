@@ -377,10 +377,10 @@
         }
     }
     
-    function calcTime(departureTime, arrivalTime, departureDate, arrivalDate){
+    function calcTime(departureTime, arrivalTime){
         try{
-            var dep = new Date(`${departureDate} ${departureTime}`);
-            var arr = new Date(`${arrivalDate} ${arrivalTime}`);
+            var dep = new Date(`2000-01-01 ${departureTime}`);
+            var arr = new Date(`2000-01-01 ${arrivalTime}`);
             if (arr < dep) {
                 arr.setDate(arr.getDate() + 1); // Add 1 day to arrival date
             }
@@ -388,9 +388,7 @@
             var hours = Math.floor(diff / (1000 * 60 * 60));
             diff -= hours * 1000 * 60 * 60;
             var minutes = Math.floor(diff / (1000 * 60));
-            var days = Math.floor(hours / 24);
-            hours -= days * 24;
-            return `${days > 0 ? days + 'd ' : ''}${hours}h ${minutes}m`;
+            return `${hours}h ${minutes}m`;
         }catch(e){
             return 'Error';
         }
