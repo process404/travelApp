@@ -30,28 +30,52 @@
                 
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <div class="mt-3 flex gap-2 items-center">
+                        <!-- <div class="flex gap-4"> -->
+                            <!-- <div class="mt-3 flex gap-2 items-center">
                                 <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noLocation}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
-                            </div>
-                            <div class="mt-3 flex gap-2 items-center">
+                            </div> -->
+                            <!-- <div class="mt-3 flex gap-2 items-center">
                                 <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
-                            </div>
+                            </div> -->
         
-                        </div>
+                        <!-- </div> -->
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Departure</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateStart}>
-                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeStart}>
+                        <div class="flex gap-4">
+                            <div class="w-full">
+                                <h3 class="text-neutral-300 italic">Departure</h3>
+                                <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                                    <input type="date" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateStart}>
+                                    <input type="time" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeStart}>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <h3 class="text-neutral-300 italic">Arrival</h3>
+                                <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                                    <input type="date" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateEnd}>
+                                    <input type="time" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeEnd}>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="text-neutral-300 italic mt-4">Arrival</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                            <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDateEnd}>
-                            <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTimeEnd}>
+                        <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-50 hover:border-neutral-400 duration-50">
+                            <button class="flex justify-between w-full items-center" on:click={() => extraJourneyDropdown = !extraJourneyDropdown}>
+                                <h2 class="dark:text-neutral-300 italic">Extra Details</h2>
+                                {#if extraJourneyDropdown}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                    </svg>
+                                {:else}
+                        
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                    </svg>
+                                {/if}
+                            </button>
+                            {#if extraJourneyDropdown}
+                                <hr class="w-full mt-2 mb-2 border-neutral-700">
+                            {/if}
                         </div>
                     </div>
 
@@ -222,6 +246,8 @@
     var fromId = null;
     var toId = null;
     let locations = ''
+
+    var extraJourneyDropdown = false;
 
     
     let allStns = null
