@@ -95,9 +95,12 @@
 
 
     function selectItem(name) {
-        value = name;
-        const selectedStation = adDs.find(station => station.name === name.name);
-        if (selectedStation) {
+        value = name.name;
+        var selectedStation
+        if(adDs){
+            selectedStation = adDs.find(station => station.name === name.name);
+        }
+        if (adDs && selectedStation) {
             console.log("test")
             value = selectedStation.name;
             presetC = selectedStation.country;
@@ -110,18 +113,24 @@
             };
             console.log(stationInfo);
             value = stationInfo;
+            dispatch('select', {
+                text: value
+            });
+            value = selectedStation.name;
+
         }else{
             const locSearch = ds.find(station => station.name === name.name);
             if(locSearch){
                 value = locSearch;
                 presetC = locSearch.country;
                 console.log(value)
+                dispatch('select', {
+                    text: value
+                });
+                value = locSearch.name;
             }
         }
         suggestions = [];
-        dispatch('select', {
-            text: value
-        });
     }
 
     $: {
