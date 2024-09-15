@@ -78,7 +78,7 @@
                                 <div class="flex gap-4 sm:flex-row flex-col mt-3">
                                     <div class="w-full">
                                         <h3 class="text-neutral-300 italic mb-2  text-sm">Operator</h3>
-                                        <PromptField red="true"/>
+                                        <PromptField red="true" ds={operators}/>
                                     </div>
                                     <div class="flex gap-4">
                                         <div class="w-full">
@@ -251,7 +251,9 @@
 
     import '../../siteDB.js'
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../siteDB';
-
+    
+    import operators from '../../../db/operators.json';
+    
     import { get, writable } from 'svelte/store';
     var combinedLocations = null;
     var locationSuggestions = []
