@@ -75,6 +75,50 @@
                             </button>
                             {#if extraJourneyDropdown}
                                 <hr class="w-full mt-2 mb-2 border-neutral-700">
+                                <div class="flex gap-4 sm:flex-row flex-col mt-3">
+                                    <div class="w-full">
+                                        <h3 class="text-neutral-300 italic mb-2  text-sm">Operator</h3>
+                                        <PromptField red="true"/>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="w-full">
+                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Train Code</h3>
+                                            <input class="input blue w-full reduced h-auto"/>
+                                        </div>
+                                        <div class="w-full sm:hidden">
+                                            <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
+                                            <div class="flex gap-1">
+                                                <select class="input reduced iconEdit w-full">
+                                                    {#each Array.from({ length: 13 }, (_, i) => i) as hour}
+                                                        <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                    {/each}
+                                                </select>
+                                                <select class="input reduced iconEdit w-full">
+                                                    {#each Array.from({ length: 60 }, (_, i) => i) as hour}
+                                                        <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                    {/each}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 mt-4 mb-3">
+                                    <div class="hidden sm:w-auto">
+                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
+                                        <div class="flex gap-1">
+                                            <select class="input reduced iconEdit w-full">
+                                                {#each Array.from({ length: 13 }, (_, i) => i) as hour}
+                                                    <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                {/each}
+                                            </select>
+                                            <select class="input reduced iconEdit w-full">
+                                                {#each Array.from({ length: 60 }, (_, i) => i) as hour}
+                                                    <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                {/each}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             {/if}
                         </div>
                     </div>
@@ -591,5 +635,6 @@
 
 <style>
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
 </style>
 

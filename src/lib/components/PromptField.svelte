@@ -4,7 +4,7 @@
 <div class="flex gap-1 w-full">
     <div class="relative w-full gap-2">
         <!--TO-DO add precise location info and country selector-->
-        <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled}>
+        <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled} class:reduced={red}>
         {#if suggestions.length != 0}
         <div class="absolute bottom-100 bg-neutral-800 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
             {#if !loading}
@@ -40,6 +40,7 @@
     export let disabled;
     export let ver;
     export let presetC;
+    export let red;
 
     let dropdownCountry = false;
 
