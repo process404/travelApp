@@ -10,10 +10,17 @@
             {#if !loading}
                 {#each suggestions.slice(0,5) as suggestion}
                     <!-- {#if name.name != value && value.length < name.name.length && value.length > 0} -->
-                    <button on:click={() => selectItem(suggestion)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
-                        <span>{@html highlightMatch(suggestion.name, value)}</span>
-                        <span><img src={`https://flagsapi.com/${suggestion.country}/flat/64.png`} class="w-4 h-4" alt={suggestion.country}></span>
-                    </button>
+                    {#if !isMobileDevice}
+                        <button on:click={() => selectItem(suggestion)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
+                            <span>{@html highlightMatch(suggestion.name, value)}</span>
+                            <span><img src={`https://flagsapi.com/${suggestion.country}/flat/64.png`} class="w-4 h-4" alt={suggestion.country}></span>
+                        </button>
+                    {:else}
+                        <button on:click={() => selectItem(suggestion)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
+                            <span>{@html highlightMatch(suggestion.name, value)}</span>
+                            <span class="w-4 h-4">{getFlag(suggestion.country)}</span>
+                        </button>
+                    {/if}
                     <!-- {/if} -->
                 {/each}
             {:else}
@@ -48,6 +55,7 @@
     let dropdownCountry = false;
 
     import { createEventDispatcher, onMount } from 'svelte';
+	import { get } from 'svelte/store';
     const dispatch = createEventDispatcher();
 
     let suggestions = []
@@ -56,6 +64,7 @@
     // console.log(presetC)
 
     let loading = false;
+    
 
     // console.log(ds)
     function promptSuggestions() {
@@ -219,6 +228,29 @@
         const afterMatch = text.slice(index + query.length);
         return `${beforeMatch}<b class="font-bold text-white">${match}</b>${afterMatch}`;
     }
+
+    
+    
+    let isMobile = false;
+    let isAndroid = false;
+    let isIOS = false;
+    let isMobileDevice = false
+    var countries = []
+    
+    onMount(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        isMobile = /mobile/.test(userAgent);
+        isAndroid = /android/.test(userAgent);
+        isIOS = /iphone|ipad|ipod/.test(userAgent);
+        isMobileDevice = isMobile || isAndroid || isIOS;
+    });
+
+    function getFlag(country){
+        const countryObj = getCountryList().find(c => c.code === country);
+        return countryObj ? countryObj.emoji : '';
+    }
+
+
 
 
 </script>
