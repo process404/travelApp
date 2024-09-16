@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-50 hover:border-neutral-400 duration-50">
+                        <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50">
                             <button class="flex justify-between w-full items-center" on:click={() => extraJourneyDropdown = !extraJourneyDropdown}>
                                 <h2 class="dark:text-neutral-300 italic">Extra Details</h2>
                                 {#if extraJourneyDropdown}
