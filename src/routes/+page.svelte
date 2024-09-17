@@ -3,7 +3,7 @@
 	<Nav ver="main"/>
 	{#if currentPage == 'main'}
 	<div class="h-full max-w-[1000px] lg:max-w-[90%] w-full flex flex-col flex-grow lg:justify-center">
-		<div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full lg:max-h-[500px] sm:pt-6 sm:pb-6 sm:pl-2 sm:pr-2 flex-grow">
+		<div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full lg:max-h-[700px] sm:pt-6 sm:pb-6 sm:pl-2 sm:pr-2 flex-grow">
 			<div class="flex flex-col lg:flex-row gap-4 w-full h-full mt-4 sm:mt-2 sm:pl-8 sm:pr-8 pl-4 pr-4 flex-grow mb-4 sm:mb-2">
 				<!-- <HomeButton clickRoute="logs" buttonName="Add" imgTitle="Gerrit-Jan van den Berg, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" imgTitle2="Gerrit-Jan van den Berg, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons" imgSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/ICNG_3110.jpg/512px-ICNG_3110.jpg?20220415163918" imgHref="https://commons.wikimedia.org/wiki/File:ICNG_3110.jpg" /> -->
 				<HomeButton clickRoute="logs" buttonName="Add" imgTitle="" imgTitle2="" imgSrc="" imgHref="" />
