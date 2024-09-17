@@ -103,19 +103,29 @@
                                 </div>
                                 <div class="flex gap-4 mt-4 mb-3">
                                     <div class="hidden sm:block w-full">
-                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
-                                        <div class="flex gap-1">
-                                            <select class="input reduced iconEdit w-full" bind:value={delayHours}>
-                                                {#each Array.from({ length: 13 }, (_, i) => i) as hour}
-                                                    <option>{hour < 10 ? `0${hour}` : hour}</option>
-                                                {/each}
-                                            </select>
-                                            <select class="input reduced iconEdit w-full" bind:value={delayMinutes}>
-                                                {#each Array.from({ length: 60 }, (_, i) => i) as minutes}
-                                                    <option>{minutes < 10 ? `0${minutes}` : minutes}</option>
-                                                {/each}
-                                            </select>
+                                        <div class="w-full">
+                                            <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
+                                            <div class="flex gap-1">
+                                                <select class="input reduced iconEdit w-full" bind:value={delayHours}>
+                                                    {#each Array.from({ length: 13 }, (_, i) => i) as hour}
+                                                        <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                    {/each}
+                                                </select>
+                                                <select class="input reduced iconEdit w-full" bind:value={delayMinutes}>
+                                                    {#each Array.from({ length: 60 }, (_, i) => i) as minutes}
+                                                        <option>{minutes < 10 ? `0${minutes}` : minutes}</option>
+                                                    {/each}
+                                                </select>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Reason</h3>
+                                        <select class="input reduced iconEdit w-full">
+                                            <option>Leisure</option>
+                                            <option>Work</option>
+                                            <option>Commuting</option>
+                                        </select>
                                     </div>
                                 </div>
                             {/if}
