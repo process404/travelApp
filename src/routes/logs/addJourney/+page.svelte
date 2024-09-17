@@ -29,6 +29,26 @@
                                 {/if}
                 
                             </div>
+                            <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
+                                <button class="flex justify-between w-full items-center" on:click={() => viaPointsDropdown = !viaPointsDropdown}>
+                                    <h2 class="dark:text-neutral-300 italic">Via</h2>
+                                    {#if viaPointsDropdown}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                        </svg>
+                                    {:else}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+                                        </svg>
+                                    {/if}
+                                </button>
+                                {#if viaPointsDropdown}
+                                    <hr class="w-full mt-2 mb-2 border-neutral-700">
+                                    <div class="flex gap-4 sm:flex-row flex-col mt-3">
+                                        
+                                    </div>
+                                {/if}
+                            </div>
                         </div>
                         <!-- <div class="flex gap-4"> -->
                             <!-- <div class="mt-3 flex gap-2 items-center">
@@ -305,6 +325,7 @@
     let locations = ''
 
     var extraJourneyDropdown = false;
+    var viaPointsDropdown = false;
 
     
     let allStns = null
