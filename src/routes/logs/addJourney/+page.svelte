@@ -366,6 +366,7 @@
 
     function selectVia(o) {
         via = o.detail.text;
+        console.log("select", via);
     }
 
     
