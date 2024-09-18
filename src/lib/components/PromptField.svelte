@@ -30,7 +30,7 @@
         {/if}
     </div>
     {#if ver === "loc"}
-        <select class="input blue w-[65px] h-[38px]" bind:value={presetC} class:inputDisabled={disabled} disbled={disabled}>
+        <select class="input blue" bind:value={presetC} class:inputDisabled={disabled} disbled={disabled} class:selectReduced={red}>
             {#each countryList as country}
             <option value={country.code} selected={presetC === country.code}>({country.code}) - {country.name}</option>
             {/each}
@@ -260,4 +260,12 @@
 <style>
     select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    select.selectReduced{
+        @apply p-0 w-[50px]
+    }
+
+    select{
+        @apply w-[65px]
+    }
+
 </style>

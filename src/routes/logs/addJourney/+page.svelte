@@ -31,7 +31,7 @@
                             </div>
                             <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
                                 <button class="flex justify-between w-full items-center" on:click={() => viaPointsDropdown = !viaPointsDropdown}>
-                                    <h2 class="dark:text-neutral-300 italic">Via</h2>
+                                    <h2 class="dark:text-neutral-300">Via</h2>
                                     {#if viaPointsDropdown}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
@@ -44,8 +44,30 @@
                                 </button>
                                 {#if viaPointsDropdown}
                                     <hr class="w-full mt-2 mb-2 border-neutral-700">
-                                    <div class="flex gap-4 sm:flex-row flex-col mt-3">
-                                        
+                                    <div class="flex gap-4 flex-col mt-4 items-center justify-center mb-2">
+                                        <div class="flex flex-col items-center gap-2">
+                                            {#if from != '' || !from}
+                                                <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
+                                            {:else}
+                                                <h3 class="text-neutral-300 italic w-full text-center">{from}</h3>
+                                            {/if}        
+                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                        </div>
+                                        {#if viaPoints.length == 0 && !viaPointsAdd}
+                                            <button class="button" on:click={() => viaPointsAdd = true}>Add via point</button>
+                                        {:else if viaPointsAdd}
+                                            <div class="max-w-[65%] w-full">
+                                                <PromptField ds={locations} on:select={selectVia} bind:value={via} ver="loc" adDs={allStns} bind:presetC={viaC} red={true}/>
+                                            </div>
+                                        {/if}
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                            {#if to != '' || !to}
+                                                <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
+                                            {:else}
+                                                <h3 class="text-neutral-300 italic w-full text-center">{to}</h3>
+                                            {/if}                            
+                                        </div>
                                     </div>
                                 {/if}
                             </div>
@@ -81,7 +103,7 @@
                         </div>
                         <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50">
                             <button class="flex justify-between w-full items-center" on:click={() => extraJourneyDropdown = !extraJourneyDropdown}>
-                                <h2 class="dark:text-neutral-300 italic">Extra Details</h2>
+                                <h2 class="dark:text-neutral-300">Extra Details</h2>
                                 {#if extraJourneyDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
@@ -179,7 +201,7 @@
                                 </svg>
                                 {/if}
                                 </button> -->
-                                <button class="button p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
+                                <button class="button p-[0.2rem]" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                 </svg></button>
                             </div>
@@ -326,6 +348,16 @@
 
     var extraJourneyDropdown = false;
     var viaPointsDropdown = false;
+    var viaPointsAdd = false;
+    var viaPoints = []
+    var addViaPoint = ''
+    var viaC = ''
+    var via = ''
+
+    function selectVia(o) {
+        via = o.detail.text.name;
+        console.log(via);
+    }
 
     
     let allStns = null
