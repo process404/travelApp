@@ -46,10 +46,14 @@
                                     <hr class="w-full mt-2 mb-2 border-neutral-700">
                                     <div class="flex gap-4 flex-col mt-4 items-center justify-center mb-2">
                                         <div class="flex flex-col items-center gap-2">
-                                            {#if from != '' || !from}
+                                            {#if !from }
                                                 <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
-                                                <h3 class="text-neutral-300 italic w-full text-center">{from}</h3>
+                                                {#if fromC}
+                                                    <h3 class="text-neutral-300 italic w-full text-center">{from} ({fromC})</h3>
+                                                {:else}
+                                                    <h3 class="text-neutral-300 italic w-full text-center">{from}</h3>
+                                                {/if}
                                             {/if}        
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
                                         </div>
@@ -59,13 +63,19 @@
                                             <div class="max-w-[65%] w-full">
                                                 <PromptField ds={locations} on:select={selectVia} bind:value={via} ver="loc" adDs={allStns} bind:presetC={viaC} red={true}/>
                                             </div>
+                                        {:else if !viaPointsAdd && viaPoints.length > 0}
+                                            <h2>e</h2>
                                         {/if}
                                         <div class="flex flex-col items-center gap-2">
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
-                                            {#if to != '' || !to}
+                                            {#if !to}
                                                 <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
-                                                <h3 class="text-neutral-300 italic w-full text-center">{to}</h3>
+                                                {#if toC}
+                                                    <h3 class="text-neutral-300 italic w-full text-center">{to} ({toC})</h3>
+                                                {:else}
+                                                    <h3 class="text-neutral-300 italic w-full text-center">{to}</h3>
+                                                {/if}
                                             {/if}                            
                                         </div>
                                     </div>
@@ -355,8 +365,7 @@
     var via = ''
 
     function selectVia(o) {
-        via = o.detail.text.name;
-        console.log(via);
+        via = o.detail.text;
     }
 
     
