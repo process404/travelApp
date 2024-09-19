@@ -416,7 +416,7 @@
         via = o.detail.text.name;
         viaPoints.push(o.detail.text);
         viaPointsAdd = false;
-        console.log("select", via);
+        // console.log("select", via);
     }
 
     
@@ -587,7 +587,7 @@
 
         if(from === '' || to === ''){
             if(!$noLocation){
-            console.log(from,to)
+            // console.log(from,to)
             customAlertSummon("No location selected", "err");
             return;
             }
