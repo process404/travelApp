@@ -80,6 +80,7 @@
                         { "name": "Enviro 400 MMC", "short": "AD_E400MMC" },
                         { "name": "Enviro 400 City", "short": "AD_E400CITY" },
                         { "name": "Enviro 400 City MMC", "short": "AD_E400CITYMMC" },
+                        {"name":"Dennis Dart SLF","short":"AD_DD_SLF"},
                         { "name": "Enviro 400 XLB", "short": "AD_E400XLB" },
                         { "name": "ALX400", "short": "AD_ALX400" },
                         { "name": "ALX300", "short": "AD_ALX300" },
@@ -87,6 +88,7 @@
                     ]
                 },
                 {"name":"Wrightbus", "variants":[
+                    { "name": "All / Others", "short": "WB_ALL" },
                     {"name":"Solar","short":"WRGT_SLR"},
                     {"name":"Pulsar","short":"WRGT_PLSR"},
                     {"name":"Pulsar 2","short":"WRGT_PLSR_2"},
@@ -102,12 +104,89 @@
                     {"name":"Kite","short":"WRGT_KIT"},
                     {"name":"Cadet","short":"WRGT_CDT"},
                     {"name":"Commander","short":"WRGT_COM"},
-                    {"name":"Kite","short":"WRGT_KIT"},
                     {"name":"StreetAir","short":"WRGT_AIR"},
                     {"name":"StreetLite","short":"WRGT_SL"},
                     {"name":"New Routemaster","short":"WRGT_NRM"},
                     {"name":"SRM","short":"WRGT_SRM"}
-                ]}
+                ]},
+                {
+                    "name":"Switch / Optare", "variants":[
+                        { "name": "All / Others", "short": "SO_ALL" },
+                        {"name":"Solo","short":"OPT_SL"},
+                        {"name":"Solo SR","short":"OPT_SLSR"},
+                        {"name":"Metrocity","short":"OPT_MC"},
+                        {"name":"Metrodecker","short":"OPT_MD"},
+                        {"name":"Tempo","short":"OPT_TMP"},
+                        {"name":"Versa","short":"OPT_VRS"},
+                        {"name":"Omnidekka","short":"OPT_OMD"},
+                        {"name":"Visionaire","short":"OPT_VSN"},
+                        {"name":"Olympus","short":"OPT_OLY"}
+                    ]
+                },
+                {
+                    "name":"AEC", "variants":[
+                        { "name": "All / Others", "short": "AEC_ALL" },
+                        {"name":"Routemaster","short":"AEC_RM"}
+                    ]
+                },
+                {
+                    "name":"Scania", "variants":[
+                        { "name": "All / Others", "short": "SC_ALL" },
+                        {"name":"Fencer","short":"SC_FC"},
+                        {"name":"Touring","short":"SC_TR"}                    
+                    ]
+                },
+                {
+                    "name":"Irizar", "variants":[
+                        { "name": "All / Others", "short": "IR_ALL" },
+                        {"name":"i4","short":"IR_I4"},
+                        {"name":"i6","short":"IR_I6"},     
+                        {"name":"i6s","short":"IR_I6S"},   
+                        {"name":"i8","short":"IR_I8"}            
+                    ]
+                },
+                {
+                    "name":"Volvo", "variants":[
+                        { "name": "All / Others", "short": "VV_ALL" },
+                        {"name":"BZL (SD)","short":"VV_BZL_SD"},
+                        {"name":"BZL (DD)","short":"VV_BZL_DD"},     
+                        {"name":"7900e","short":"VV_7900e"},
+                        {"name":"9700 (SD)","short":"VV_9700_SD"},
+                        {"name":"9700 (DD)","short":"VV_9700_SD"}        
+                    ]
+                },
+                {
+                    "name":"Caetano", "variants":[
+                        { "name": "All / Others", "short": "CT_ALL" },
+                        {"name":"H2 City","short":"CT_H2C"},
+                        {"name":"E City","short":"CT_EC"},
+                        {"name":"Levante","short":"CT_LV"},
+                        {"name":"Levante 2","short":"CT_LV"},
+                        {"name":"Levante 3","short":"CT_LV"}
+                    ]
+                },
+                {
+                    "name":"Plaxton", "variants":[
+                        {"name": "All / Others", "short": "PX_ALL" },
+                        {"name":"Elite","short":"PX_EL"},
+                        {"name":"Leopard","short":"PX_LP"},
+                        {"name":"Panorama","short":"PX_PR"},
+                        {"name":"Panther","short":"PX_PN"},
+                        {"name":"Dennis Dart SLF","short":"PX_DD_SLF"},
+                        {"name":"President","short":"PX_PRE"},
+                        {"name":"Premiere","short":"PX_PMR"},
+                        {"name":"Centro","short":"PX_CEN"}
+                    ]
+                },
+                {
+                    "name":"Yutong","variants":[
+                        {"name":"GTe14","short":"YU_GTE14"},
+                        {"name":"ICe12","short":"YU_ICE12"},
+                        {"name":"E10","short":"YU_E10"},
+                        {"name":"E12","short":"YU_E12"},
+                        {"name":"E12","short":"YU_E12"}
+                    ]
+                }
             ]
         }
     ]

@@ -46,7 +46,7 @@
                                     <hr class="w-full mt-2 mb-2 border-neutral-700">
                                     <div class="flex gap-4 flex-col mt-4 items-center justify-center mb-2">
                                         <div class="flex flex-col items-center gap-2">
-                                            {#if !from }
+                                            {#if !from}
                                                 <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
                                                 {#if fromC}
@@ -56,7 +56,7 @@
                                                         <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{from} <span><img class="w-4 h-4" alt={fromC} src={`https://flagsapi.com/${fromC}/flat/64.png`}></span></h3>
                                                     {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 w-full text-center">{from}</h3>
+                                                    <h3 class="text-neutral-300 w-full text-center">{from} (None selected)</h3>
                                                 {/if}
                                             {/if}        
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
@@ -90,9 +90,9 @@
                                             {#each viaPoints as point}
                                                 <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider" on:click={removeVia(point)}>
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center">{point.name} ({getFlag(point.country)})</h3>
+                                                        <h3 class="text-neutral-300 w-full text-center italic">{point.name} ({getFlag(point.country)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center italic">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
                                                     {/if}
             
                                                     <!-- <button class="button red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -102,7 +102,7 @@
                                                 </button>
                                             {/each}
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
-                                            <button class="button" on:click={() => viaPointsAdd = true}>Add via point</button>
+                                            <button class="button" on:click={() => {viaPointsAdd = true; via = ''}}>Add via point</button>
                                         {/if}
                                         <div class="flex flex-col items-center gap-2">
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
@@ -111,12 +111,12 @@
                                             {:else}
                                                 {#if toC}
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center">{to} ({getFlag(toC)})</h3>
+                                                        <h3 class="text-neutral-300 w-full text-center italic">{to} ({getFlag(toC)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{to} <span><img class="w-4 h-4" alt={toC} src={`https://flagsapi.com/${toC}/flat/64.png`}></span></h3>
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center italic">{to} <span><img class="w-4 h-4" alt={toC} src={`https://flagsapi.com/${toC}/flat/64.png`}></span></h3>
                                                     {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 w-full text-center">{to}</h3>
+                                                    <h3 class="text-neutral-300 w-full text-center">{to} (None selected)</h3>
                                                 {/if}
                                             {/if}                            
                                         </div>
@@ -416,7 +416,7 @@
         via = o.detail.text.name;
         viaPoints.push(o.detail.text);
         viaPointsAdd = false;
-        console.log("select", via);
+        // console.log("select", via);
     }
 
     
@@ -587,7 +587,7 @@
 
         if(from === '' || to === ''){
             if(!$noLocation){
-            console.log(from,to)
+            // console.log(from,to)
             customAlertSummon("No location selected", "err");
             return;
             }
