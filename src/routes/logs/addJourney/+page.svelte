@@ -50,21 +50,59 @@
                                                 <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
                                                 {#if fromC}
-                                                    <h3 class="text-neutral-300 italic w-full text-center">{from} ({fromC})</h3>
+                                                    {#if isMobileDevice}
+                                                        <h3 class="text-neutral-300 w-full text-center">{from} ({getFlag(fromC)})</h3>
+                                                    {:else}
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{from} <span><img class="w-4 h-4" alt={fromC} src={`https://flagsapi.com/${fromC}/flat/64.png`}></span></h3>
+                                                    {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 italic w-full text-center">{from}</h3>
+                                                    <h3 class="text-neutral-300 w-full text-center">{from}</h3>
                                                 {/if}
                                             {/if}        
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
                                         </div>
                                         {#if viaPoints.length == 0 && !viaPointsAdd}
                                             <button class="button" on:click={() => viaPointsAdd = true}>Add via point</button>
-                                        {:else if viaPointsAdd}
+                                        {:else if viaPointsAdd && !viaPoints.length > 0}
                                             <div class="max-w-[65%] w-full">
                                                 <PromptField ds={locations} on:select={selectVia} bind:value={via} ver="loc" adDs={allStns} bind:presetC={viaC} red={true}/>
                                             </div>
+                                        {:else if viaPointsAdd && viaPoints.length > 0}
+                                            {#each viaPoints as point}
+                                                <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider" on:click={removeVia(point)}>
+                                                    {#if isMobileDevice}
+                                                        <h3 class="text-neutral-300 w-full text-center">{point.name} ({getFlag(point.country)})</h3>
+                                                    {:else}
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
+                                                    {/if}
+            
+                                                    <!-- <button class="button red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                    </svg></button> -->
+                                                </button>
+                                            
+                                                {/each}
+                                                <div class="max-w-[65%] w-full">
+                                                    <PromptField ds={locations} on:select={selectVia} bind:value={via} ver="loc" adDs={allStns} bind:presetC={viaC} red={true}/>
+                                                </div>
                                         {:else if !viaPointsAdd && viaPoints.length > 0}
-                                            <h2>e</h2>
+                                            {#each viaPoints as point}
+                                                <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider" on:click={removeVia(point)}>
+                                                    {#if isMobileDevice}
+                                                        <h3 class="text-neutral-300 w-full text-center">{point.name} ({getFlag(point.country)})</h3>
+                                                    {:else}
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
+                                                    {/if}
+            
+                                                    <!-- <button class="button red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                      </svg></button> -->
+                                                </button>
+                                            {/each}
+                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                            <button class="button" on:click={() => viaPointsAdd = true}>Add via point</button>
                                         {/if}
                                         <div class="flex flex-col items-center gap-2">
                                             <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
@@ -72,9 +110,13 @@
                                                 <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
                                                 {#if toC}
-                                                    <h3 class="text-neutral-300 italic w-full text-center">{to} ({toC})</h3>
+                                                    {#if isMobileDevice}
+                                                        <h3 class="text-neutral-300 w-full text-center">{to} ({getFlag(toC)})</h3>
+                                                    {:else}
+                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{to} <span><img class="w-4 h-4" alt={toC} src={`https://flagsapi.com/${toC}/flat/64.png`}></span></h3>
+                                                    {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 italic w-full text-center">{to}</h3>
+                                                    <h3 class="text-neutral-300 w-full text-center">{to}</h3>
                                                 {/if}
                                             {/if}                            
                                         </div>
@@ -129,7 +171,7 @@
                                 <div class="flex gap-4 sm:flex-row flex-col mt-3">
                                     <div class="w-full">
                                         <h3 class="text-neutral-300 italic mb-2  text-sm">Operator</h3>
-                                        <PromptField red="true" ds={operators}/>
+                                        <PromptField red="true" ds={operators} bind:value={operator} on:select={selectOperator}/>
                                     </div>
                                     <div class="flex gap-4">
                                         <div class="w-full">
@@ -173,7 +215,7 @@
                                     </div>
                                     <div class="w-full">
                                         <h3 class="text-neutral-300 italic mb-2 text-sm">Reason</h3>
-                                        <select class="input reduced iconEdit w-full">
+                                        <select class="input reduced iconEdit w-full" bind:value={journeyReason}>
                                             <option>Leisure</option>
                                             <option>Work</option>
                                             <option>Commuting</option>
@@ -338,6 +380,12 @@
     var fromC = ''
     var delayMinutes;
     var delayHours; 
+    var operator;
+    var journeyReason = ''
+
+    function selectOperator(o){
+        operator = o.detail.text.name;
+    }
     
     var alrtTxt  = writable('')
     var alrtAct = writable(false)
@@ -365,7 +413,9 @@
     var via = ''
 
     function selectVia(o) {
-        via = o.detail.text;
+        via = o.detail.text.name;
+        viaPoints.push(o.detail.text);
+        viaPointsAdd = false;
         console.log("select", via);
     }
 
@@ -602,7 +652,13 @@
                 end_date: inputDateEnd,
                 end_time: inputTimeEnd,
                 log_lat: preciseLat,
-                log_lon: preciseLon
+                log_lon: preciseLon,
+                viaPoints: viaPoints,
+                operator: operator,
+                delayHours: delayHours,
+                delayMinutes: delayMinutes,
+                journeyReason: journeyReason
+
             }));
 
             const addNew = JSON.parse(journeys).concat(numbersWithLocation);
@@ -703,6 +759,34 @@
             toId = o.detail.text.id;
             console.log(from, to, fromId, toId);
         }
+
+
+        let isMobile;
+        let isAndroid;
+        let isIOS;
+        let isMobileDevice = isMobile || isAndroid || isIOS;
+
+        onMount(() => {
+            const userAgent = navigator.userAgent.toLowerCase();
+            isMobile = /mobile/.test(userAgent);
+            isAndroid = /android/.test(userAgent);
+            isIOS = /iphone|ipad|ipod/.test(userAgent);
+            isMobileDevice = isMobile || isAndroid || isIOS;
+        });
+
+        import { countryFlags } from '../../countries.js'
+
+        function getFlag(item){
+            let country = item.country
+            if(isMobileDevice){
+                return countryFlags.find(flag => flag.code === country)
+            }
+        }
+
+        function removeVia(via){
+            viaPoints = viaPoints.filter(point => point !== via);
+        }
+
 
 
 
