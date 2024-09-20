@@ -469,6 +469,7 @@
     var journeyRestauraunt = false;
     var journeySleeper = false;
     var journeyTags = []
+    var existingTags = []
     var journeyNotes = ''
 
     function selectVia(o) {
@@ -478,11 +479,27 @@
         // console.log("select", via);
     }
 
+    async function getTagsFromJourneys(){
+        let journeys = await getJourneysData();
+        if(journeys != null){
+            const parsedJourneys = JSON.parse(journeys);
+            parsedJourneys.forEach(journey => {
+                if(journey.tags){
+                    journey.tags.forEach(tag => {
+                        if(!existingTags.includes(tag)){
+                            existingTags.push(tag);
+                        }
+                    });
+                }
+            });
+        }
+    }
     
     let allStns = null
     let loadStns = true;
     onMount(async () => {
         locations = await getLocationsData();
+        getTagsFromJourneys();
         if (locations != null) {
             locations = locations.concat(additionalStns);
         }else{
