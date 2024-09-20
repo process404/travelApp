@@ -223,7 +223,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="w-full">
+                                <div class="w-full mt-4 mb-3">
                                     <h3 class="text-neutral-300 italic mb-2 text-sm">Facilities</h3>
                                     <div class="flex">
 
@@ -265,6 +265,14 @@
                                           </svg>{/if}</button>
                                         
                                     </div>
+                                </div>
+
+                                <div class="w-full mt-4 mb-3">
+                                    <h3 class="text-neutral-300 italic mb-2 text-sm">Tags</h3>
+                                </div>
+
+                                <div class="w-full mt-4 mb-3">
+                                    <h3 class="text-neutral-300 italic mb-2 text-sm">Notes</h3>
                                 </div>
                             {/if}
                         </div>
