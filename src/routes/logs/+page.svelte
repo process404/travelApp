@@ -7,12 +7,12 @@
             <h3 class="text-neutral-400 italic mt-2">Please select an option</h3>
             <div class="border-[1px] rounded-md border-neutral-700 w-full sm:p-4 p-2 mt-4 sm:mt-8 flex justify-center gap-2 h-full flex-col max-w-[600px]">
                 <div class="border-[0px] rounded-md border-neutral-700 w-full h-full flex gap-2">
-                    <button class="button blue2 w-full" on:click={() => goInnerPage('addJourney')}>Add Journey</button>
-                    <button class="button blue2 w-full" on:click={() => goInnerPage('addLog')}>Add Log</button>
+                    <button class="button blue2 w-full lessprominent" on:click={() => goInnerPage('addJourney')}>Add Journey</button>
+                    <button class="button blue2 w-full lessprominent" on:click={() => goInnerPage('addLog')}>Add Log</button>
                 </div>
                 <div class="border-[0px] rounded-md border-neutral-700 w-full h-full flex flex-col gap-2">
-                    <button class="button blue3 h-full" on:click={() => goInnerPage('addLocation')}>Add Location</button>
-                    <button class="button blue3 h-full" on:click={() => goInnerPage('addNote')}>Add Note</button>
+                    <button class="button blue3 h-full lessprominent" on:click={() => goInnerPage('addLocation')}>Add Location</button>
+                    <button class="button blue3 h-full lessprominent" on:click={() => goInnerPage('addNote')}>Add Note</button>
                 </div>
             </div>
             <!-- <div class="border-[1px] rounded-md border-neutral-700 w-full sm:p-4 p-2 mt-4 flex justify-center gap-2 h-full">
