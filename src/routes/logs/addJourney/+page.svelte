@@ -269,10 +269,19 @@
 
                                 <div class="w-full mt-4 mb-3">
                                     <h3 class="text-neutral-300 italic mb-2 text-sm">Tags</h3>
+                                    <div class="input blue min-h-[70px] flex gap-2 flex-wrap items-start justify-start" on:click={() => document.getElementById("focusJourneyTagInput").focus()} role="presentation">
+                                        {#each journeyTags as tag}
+                                            <button class="button blue2 hover-red" on:click={removeTag(tag)}>
+                                                {tag}
+                                            </button>
+                                        {/each}
+                                        <input class="focus:border-white border-[1px] border-transparent bg-transparent w-auto" id="focusJourneyTagInput" on:keydown={addTag} bind:value={tagInput}/>
+                                    </div>
                                 </div>
 
                                 <div class="w-full mt-4 mb-3">
                                     <h3 class="text-neutral-300 italic mb-2 text-sm">Notes</h3>
+                                    <textarea class="input blue resize-none w-full min-h-[70px]"></textarea>
                                 </div>
                             {/if}
                         </div>
@@ -311,62 +320,62 @@
                             </div>
                             {#if logNumbers.length != 0}
                                 <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row min-h-[47px]">
-                                    {#each $logNumbers as train}
+                                    {#each $logNumbers as veh}
                                         <li class="relative inline-block p-0 m-0 h-6">
-                                            <button on:click={() => {train['dropdown'] = !train['dropdown']}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding">{train['name']} ({train['type']} - {train['variant']})</button>
-                                            {#if train['dropdown']}
-                                                <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(train)}></button>
+                                            <button on:click={() => {veh['dropdown'] = !veh['dropdown']}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding">{veh['name']} ({veh['type']} - {veh['variant']})</button>
+                                            {#if veh['dropdown']}
+                                                <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(veh)}></button>
                                             {/if}
                                             
-                                            {#if train['dropdown']}
+                                            {#if veh['dropdown']}
                                             <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
-                                                {#if train['dropdown_2'] == ''}
+                                                {#if veh['dropdown_2'] == ''}
                                                 <div class="flex gap-2 min-w-[180px]">
-                                                    <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(train['id'])}>Remove</button>
-                                                    <button class="sm button blue pl-2 pr-2 w-full" on:click={() => train['dropdown_2'] = "section"}>Edit type</button>
+                                                    <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(veh['id'])}>Remove</button>
+                                                    <button class="sm button blue pl-2 pr-2 w-full" on:click={() => veh['dropdown_2'] = "section"}>Edit type</button>
                                                 </div>
                                                 {/if}
 
-                                                {#if train.dropdown_2 === "section"}
+                                                {#if veh.dropdown_2 === "section"}
                                                 <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", train)}>Train</button>
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", train)}>Bus / Coach</button>
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", train)}>Other</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", veh)}>Train</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", veh)}>Bus / Coach</button>
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", veh)}>Other</button>
                                                 </div>
                                                 {/if}
 
-                                                {#if train.dropdown_2 === "area"}
+                                                {#if veh.dropdown_2 === "area"}
                                                     <h3 class="text-white text-sm">Select Area</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                         {#each logAreas as area}
-                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, train)}>{area.area}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, veh)}>{area.area}</button>
                                                         {/each}
                                                     </div>
                                                 {/if}
-                                                {#if train.dropdown_2 === "type"}
+                                                {#if veh.dropdown_2 === "type"}
                                                     <h3 class="text-white text-sm">Select Type</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                        {#if train['vehicletype'] == 'Train'}
+                                                        {#if veh['vehicletype'] == 'Train'}
                                                             {#each $inputArea.trainTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, veh)}>{type.name}</button>
                                                             {/each}
-                                                        {:else if train['vehicletype'] == "Bus / Coach"}
+                                                        {:else if veh['vehicletype'] == "Bus / Coach"}
                                                             {#each $inputArea.busTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, veh)}>{type.name}</button>
                                                             {/each}
-                                                        {:else if train['vehicletype'] == "Others"}
+                                                        {:else if veh['vehicletype'] == "Others"}
                                                             {#each $inputArea.otherTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, train)}>{type.name}</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, veh)}>{type.name}</button>
                                                             {/each}
                                                         {/if}
                                                     </div>
                                                 {/if}
-                                                {#if train.dropdown_2 === "variant"}
+                                                {#if veh.dropdown_2 === "variant"}
                                                     <h3 class="text-white text-sm">Select Variant</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
                                                         {#each $inputVariant as variant}
-                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, train)}>{variant.name}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, veh)}>{variant.name}</button>
                                                         {/each}
                                                     </div>
                                                 {/if}
@@ -443,7 +452,7 @@
     var alrtAct = writable(false)
     var alrtMode = writable('err')
 
-    var db = import ('../../../db/vehicles.json');
+    var db;
     import additionalStns from '../../../db/additionalStations.json'
     import { tl_getAllData, tl_putData } from '../../tl_stationsDB';
 	import { add } from 'dexie';
@@ -468,7 +477,7 @@
     var journeyCycles = false;
     var journeyRestauraunt = false;
     var journeySleeper = false;
-    var journeyTags = []
+    var journeyTags = ["test tag"]
     var existingTags = []
     var journeyNotes = ''
 
@@ -489,7 +498,8 @@
                         if(!existingTags.includes(tag)){
                             existingTags.push(tag);
                         }
-                    });
+                    })
+                    journeyTags.concat(existingTags)
                 }
             });
         }
@@ -498,6 +508,8 @@
     let allStns = null
     let loadStns = true;
     onMount(async () => {
+        db = await import ('../../../db/vehicles.json');
+        db = module.default
         locations = await getLocationsData();
         getTagsFromJourneys();
         if (locations != null) {
@@ -565,32 +577,34 @@
             });
         });
 
-        let logs = await getAllLogs();
-        // console.log(logs)
+        let logs = await getLogsData();
+        console.log(logs)
         if (logs) {
-            const parsedLogs = JSON.parse(logs);
-            parsedLogs.forEach(item => {
+            logs.forEach(item => {
                 if(item.number === train.name){
                     item.type = train.type;
                     item.variant = train.variant;
                 }
             });
-            await writeLogsData(parsedLogs);
+            await writeLogsData(logs);
         }
     }
     
     function inputAreaBtn(area, train) {
         inputArea.set(area);
-        // console.log(area);
+        // Add debugging log to check the structure of logAreas
+        console.log('logAreas:', logAreas);
         logNumbers.update(numbers => {
             return numbers.map(t => {
-                if (t.id === train.id && t.vehicleType === train.vehicleType) {
-                    t.area = area.area;
-                    t.dropdown_2 = 'type';
-                }
-                return t;
+            if (t.id === train.id && t.vehicleType === train.vehicleType) {
+                t.area = area;
+                t.dropdown_2 = 'type';
+            }
+            return t;
             });
         });
+
+
     }
 
     function clearLocation(){
@@ -601,21 +615,22 @@
     async function addNumber(){
         id++;
         // check local storage to see if train is already in logs
-        let logs = await getAllLogs();
+        let logs = await getLogsData();
         let vehFound = false
         let veh = null;
-        // console.log(logs)
+        console.log(logs)
+        console.log(inputNumber)
         if (logs) {
-            const parsedLogs = JSON.parse(logs);
-            vehFound = parsedLogs.some(log => log.name === inputNumber);
+            vehFound = logs.some(log => log.number === inputNumber);
+            console.log(vehFound)
             if (vehFound) {
-                veh = parsedLogs.find(log => log.name === inputNumber);
+                veh = logs.find(log => log.number === inputNumber);
             }
         }
 
         if(vehFound && veh){
             logNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","name":inputNumber,"type":train.type,"variant":train.variant, "dropdown":false, "dropdown_2":""}];
+                return [...numbers, {"id": id, "vehicletype":"","name":inputNumber,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
             });
         }else{
             logNumbers.update(numbers => {
@@ -819,7 +834,40 @@
         }
         }
 
-        function inputVType(type, train){
+        async function inputVType(type, train){
+            logAreas = []
+            if(!db){
+                db = await import ('../../../db/vehicles.json');
+                db = module.default
+            }
+            
+            console.log(type)
+            console.log(db)
+            if (type === "Train") {
+                console.log("TR");
+                db.vehTypes.forEach(item => {
+                    console.log(item)
+                    if (item.trainTypes) {
+                        logAreas.push(item);
+                        console.log(item);
+                    }
+                });
+            } else if (type === "Bus / Coach") {
+                db.vehTypes.forEach(item => {
+                    if (item.busTypes) {
+                        logAreas.push(item);
+                        console.log(item);
+                    }
+                });
+            } else if (type === "Others") {
+                db.vehTypes.forEach(item => {
+                    if (item.others) {
+                        logAreas.push(item);
+                        console.log(item);
+                    }
+                });
+            }
+
             logNumbers.update(numbers => {
                 return numbers.map(t => {
                     if (t.id === train.id) {
@@ -869,10 +917,23 @@
             viaPoints = viaPoints.filter(point => point !== via);
         }
 
+        function removeTag(tag){
+            journeyTags = journeyTags.filter(t => t !== tag);
+        }
 
+        var tagInput;
+        
+        function addTag(event){
+            if (event.key === 'Enter' && tagInput.trim() !== '') {
+                if (!journeyTags.includes(tagInput)) {
+                    journeyTags = [...journeyTags, tagInput];
+                }
+                tagInput = '';
+            } else if (event.key === 'Backspace' && tagInput.trim() === '') {
+                journeyTags = journeyTags.slice(0, -1);
+            }
+        }
 
-
-    
 </script>
 
 <style>
