@@ -74,8 +74,8 @@
                                                 {#if logItem.dropdown_2 === "section"}
                                                 <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                        
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem)}>logItem</button>
+                                    
+                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem)}>Train</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem)}>Bus / Coach</button>
                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem)}>Other</button>
                                                 </div>
@@ -299,7 +299,7 @@
             });
         }else{
             logNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
+                return [...numbers, {"id": id, "vehicletype":"","number":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
             });
         }
 
