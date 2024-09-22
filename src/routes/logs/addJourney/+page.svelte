@@ -508,8 +508,8 @@
     let allStns = null
     let loadStns = true;
     onMount(async () => {
-        db = await import ('../../../db/vehicles.json');
-        db = module.default
+        const module = await import('../../../db/vehicles.json');
+        db = module.default; // Access the default property to get the actual data
         locations = await getLocationsData();
         getTagsFromJourneys();
         if (locations != null) {
