@@ -34,8 +34,81 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
-                            <div class="flex  mb-2 rounded-md border-neutral-800 gap-1 w-full">
-                                <input placeholder="Enter Number" class="input blue w-full lighter" on:keydown={handleKeyPressNumber} bind:value={inputNumber}>
+                            <div class="flex mb-2 rounded-md border-neutral-800 gap-1 w-full items-start">
+                                <ul class="gap-1 input w-full min-h-[150px] flex-wrap" role="presentation" on:click|self={() => {document.getElementById('numberEntryInput').focus()}}>
+                                    {#if logNumbers.length != 0}
+                                        {#each $logNumbers as logItem}
+                                            <li class="relative mb-1 inline-block">
+                                                <button on:click={() => {logItem['dropdown'] = !logItem['dropdown']; document.getElementById('numberEntryInput').blur()}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding mr-1">{logItem['number']} ({logItem['type']} - {logItem['variant']})</button>
+                                                
+                                                {#if logItem['dropdown']}
+                                                    <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(logItem)}></button>
+                                                {/if}
+                                                
+                                                {#if logItem['dropdown']}
+                                                <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
+                                                    {#if logItem['dropdown_2'] == ''}
+                                                    <div class="flex gap-2 min-w-[180px]">
+                                                        <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(logItem['id'])}>Remove</button>
+                                                        <button class="sm button blue pl-2 pr-2 w-full" on:click={() => logItem['dropdown_2'] = "section"}>Edit type</button>
+                                                    </div>
+                                                    {/if}
+
+                                                    {#if logItem.dropdown_2 === "section"}
+                                                    <h3 class="text-white text-sm">Select Vehicle Type</h3>
+                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                        
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem)}>Train</button>
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem)}>Bus / Coach</button>
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem)}>Other</button>
+                                                    </div>
+                                                    {/if}
+
+                                                    {#if logItem.dropdown_2 === "area"}
+                                                        <h3 class="text-white text-sm">Select Area</h3>
+                                                        <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                            {#each logAreas as area}
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, logItem)}>{area.area}</button>
+                                                            {/each}
+                                                        </div>
+                                                    {/if}
+                                                    {#if logItem.dropdown_2 === "type"}
+                                                        <h3 class="text-white text-sm">Select Type</h3>
+                                                        <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                            {#if logItem['vehicletype'] == 'logItem'}
+                                                            {#each $inputArea.logItemTypes as type}
+                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                {/each}
+                                                            {:else if logItem['vehicletype'] == "Bus / Coach"}
+                                                            {#each $inputArea.busTypes as type}
+                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                {/each}
+                                                            {:else if logItem['vehicletype'] == "Others"}
+                                                                {#each $inputArea.otherTypes as type}
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                {/each}
+                                                                {/if}
+                                                            <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'area'}>Back</button>
+                                                        </div>
+                                                    {/if}
+                                                    {#if logItem.dropdown_2 === "variant"}
+                                                        <h3 class="text-white text-sm">Select Variant</h3>
+                                                        <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
+                                                            {#each $inputVariant as variant}
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, logItem)}>{variant.name}</button>
+                                                            {/each}
+                                                            <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'type'}>Back</button>
+                                                        </div>
+                                                    {/if}
+                                                </div>
+                                                {/if}
+                        
+                                            </li>
+                                        {/each}
+                                    {/if}
+                                    <input id="numberEntryInput" class="focus:border-white border-[1px] border-transparent bg-transparent w-auto mt-1 p-1   " on:keydown={handleKeyPressNumber} bind:value={inputNumber}/>
+                                </ul>
+                                <!-- <input placeholder="Enter Number" class="input w-full lighter" on:keydown={handleKeyPressNumber} bind:value={inputNumber}> -->
                                 <!-- <button class="fadeButton p-1" on:click={() => typeDropdown = !typeDropdown}>
                                 {#if !typeDropdown}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short w-5 h-5" viewBox="0 0 16 16">
@@ -49,80 +122,11 @@
                                 </svg>
                                 {/if}
                                 </button> -->
-                                <button class="button p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
+                                <!-- <button class="button p-[0.2rem] blue" on:click={() => {addNumber()}}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus w-5 h-5" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                                </svg></button>
+                                </svg></button> -->
                             </div>
-                            {#if logNumbers.length != 0}
-                                <ul class="border-[1px] border-neutral-800 w-full h-auto  p-2 flex md:flex-wrap gap-1 flex-nowrap flex-col md:flex-row min-h-[47px]">
-                                    {#each $logNumbers as logItem}
-                                        <li class="relative inline-block p-0 m-0 h-6">
-                                            <button on:click={() => {logItem['dropdown'] = !logItem['dropdown']}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding">{logItem['number']} ({logItem['type']} - {logItem['variant']})</button>
-                                            {#if logItem['dropdown']}
-                                                <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(logItem)}></button>
-                                            {/if}
-                                            
-                                            {#if logItem['dropdown']}
-                                            <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
-                                                {#if logItem['dropdown_2'] == ''}
-                                                <div class="flex gap-2 min-w-[180px]">
-                                                    <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(logItem['id'])}>Remove</button>
-                                                    <button class="sm button blue pl-2 pr-2 w-full" on:click={() => logItem['dropdown_2'] = "section"}>Edit type</button>
-                                                </div>
-                                                {/if}
-
-                                                {#if logItem.dropdown_2 === "section"}
-                                                <h3 class="text-white text-sm">Select Vehicle Type</h3>
-                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                    
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem)}>Train</button>
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem)}>Bus / Coach</button>
-                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem)}>Other</button>
-                                                </div>
-                                                {/if}
-
-                                                {#if logItem.dropdown_2 === "area"}
-                                                    <h3 class="text-white text-sm">Select Area</h3>
-                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                        {#each logAreas as area}
-                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, logItem)}>{area.area}</button>
-                                                        {/each}
-                                                    </div>
-                                                {/if}
-                                                {#if logItem.dropdown_2 === "type"}
-                                                    <h3 class="text-white text-sm">Select Type</h3>
-                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                        {#if logItem['vehicletype'] == 'logItem'}
-                                                        {#each $inputArea.logItemTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
-                                                            {/each}
-                                                        {:else if logItem['vehicletype'] == "Bus / Coach"}
-                                                        {#each $inputArea.busTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
-                                                            {/each}
-                                                        {:else if logItem['vehicletype'] == "Others"}
-                                                            {#each $inputArea.otherTypes as type}
-                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
-                                                            {/each}
-                                                            {/if}
-                                                        <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'area'}>Back</button>
-                                                    </div>
-                                                {/if}
-                                                {#if logItem.dropdown_2 === "variant"}
-                                                    <h3 class="text-white text-sm">Select Variant</h3>
-                                                    <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
-                                                        {#each $inputVariant as variant}
-                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, logItem)}>{variant.name}</button>
-                                                        {/each}
-                                                        <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'type'}>Back</button>
-                                                    </div>
-                                                {/if}
-                                            </div>
-                                            {/if}
-                                        </li>
-                                    {/each}
-                                </ul>
-                            {/if}
+                    
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
@@ -310,9 +314,25 @@
 
     function handleKeyPressNumber(e){
         if(e.key == 'Enter'){
-            if(inputNumber != ''){
-                addNumber()
+            if (inputNumber != '') {
+                let numberExists = false;
+                $logNumbers.forEach(logItem => {
+                    if (logItem.number === inputNumber) {
+                        numberExists = true;
+                    }
+                });
+                if (!numberExists) {
+                    addNumber();
+                }
             }
+        }
+        if (e.key === 'Backspace' && inputNumber === '') {
+            logNumbers.update(numbers => {
+                if (numbers.length > 0) {
+                    numbers.pop();
+                }
+                return numbers;
+            });
         }
     }
 
