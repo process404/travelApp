@@ -23,9 +23,9 @@
                                 <div class="flex gap-2">
                                     {#if timeToStart(plan) < 10}
                                         {#if timeToEnd(plan) < 0}
-                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ended {timeToEnd(plan)} days ago</h3>
-                                        {:else if timeToEnd(plan) < getDays(plan)}
-                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ongoing ({timeToStart(plan)} days to end)</h3>
+                                            <h3 class="text-white bg-neutral-900 pl-2 pr-2 p-1 rounded-sm text-xs italic border-neutral-600 border-[1px] bg-opacity-20">Ended {Math.abs(timeToEnd(plan))} days ago</h3>
+                                        {:else if timeToEnd(plan) >= 0}
+                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ongoing ({timeToEnd(plan)} days to end)</h3>
                                         {:else}
                                             <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Begins in {timeToStart(plan)} days</h3>
                                         {/if}
@@ -144,9 +144,10 @@
 
     function countJourneys(plan) {
         let count = 0;
-        for (const day in plan.days) {
-            for (const journey in day.journeys) {
-                count++;
+        for (const dayKey in plan.days) {
+            const day = plan.days[dayKey];
+            if (Array.isArray(day.journeys)) {
+                count += day.journeys.length;
             }
         }
         return count;
@@ -155,17 +156,17 @@
     function timeToStart(plan) {
         let start = new Date(plan.start);
         let now = new Date();
-        let diffTime = Math.abs(start - now);
-        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return days;
+        let diffTime = start - now; // Calculate the difference in milliseconds
+        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+        return days; // Return the number of days until the start date
     }
 
-    function timeToEnd(plan){
+    function timeToEnd(plan) {
         let end = new Date(plan.end);
         let now = new Date();
-        let diffTime = Math.abs(end - now);
-        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return days;
+        let diffTime = end - now; // Calculate the difference in milliseconds
+        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+        return days; // Return the number of days until the end date
     }
     
 
