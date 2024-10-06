@@ -144,9 +144,10 @@
 
     function countJourneys(plan) {
         let count = 0;
-        for (const day in plan.days) {
-            for (const journey in day.journeys) {
-                count++;
+        for (const dayKey in plan.days) {
+            const day = plan.days[dayKey];
+            if (Array.isArray(day.journeys)) {
+                count += day.journeys.length;
             }
         }
         return count;
