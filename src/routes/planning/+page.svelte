@@ -64,21 +64,24 @@
                                       </svg>
                                     <h4 class="text-white text-sm">{countLocations(plan)} locations</h4>
                                 </div>
+                                {#if countCountries(plan) != 0}
                                 <div class="bg-neutral-800 flex pl-3 pr-3 p-1 rounded-sm gap-2 items-center">
-                                    {#if !isMobileDevice}
-                                        {#each countries as country}
-                                            {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
-                                                <img src={country.src} alt={country.code} class="w-4 h-4"/>
-                                            {/if}
-                                        {/each}
-                                    {:else}
-                                        {#each countries as country}
-                                            {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
-                                                <h4 class="">{country.emoji}</h4>
-                                            {/if}
-                                        {/each}
-                                    {/if}
-                                </div>
+                                        {#if !isMobileDevice}
+                                            {#each countries as country}
+                                                {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
+                                                    <img src={country.src} alt={country.code} class="w-4 h-4"/>
+                                                {/if}
+                                            {/each}
+                                        {:else}
+                                            {#each countries as country}
+                                                {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
+                                                    <h4 class="">{country.emoji}</h4>
+                                                {/if}
+                                            {/each}
+                                        {/if}
+                                    
+                                    </div>
+                                 {/if}
                             </div>
                             <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
                         </button>
@@ -155,6 +158,18 @@
             }
         }
         return count;
+    }
+
+    function countTripCountries(plan){
+        let countries = new Set();
+        for (const dayKey in plan.days) {
+            const day = plan.days[dayKey];
+            for (const journey of day.journeys) {
+                countries.add(journey.fromCountry);
+                countries.add(journey.toCountry);
+            }
+        }
+        return countries.size;
     }
 
     function timeToStart(plan) {
@@ -234,7 +249,7 @@
                 countries.add(journey.toCountry);
             }
         }
-        console.log(countries);
+        console.log(countries.size);
         return countries.size;
     }
 
