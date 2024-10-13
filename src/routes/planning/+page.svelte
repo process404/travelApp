@@ -16,22 +16,18 @@
                 {:else}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
                 <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar sm:ml-0 items-center gap-3">
-                        {#each plansFromDB as plan}
+                        {#each sortPlans(plansFromDB) as plan}
                         <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 bg-black bg-opacity-30 text-left focus:border-white duration-100 hover:border-white hover:border-opacity-50  max-w-[700px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
                                 <h3 class="text-white italic font-semibold text-xl">{plan.name}</h3>
                                 <div class="flex gap-2">
-                                    {#if timeToStart(plan) < 10}
-                                        {#if timeToEnd(plan) < 0}
-                                            <h3 class="text-white bg-neutral-900 pl-2 pr-2 p-1 rounded-sm text-xs italic border-neutral-600 border-[1px] bg-opacity-20">Ended {Math.abs(timeToEnd(plan))} days ago</h3>
-                                        {:else if timeToEnd(plan) >= 0}
-                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ongoing ({timeToEnd(plan)} days to end)</h3>
-                                        {:else}
-                                            <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Begins in {timeToStart(plan)} days</h3>
-                                        {/if}
-                                    {:else}
-                                        <h3 class="text-white bg-neutral-800 pl-2 pr-2 p-1 rounded-sm text-xs italic">Begins in {timeToStart(plan)} days</h3>
-                                    {/if}
+                                    {#if timeToStart(plan) > 0}
+                                    <h3 class="text-white bg-neutral-800 pl-2 pr-2 p-1 rounded-sm text-xs italic">Begins in {timeToStart(plan)} days</h3>
+                                {:else if timeToEnd(plan) >= 0}
+                                    <h3 class="text-white bg-red-700 pl-2 pr-2 p-1 rounded-sm text-xs italic border-red-600 border-[1px] bg-opacity-20">Ongoing ({timeToEnd(plan)} days to end)</h3>
+                                {:else}
+                                    <h3 class=" bg-neutral-900 pl-2 pr-2 p-1 rounded-sm text-xs italic border-neutral-800 border-[1px] bg-opacity-20 text-neutral-500">Ended {Math.abs(timeToEnd(plan))} days ago</h3>
+                                {/if}
                                 </div>
                             </div>
                             <hr class="mt-2 opacity-20">
@@ -158,6 +154,15 @@
             }
         }
         return count;
+    }
+
+    function sortPlans(plans) {
+        console.log(plans)
+            return plans.sort((a, b) => {
+            let aStart = new Date(a.start);
+            let bStart = new Date(b.start);
+            return bStart - aStart; // Reverse the order for descending sort
+        });
     }
 
     function countTripCountries(plan){
