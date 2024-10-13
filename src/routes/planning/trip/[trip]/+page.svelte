@@ -1,6 +1,6 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 {#if tooltip || tooltip2}   
-<button class="w-screen h-screen fixed z-10 hover:cursor-default backdrop-blur-sm" on:click={() => {tooltip = false; tooltip2 = false}}></button>
+<button class="w-screen h-screen fixed z-10 hover:cursor-default" on:click={() => {tooltip = false; tooltip2 = false}}></button>
 {/if}
 {#if addJourney && !loadStns}
 <AddJourney on:message={addJourneyFinal} day={addJourneyDay} allStns={allStns} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd}/>
@@ -24,7 +24,7 @@
                         <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>[No Trip Name]</button>
                         {/if}
                         {#if tooltip}
-                            <div in:fade={{duration:50}} class="absolute top-[100%] translate-x-[-50%] left-[50%] bg-black p-2 rounded-md z-30 min-w-[150px]">
+                            <div in:fade={{duration:50}} class="absolute top-[75%] translate-x-[-50%] left-[50%] bg-black p-2 rounded-md z-30 min-w-[150px]">
                                 <div class="triangle w-4 h-2 bg-black absolute bottom-[99%] translate-x-[-50%] left-[50%]"></div>
                                 <input class="input darker non-empty" bind:value={editName} placeholder="Edit name" on:keyup={callEdit} on:input={submitChanges} maxlength="20" minlength="3">
                                 <button class="button red text-md pl-2 pr-2 w-full mt-2" on:click={deletePlan}>Delete Plan</button>
