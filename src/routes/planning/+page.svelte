@@ -67,11 +67,15 @@
                                 <div class="bg-neutral-800 flex pl-3 pr-3 p-1 rounded-sm gap-2 items-center">
                                     {#if !isMobileDevice}
                                         {#each countries as country}
-                                            <img src={country.src} alt={country.code} class="w-4 h-4"/>
+                                            {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
+                                                <img src={country.src} alt={country.code} class="w-4 h-4"/>
+                                            {/if}
                                         {/each}
                                     {:else}
                                         {#each countries as country}
-                                            <h4 class="">{country.emoji}</h4>
+                                            {#if plan.days.some(day => day.journeys.some(journey => journey.fromCountry === country.code || journey.toCountry === country.code))}
+                                                <h4 class="">{country.emoji}</h4>
+                                            {/if}
                                         {/each}
                                     {/if}
                                 </div>
