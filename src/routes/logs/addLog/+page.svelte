@@ -153,10 +153,17 @@
                                 <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true}}>Add Photograph</button>
                                 {:else}
                                 <div class="border-neutral-700 rounded-md pb-2">
-                                    <div class="flex gap-4 border-neutral-700 border-[1px] justify-between p-2 flex-col">
-                                        <div class="flex gap-2 justify-between items-center w-full">
-                                            <input type="file" class="text-white">
+                                    <div class="flex gap-4 border-neutral-700 border-[1px] justify-between p-2 flex-col rounded-md overflow-hidden">
+                                        <div>
+                                            <h3 class="text-neutral-300 italic">Image</h3>
+                                            <input type="file" class="text-white mt-2 text-sm" on:input={() => {handlePhotoProcess()}} bind:value={selectedPhoto}>
                                         </div>
+                                        {#if selectedPhotoSrc != ''}
+                                            <div class="overflow-hidden">
+                                                <h3 class="text-neutral-300 italic">Selected File</h3>
+                                                <img alt={selectedPhotoAlt} src={selectedPhotoSrc} class="w-full mt-2 border-neutral-700 p-1 rounded-sm border-[1px]">
+                                            </div>
+                                        {/if}
                                         <div>
                                             <h3 class="text-neutral-300 italic">Numbers</h3>
                                             <ul class="input w-full min-h-[100px] flex-wrap mt-2" role="presentation" on:click|self={() => {document.getElementById('photoNumberAdd').focus()}}>
@@ -234,11 +241,11 @@
                                             </ul>
                                         </div>
                                         
+                                        <div class="flex gap-2">
+                                            <button class="button red w-full p-2 text-sm x-padding" on:click={() => {addPhoto = false; selectedPhoto = ''; selectedPhotoSrc = ''; $photoLogNumbers = []}}>Cancel</button>
+                                            <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhotoLog()}}>Add</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button class="button red w-full p-2 text-sm x-padding" on:click={() => {addPhoto = false}}>Cancel</button>
-                                    <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true}}>Add</button>
                                 </div>
                                 {/if}
                             </div>
@@ -301,8 +308,29 @@
 
     var location = ''
     var locations = []
-
+    
+    let selectedPhotoSrc = '';
+    let selectedPhotoAlt = "Selected Photo";
+    let selectedPhoto = ''
     let addPhoto = false;
+
+
+    function handlePhotoProcess(){
+        const files = event.target.files;
+        if (!files || files.length === 0) {
+            console.error('No file selected');
+            return;
+        }
+
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            selectedPhotoSrc = reader.result;
+            selectedPhotoAlt = file.name;
+            tick();
+        };
+        reader.readAsDataURL(file);
+    }
 
     
     onMount(async () => {
@@ -325,19 +353,8 @@
 
     });
 
-    function promptSuggestions(){
-        locationSuggestions = []
-        // console.log(combinedLocations)
-        if(location != '' && combinedLocations){
-            for(const item in combinedLocations){
-                // console.log(combinedLocations[item])
-                if (combinedLocations[item] && combinedLocations[item].toLowerCase().includes(location)) {
-                    locationSuggestions.push(combinedLocations[item]);
-                }
-            }
-        }
-        // console.log(location)
-        // console.log(locationSuggestions)
+    function addFunctionLog(){
+
     }
 
     function selectLocation(o){
@@ -363,12 +380,10 @@
     }
 
     function inputTypePhoto(type, logItem) {
-        // console.log(type)
+
         inputVariant.set(type.variants);
-        // console.log("variants");
-        // console.log(inputVariant);
-    
-        $photoLogNumbers.update(numbers => {
+        console.log(photoLogNumbers)
+        photoLogNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === logItem.id) {
                     t.type = type.name;
@@ -447,8 +462,7 @@
 
     function inputAreaBtnPhoto(area, logItem) {
         inputArea.set(area);
-        // console.log(area);
-        $photoLogNumbers.update(numbers => {
+        photoLogNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
                     t.area = area.area;
@@ -583,7 +597,7 @@
     }
 
     function removeLogPhoto(logItemId){
-        $photoLogNumbers.update(numbers => {
+        photoLogNumbers.update(numbers => {
             return numbers.filter(number => number.id != logItemId);
         });
     }
