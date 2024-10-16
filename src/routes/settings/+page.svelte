@@ -1,7 +1,7 @@
 <div style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
-    <div class="h-full max-w-[1000px] w-full flex flex-col">
-        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-2 pr-2 sm:pl-12 sm:pr-12 pb-2">
+    <div class="h-full w-full flex flex-col items-center">
+        <div class="max-w-[1000px] flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-2 pr-2 sm:pl-12 sm:pr-12 pb-2">
             <h2 class="text-white text-2xl font-semibold sm:mt-1 mt-4 mb-4">Settings</h2>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
                 <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
-                <button class="w-full flex justify-between p-4 items-center group" on:click={() => {advancedDropdown = !advancedDropdown}}>
+                <button class="w-full flex justify-between p-4 items-center group" on:click={() => {advancedDropdown = !advancedDropdown; if(advancedDropdown == false){understood = false}}}>
                     <h2 class="text-white text-xl font-semibold">Advanced</h2>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill w-5 h-5 opacity-50 group-hover:opacity-100 duration-100 fill-neutral-200" viewBox="0 0 16 16" class:rotate={advancedDropdown}>
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
@@ -29,7 +29,11 @@
                             <p class="dark:text-neutral-400 text-sm italic">Clear parts of the database, either to free up storage, clear old plans or because of a issue. <br><br><span class="text-yellow-300">Warning! This action is permanent and cannot be reversed.</span></p>
                         </div>
                         <div class="w-1/3 flex items-center justify-center">
-                           <button class="button">Click to reveal database</button>
+                            {#if understood}
+                                <button class="red"></button>
+                            {:else}
+                                <button class="button" on:click={() => {understood = true}}>Click to reveal database <br><span class="text-xs">(Acknowledge warning)</span></button>
+                            {/if}
                         </div>
                     </div>
                 </div>
