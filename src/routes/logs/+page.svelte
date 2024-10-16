@@ -3,16 +3,16 @@
     <div class="h-full max-w-[1000px] w-full flex flex-col">
         {#if currentPage === 'home'}
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2">
-            <h2 class="text-white text-3xl font-semibold mt-4">Add Records</h2>
+            <h2 class="text-white text-3xl font-semibold mt-4">Add to Database</h2>
             <h3 class="text-neutral-400 italic mt-2">Please select an option</h3>
             <div class="border-[1px] rounded-md border-neutral-700 w-full sm:p-4 p-2 mt-4 sm:mt-8 flex justify-center gap-2 h-full flex-col max-w-[600px]">
                 <div class="border-[0px] rounded-md border-neutral-700 w-full h-full flex gap-2">
-                    <button class="button blue2 w-full lessprominent" on:click={() => goInnerPage('addJourney')}>Add Journey</button>
-                    <button class="button blue2 w-full lessprominent" on:click={() => goInnerPage('addLog')}>Add Log</button>
+                    <button class="button blue2 w-full lessprominent text-md" on:click={() => goInnerPage('addJourney')}>Add Journey</button>
+                    <button class="button blue2 w-full lessprominent text-md" on:click={() => goInnerPage('addLog')}>Add Log</button>
                 </div>
                 <div class="border-[0px] rounded-md border-neutral-700 w-full h-full flex flex-col gap-2">
-                    <button class="button blue3 h-full lessprominent" on:click={() => goInnerPage('addLocation')}>Add Location</button>
-                    <button class="button blue3 h-full lessprominent" on:click={() => goInnerPage('addNote')}>Add Note</button>
+                    <button class="button blue3 h-full lessprominent text-md" on:click={() => goInnerPage('addLocation')}>Add Location</button>
+                    <button class="button blue3 h-full lessprominent text-md" on:click={() => goInnerPage('addNote')}>Add Note</button>
                 </div>
             </div>
             <!-- <div class="border-[1px] rounded-md border-neutral-700 w-full sm:p-4 p-2 mt-4 flex justify-center gap-2 h-full">
