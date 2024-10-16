@@ -14,7 +14,30 @@
                     </div>
                 </div>
             </div>
+            <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
+                <button class="w-full flex justify-between p-4 items-center group" on:click={() => {advancedDropdown = !advancedDropdown}}>
+                    <h2 class="text-white text-xl font-semibold">Advanced</h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill w-5 h-5 opacity-50 group-hover:opacity-100 duration-100 fill-neutral-200" viewBox="0 0 16 16" class:rotate={advancedDropdown}>
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                    </svg>
+                </button>
+                {#if advancedDropdown}
+                <div class="border-neutral-700 border-[1px] m-4">
+                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
+                        <div class="w-3/4">
+                            <h2 class="dark:text-neutral-300 mb-2">Clear parts of the database</h2>
+                            <p class="dark:text-neutral-400 text-sm italic">Clear parts of the database, either to free up storage, clear old plans or because of a issue. <br><br><span class="text-yellow-300">Warning! This action is permanent and cannot be reversed.</span></p>
+                        </div>
+                        <div class="w-1/3 flex items-center justify-center">
+                           <button class="button">Click to reveal database</button>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+            </div>
         </div>
+    
+    
     </div>
     <Footer/>
 </div>
@@ -26,6 +49,8 @@
     import '../../global.css';
 
     let dbStn = false;
+    let advancedDropdown = false;
+    let understood = false;
 
     onMount(() => {
         document.title = 'Settings';
@@ -53,3 +78,10 @@
     }
 
 </script>
+
+<style>
+    .rotate{
+        rotate: 180deg;
+    }
+
+</style>

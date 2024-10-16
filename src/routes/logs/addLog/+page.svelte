@@ -129,6 +129,31 @@
                     
                         </div>
                     </div>
+                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                        <h3 class="text-neutral-300 italic">Photographs</h3>
+                        {#if pictures.length == 0}
+                            <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
+                                <h4 class="text-neutral-500 italic w-full text-center mb-2 border-neutral-700 border-[1px] pt-2 pb-2">No Photographs</h4>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {}}>Add Photograph</button>
+                            </div>
+                        {:else}
+                            <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
+                                <div class="border-neutral-700 rounded-md p-2">
+                                    {#each pictures as picture}
+                                        <div class="flex gap-2">
+                                            <img src="" alt="">
+                                            
+
+                                        </div>
+                                    {/each}
+                                </div>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {}}>Add Photograph</button>
+                            </div>
+                        {/if}
+                        <div>
+
+                        </div>
+                    </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
                     <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
@@ -162,6 +187,7 @@
     var inputDate = ''
     var inputTime = ''
     var sCountry = ''
+    var pictures = [{"src":"","alt":"","numbers":["331020", "24295 (NL)"]}];
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
@@ -181,7 +207,9 @@
 
     
     onMount(async () => {
+        locations = [];
         locations = await getLocationsData();
+        console.log(locations)
         document.title = 'Add Log';
         const loc = locations
         if(loc != null){
