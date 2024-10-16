@@ -58,7 +58,7 @@
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css';
-    import siteDB from '../../siteDB.js';
+    import '../siteDB.js';
 
     let dbStn = false;
     let advancedDropdown = false;
@@ -90,27 +90,51 @@
     }
     
     function clearJourneys(){
-        
+        if (confirm('Are you sure you want to clear all journeys? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
     function clearUserLocations(){
-        
+        if (confirm('Are you sure you want to clear all user locations? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
     function clearDBLocations(){
-        
+        if (confirm('Are you sure you want to clear all database locations? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
     function clearLogPhotos(){
-        
+        if (confirm('Are you sure you want to clear all photos within logs? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
     function clearLogsGeneral(){
-        
+        if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
     function clearPlanning(){
-        
+        if (confirm('Are you sure you want to clear all plans? This action cannot be undone.')) {
+            console.log('Journeys cleared');
+        } else {
+            console.log('Action cancelled');
+        }
     }
 
 </script>
