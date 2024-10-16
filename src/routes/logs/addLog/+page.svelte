@@ -138,12 +138,14 @@
                             </div>
                         {:else}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
-                                <div class="border-neutral-700 rounded-md p-2">
+                                <div class="border-neutral-700 rounded-md pb-2">
                                     {#each pictures as picture}
-                                        <div class="flex gap-2">
-                                            <img src="" alt="">
-                                            
-
+                                        <div class="flex gap-4 border-neutral-700 border-[1px] justify-between p-2">
+                                            <img src={picture.src} alt={picture.alt} class="w-1/2 border-[1px] border-neutral-800 outline-none">
+                                            <div class="w-full flex gap-1 flex-col">
+                                                <h3 class="text-white">{picture.file_name}</h3>
+                                                <h3 class="text-neutral-300 italic">{picture.numbers.toString().replace(",",", ")}</h3>
+                                            </div>
                                         </div>
                                     {/each}
                                 </div>
@@ -189,7 +191,7 @@
     var inputDate = ''
     var inputTime = ''
     var sCountry = ''
-    var pictures = [{"src":"","alt":"","numbers":["331020", "24295 (NL)"]}];
+    var pictures = [{"src":"","alt":"","numbers":["331020", "24295 (NL)"],"file_name":"photo.png"}];
     var preciseLocation = writable(false)
     var preciseLat;
     var preciseLon;
@@ -206,6 +208,8 @@
 
     var location = ''
     var locations = []
+
+    let addPhoto = false;
 
     
     onMount(async () => {
