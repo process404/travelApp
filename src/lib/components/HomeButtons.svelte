@@ -13,7 +13,7 @@
     <img class="absolute top-0 w-full h-full z-10 object-cover blur-xs opacity-30 duration-100 group-hover:opacity-70" alt="Train" src="{imgSrc}" loading="lazy" on:load={handleImageLoad}>
     {/if}
     {#if !imgSrc}
-        <div class="absolute top-0 w-full h-full z-10 gradient bg-opacity-60"></div>
+        <div class="absolute top-0 w-full h-full z-10 bg-blue-800"></div>
     }
     {/if}
 </button>
@@ -26,5 +26,4 @@
 .blurBox::after{content:"";position:absolute;inset:0;z-index:20;width:100%;mask:linear-gradient(to right,transparent,black 60%);backdrop-filter:blur(4px)}
 @media(min-width:640px){.blurBox::after{mask:none}}
 @media(max-width:639px){.blurBox::after{mask:linear-gradient(to right,transparent,black 0%)}}
-.gradient{background: linear-gradient(90deg, rgb(9, 49, 158) 0%, rgb(15, 73, 199)100%);}
 </style>

@@ -24,7 +24,9 @@
 		</div>
 	</div>
 	{/if}
-	<Footer/>
+    <div class="mt-auto w-full">
+        <Footer/>
+    </div>
 </div>
 
 
