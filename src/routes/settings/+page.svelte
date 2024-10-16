@@ -25,18 +25,18 @@
                 <div class="border-neutral-700 border-[1px] m-4">
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
                         <div class="w-3/4">
-                            <h2 class="dark:text-neutral-300 mb-2">Clear Database</h2>
+                            <h2 class="dark:text-neutral-300 mb-2">Manage Data</h2>
                             <p class="dark:text-neutral-400 text-sm italic">Clear parts of or all of the data stored. Either to free up storage, clear old plans or because of a technical issue. <br><br><span class="text-yellow-300">Warning! These actions are permanent and cannot be reversed (except getting stations from the database).</span></p>
                         </div>
                         <div class="w-1/3 flex items-center justify-center" class:widthAdj={understood}>
                             {#if understood}
                                 <div class="w-full flex justify-end items-end flex-col gap-2">
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearJourneys()}}>Clear Journeys</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={() => {clearPlanning()}}>Clear Planning</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearJourneys()}}>Clear Journeys</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearPlanning()}}>Clear Planning</button>
                                 </div>
                             {:else}
                                 <button class="button" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
@@ -145,6 +145,6 @@
     }
 
     .widthAdj{
-        width: 70%;
+        width: 40%;
     }
 </style>
