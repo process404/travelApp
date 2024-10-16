@@ -28,11 +28,18 @@
                             <h2 class="dark:text-neutral-300 mb-2">Clear parts of the database</h2>
                             <p class="dark:text-neutral-400 text-sm italic">Clear parts of the database, either to free up storage, clear old plans or because of a issue. <br><br><span class="text-yellow-300">Warning! This action is permanent and cannot be reversed.</span></p>
                         </div>
-                        <div class="w-1/3 flex items-center justify-center">
+                        <div class="w-1/3 flex items-center justify-center" class:widthAdj={understood}>
                             {#if understood}
-                                <button class="red"></button>
+                                <div class="w-full flex justify-end items-end flex-col gap-2">
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearJourneys()}>Clear Journeys</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearUserLocations()}>Clear User Locations</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearDBLocations()}>Clear Database Locations</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearLogPhotos()}>Clear Log Photos</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearLogsGeneral()}>Clear Logs</button>
+                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-[70%]" on:click={clearPlanning()}>Clear Planning</button>
+                                </div>
                             {:else}
-                                <button class="button" on:click={() => {understood = true}}>Click to reveal database <br><span class="text-xs">(Acknowledge warning)</span></button>
+                                <button class="button" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
                             {/if}
                         </div>
                     </div>
@@ -51,6 +58,7 @@
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css';
+    import siteDB from '../../siteDB.js';
 
     let dbStn = false;
     let advancedDropdown = false;
@@ -80,6 +88,30 @@
         settings.dbStn = dbStn;
         localStorage.setItem('settings', JSON.stringify(settings));
     }
+    
+    function clearJourneys(){
+        
+    }
+
+    function clearUserLocations(){
+        
+    }
+
+    function clearDBLocations(){
+        
+    }
+
+    function clearLogPhotos(){
+        
+    }
+
+    function clearLogsGeneral(){
+        
+    }
+
+    function clearPlanning(){
+        
+    }
 
 </script>
 
@@ -88,4 +120,7 @@
         rotate: 180deg;
     }
 
+    .widthAdj{
+        width: 70%;
+    }
 </style>
