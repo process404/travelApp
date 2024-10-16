@@ -138,6 +138,7 @@
                             </div>
                         {:else}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
+                                {#if !addPhoto}
                                 <div class="border-neutral-700 rounded-md pb-2">
                                     {#each pictures as picture}
                                         <div class="flex gap-4 border-neutral-700 border-[1px] justify-between p-2">
@@ -149,7 +150,97 @@
                                         </div>
                                     {/each}
                                 </div>
-                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {}}>Add Photograph</button>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true}}>Add Photograph</button>
+                                {:else}
+                                <div class="border-neutral-700 rounded-md pb-2">
+                                    <div class="flex gap-4 border-neutral-700 border-[1px] justify-between p-2 flex-col">
+                                        <div class="flex gap-2 justify-between items-center w-full">
+                                            <input type="file" class="text-white">
+                                        </div>
+                                        <div>
+                                            <h3 class="text-neutral-300 italic">Numbers</h3>
+                                            <ul class="input w-full min-h-[100px] flex-wrap mt-2" role="presentation" on:click|self={() => {document.getElementById('photoNumberAdd').focus()}}>
+                                                {#if $photoLogNumbers.length > 0}
+                                                    {#each $photoLogNumbers as logItem}
+                                                    <li class="relative mb-1 inline-block">
+                                                        <button on:click={() => {logItem['dropdown'] = !logItem['dropdown']; document.getElementById('numberEntryInput').blur()}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding mr-1">{logItem['number']} ({logItem['type']} - {logItem['variant']})</button>
+                                                        
+                                                        {#if logItem['dropdown']}
+                                                            <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(logItem)}></button>
+                                                        {/if}
+                                                        
+                                                        {#if logItem['dropdown']}
+                                                        <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
+                                                            {#if logItem['dropdown_2'] == ''}
+                                                            <div class="flex gap-2 min-w-[180px]">
+                                                                <button class="sm button red pl-2 pr-2 w-full" on:click={removeLogPhoto(logItem['id'])}>Remove</button>
+                                                                <button class="sm button blue pl-2 pr-2 w-full" on:click={() => logItem['dropdown_2'] = "section"}>Edit type</button>
+                                                            </div>
+                                                            {/if}
+        
+                                                            {#if logItem.dropdown_2 === "section"}
+                                                            <h3 class="text-white text-sm">Select Vehicle Type</h3>
+                                                            <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Train", logItem)}>Train</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Bus / Coach", logItem)}>Bus / Coach</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Others", logItem)}>Other</button>
+                                                            </div>
+                                                            {/if}
+        
+                                                            {#if logItem.dropdown_2 === "area"}
+                                                                <h3 class="text-white text-sm">Select Area</h3>
+                                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                                    {#each logAreas as area}
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtnPhoto(area, logItem)}>{area.area}</button>
+                                                                    {/each}
+                                                                </div>
+                                                            {/if}
+                                                            {#if logItem.dropdown_2 === "type"}
+                                                                <h3 class="text-white text-sm">Select Type</h3>
+                                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
+                                                                    {#if logItem['vehicletype'] == 'logItem'}
+                                                                    {#each $inputArea.logItemTypes as type}
+                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                        {/each}
+                                                                    {:else if logItem['vehicletype'] == "Bus / Coach"}
+                                                                    {#each $inputArea.busTypes as type}
+                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                        {/each}
+                                                                    {:else if logItem['vehicletype'] == "Others"}
+                                                                        {#each $inputArea.otherTypes as type}
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                        {/each}
+                                                                        {/if}
+                                                                    <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'area'}>Back</button>
+                                                                </div>
+                                                            {/if}
+                                                            {#if logItem.dropdown_2 === "variant"}
+                                                                <h3 class="text-white text-sm">Select Variant</h3>
+                                                                <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
+                                                                    {#each $inputVariant as variant}
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtnPhoto(variant, logItem)}>{variant.name}</button>
+                                                                    {/each}
+                                                                    <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'type'}>Back</button>
+                                                                </div>
+                                                            {/if}
+                                                        </div>
+                                                        {/if}
+                                
+                                                    </li>
+                                                    {/each}
+                                                {/if}
+                                                <input type="text" class="focus:border-white border-[1px] border-transparent bg-transparent w-auto mt-1 p-1 " id="photoNumberAdd" on:keydown={handleKeyPressNumberPhoto} bind:value={inputNumberPhoto}/>
+                                            </ul>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="button red w-full p-2 text-sm x-padding" on:click={() => {addPhoto = false}}>Cancel</button>
+                                    <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true}}>Add</button>
+                                </div>
+                                {/if}
                             </div>
                         {/if}
                         <div>
@@ -182,10 +273,12 @@
     var combinedLocations = null;
     var locationSuggestions = []
     var logNumbers = writable([])
+    var photoLogNumbers = writable([])
     var dbWriteable = writable([])
 
     var typeDropdown = false;
     var inputNumber = ''
+    var inputNumberPhoto = ''
     var inputArea = writable([])
     var inputVariant = writable([])
     var inputDate = ''
@@ -225,8 +318,8 @@
     
         const dbData = await db;
         const resolvedDbData = await dbData.default;
-        logAreas = resolvedDbData.logItemTypes;
-        // console.log(logAreas)
+        logAreas = resolvedDbData.vehTypes;
+        console.log(resolvedDbData)
 
         inputDate = new Date().toISOString().split('T')[0];
 
@@ -269,8 +362,51 @@
         });
     }
 
+    function inputTypePhoto(type, logItem) {
+        // console.log(type)
+        inputVariant.set(type.variants);
+        // console.log("variants");
+        // console.log(inputVariant);
+    
+        $photoLogNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === logItem.id) {
+                    t.type = type.name;
+                    t.dropdown_2 = 'variant';
+                }
+                return t;
+            });
+        });
+    }
+
     async function inputVariantBtn(variant, logItem) {
         logNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === logItem.id) {
+                    t.variant = variant.name
+                    t.dropdown_2 = '';
+                    t.dropdown = false;
+                }
+                return t;
+            });
+        });
+
+        let logs = await getLogsData();
+        // console.log(logs)
+        if (logs && logs.length > 0) {
+            const parsedLogs = JSON.parse(logs);
+            parsedLogs.forEach(item => {
+                if(item.number === logItem.name){
+                    item.type = logItem.type;
+                    item.variant = logItem.variant;
+                }
+            });
+           await writeLogsData(parsedLogs);
+        }
+    }
+
+    async function inputVariantBtnPhoto(variant, logItem) {
+        photoLogNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === logItem.id) {
                     t.variant = variant.name
@@ -299,6 +435,20 @@
         inputArea.set(area);
         // console.log(area);
         logNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
+                    t.area = area.area;
+                    t.dropdown_2 = 'type';
+                }
+                return t;
+            });
+        });
+    }
+
+    function inputAreaBtnPhoto(area, logItem) {
+        inputArea.set(area);
+        // console.log(area);
+        $photoLogNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
                     t.area = area.area;
@@ -344,6 +494,38 @@
 
         inputNumber = ''
     };
+
+    async function addNumberPhoto(){
+        id++;
+        // check local storage to see if logItem is already in logs
+        let logs = await getLogsData()
+        let vehFound = false
+        let veh = null;
+        if (logs && logs.length > 0) {
+            console.log(logs)
+            vehFound = logs.some(log => log.number === inputNumberPhoto);
+            if (vehFound) {
+                veh = logs.find(log => log.number === inputNumberPhoto);
+            }
+        }else{
+            console.log("no log");
+        }
+
+        if(vehFound && veh){
+            photoLogNumbers.update(numbers => {
+                return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
+            });
+        }else{
+            photoLogNumbers.update(numbers => {
+                return [...numbers, {"id": id, "vehicletype":"","number":inputNumberPhoto,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
+            });
+        }
+
+        console.log($photoLogNumbers)
+
+
+        inputNumberPhoto = ''
+    };
         
 
     function handleKeyPressNumber(e){
@@ -370,8 +552,38 @@
         }
     }
 
+    function handleKeyPressNumberPhoto(e){
+        if(e.key == 'Enter'){
+            if (inputNumberPhoto != '') {
+                let numberExists = false;
+                $photoLogNumbers.forEach(logItem => {
+                    if (logItem.number === inputNumberPhoto) {
+                        numberExists = true;
+                    }
+                });
+                if (!numberExists) {
+                    addNumberPhoto();
+                }
+            }
+        }
+        if (e.key === 'Backspace' && inputNumberPhoto === '') {
+            photoLogNumbers.update(numbers => {
+                if (numbers.length > 0) {
+                    numbers.pop();
+                }
+                return numbers;
+            });
+        }
+    }
+
     function removeLog(logItemId){
         logNumbers.update(numbers => {
+            return numbers.filter(number => number.id != logItemId);
+        });
+    }
+
+    function removeLogPhoto(logItemId){
+        $photoLogNumbers.update(numbers => {
             return numbers.filter(number => number.id != logItemId);
         });
     }
@@ -525,6 +737,19 @@
 
         function inputVType(type, logItem){
             logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.vehicletype = type;
+                        t.dropdown_2 = 'area';
+                    }
+                    return t;
+                });
+            });
+        }
+
+        function inputVTypePhoto(type, logItem){
+            console.log(type, logItem)
+            photoLogNumbers.update(numbers => {
                 return numbers.map(t => {
                     if (t.id === logItem.id) {
                         t.vehicletype = type;
