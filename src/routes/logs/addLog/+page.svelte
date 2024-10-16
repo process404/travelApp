@@ -131,10 +131,10 @@
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Photographs</h3>
-                        {#if pictures.length == 0}
+                        {#if pictures.length == 0 && addPhoto == false}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
                                 <h4 class="text-neutral-500 italic w-full text-center mb-2 border-neutral-700 border-[1px] pt-2 pb-2">No Photographs</h4>
-                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {}}>Add Photograph</button>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true; console.log(addPhoto)}}>Add Photograph</button>
                             </div>
                         {:else}
                             <ul class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
@@ -272,6 +272,7 @@
     import Footer from '../../../lib/components/Footer.svelte';
     import CustomAlert from '../../../lib/components/Alert.svelte';
     import PromptField from '../../../lib/components/PromptField.svelte';
+    import Compressor from 'compressorjs';
     import '../../siteDB.js'
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../siteDB';
     import '../../../global.css'
@@ -330,6 +331,25 @@
             tick();
         };
         reader.readAsDataURL(file);
+    
+        console.log(`Original file size: ${file.size} bytes`);
+        new Compressor(file, {
+            quality: 0.4,
+            success(result) {
+            console.log(`Compressed file size: ${result.size} bytes`);
+            const reader = new FileReader();
+            reader.onload = () => {
+                selectedPhotoSrc = reader.result;
+                selectedPhotoAlt = file.name;
+                tick();
+            };
+            reader.readAsDataURL(result);
+            console.log("compressed");
+            },
+            error(err) {
+            console.error(err.message);
+            },
+        });
     }
 
     
@@ -354,8 +374,8 @@
     });
 
     function addPhotoLog(){
-        let photoLogNumbersArr = $photoLogNumbers.map(logItem => logItem.number);
         pictures.push({"src":selectedPhotoSrc,"alt":selectedPhotoAlt,"numbers":photoLogNumbersArr,"file_name":selectedPhotoAlt});
+
         selectedPhoto = '';
         selectedPhotoSrc = '';
         $photoLogNumbers = [];
@@ -626,7 +646,6 @@
     }
 
     async function confirmLog(){
-        // stuff here
 
         var lat;
         var lon;
@@ -634,8 +653,8 @@
 
         if(location == ''){
             if(!$noLocation){
-                customAlertSummon("No location selected", "err");
-                return;
+            customAlertSummon("No location selected", "err");
+            return;
             }
         }
 
@@ -654,12 +673,12 @@
             const parsedLoc = JSON.parse(loc);
             var found = false;
             for(var locs in parsedLoc){
-                if(locs == from){
-                    found = true;
-                }
+            if(locs == from){
+                found = true;
+            }
             }
             if(found = false){
-                parsedLoc.push({"name":location, "country":sCountry})
+            parsedLoc.push({"name":location, "country":sCountry})
             }
         }
 
@@ -676,30 +695,26 @@
                 log_date: inputDate,
                 log_time: inputTime,
                 log_lat: preciseLat,
-                log_lon: preciseLon
+                log_lon: preciseLon,
+                pictures: pictures
             }));
-            console.log(numbersWithLocation)
 
-            console.log(numbers)
             const addNew = JSON.parse(logs).concat(numbersWithLocation);
             await writeLogsData(addNew);
-            console.log(addNew);
-        });
+            });
         }else{
             logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                    ...item,
-                    log_location: location,
-                    log_date: inputDate,
-                    log_time: inputTime
-                }));
+            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                ...item,
+                log_location: location,
+                log_date: inputDate,
+                log_time: inputTime,
+                pictures: pictures
+            }));
 
-                console.log(numbers)
-                const addNew = JSON.parse(logs).concat(numbersWithLocation);
-                await writeLogsData(addNew);
-                console.log(addNew);
+            const addNew = JSON.parse(logs).concat(numbersWithLocation);
+            await writeLogsData(addNew);
             });
-
         }
 
 
