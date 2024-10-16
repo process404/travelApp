@@ -135,13 +135,11 @@
     }
 
     onMount(async () => {
-        if (document.title = "Print Window", localStorage.getItem("planning")) {
-            let t = await getPlanningData();
-            console.log(t)
-            plan = t.find(t => t.tripID === param),
-            console.log(t)
-            plan && (calcDays(plan.start, plan.end), titleSet.set(UC(plan.name)), descriptionSet.set(UC(plan.description)), document.title = "Print (" + plan.name + ")");
-        }
+        let t = await getPlanningData();
+        console.log(t)
+        plan = t.find(t => t.tripID === param),
+        console.log(t)
+        plan && (calcDays(plan.start, plan.end), titleSet.set(UC(plan.name)), descriptionSet.set(UC(plan.description)), document.title = "Print (" + plan.name + ")");
     });
 
     function sortJourneys(journeys) {
