@@ -3,7 +3,7 @@
     <div class="h-auto max-w-[1400px] w-full flex flex-col gap-4 h-full">
         <!-- nav menu goes here to navigate between the different sections-->
         <!-- see this: https://assets.justinmind.com/wp-content/uploads/2021/02/top-navigation-bar-mobile-apps.png-->
-         <!-- have a line that moves when you click on any one-->
+        <!-- have a line that moves when you click on any one-->
 
         {#if page == 'stats'}
             <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pt-4 pb-4">
@@ -40,12 +40,12 @@
                                             <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
                                                 <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
                                                     {#if date != 'Unknown'}
-                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left">{formatDate(date)}</h4>
+                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">{formatDate(date)}</h4>
                                                     {:else}
-                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left">No Date</h4>
+                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">No Date</h4>
                                                     {/if}
                                                     {#each getFirstLogs(logsByYear[year][month][date]) as log}
-                                                        <p class="text-neutral-300 text-sm text-left">{log.log_location}</p>
+                                                        <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
                                                     {/each}
                                                 </span>
                                             </button>
