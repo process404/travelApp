@@ -4,8 +4,9 @@ An intended evolution of a simple tool created to allow the creation of physical
 
 ### Technologies
 - [Svelte](https://svelte.dev/)
-- [Dexie.js](https://dexie.org/)
 - [TailwindCSS](https://tailwindcss.com/)
+- [Dexie.js](https://dexie.org/)
+- [Compressor.js](https://github.com/fengyuanchen/compressorjs)
 
 ### Data / API's
 - [Flags API](https://flagsapi.com/)
