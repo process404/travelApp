@@ -25,21 +25,42 @@
                 <div class="border-neutral-700 border-[1px] m-4">
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
+                            <h2 class="dark:text-neutral-300 mb-2">Print decompressed database data to console</h2>
+                            <p class="dark:text-neutral-400 text-sm italic">Print decompressed data from database to console to check or store elsewhere</p>
+                        </div>
+                        <div class="md:w-1/3 w-full flex items-center justify-center flex-col gap-2">
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("jou")}}>Print Journeys</button>
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("loc")}}>Print Locations</button>
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("logs")}}>Print Logs</button>
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("planning")}}>Print Planning</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                        <div class="md:w-3/4 w-full">
+                            <h2 class="dark:text-neutral-300 mb-2">Export database as CSV</h2>
+                            <p class="dark:text-neutral-400 text-sm italic">Export all database data as a CSV file, this may take a considerable time duration to generate.</p>
+                        </div>
+                        <div class="md:w-1/3 w-full flex items-center justify-center">
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {exportCSV()}}>Export as CSV</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                        <div class="md:w-3/4 w-full">
                             <h2 class="dark:text-neutral-300 mb-2">Manage Data</h2>
                             <p class="dark:text-neutral-400 text-sm italic">Clear parts of or all of the data stored. Either to free up storage, clear old plans or because of a technical issue. <br><br><span class="text-yellow-300">Warning! These actions are permanent and cannot be reversed (except getting stations from the database).</span></p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood}
-                                <div class="w-full flex justify-end items-end flex-col gap-2">
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearJourneys()}}>Clear Journeys</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearPlanning()}}>Clear Planning</button>
+                                <div class="w-full flex justify-end items-center flex-col gap-2">
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearJourneys()}}>Clear Journeys</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearPlanning()}}>Clear Planning</button>
                                 </div>
                             {:else}
-                                <button class="button" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
+                                <button class="button w-full md:max-w-[200px]" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
                             {/if}
                         </div>
                     </div>
@@ -50,15 +71,15 @@
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood2}
-                                <div class="w-full flex justify-end items-end flex-col gap-2">
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearTimePeriod("30")}}>Clear older than 1 month</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearTimePeriod("60")}}>Clear older than 3 months</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearTimePeriod("182")}}>Clear older than 6 months</button>
-                                    <button class="button hover:before:bg-red-700 hover:before:bg-opacity-50 w-full" on:click={() => {clearTimePeriod("365")}}>Clear older than 12 months</button>
+                                <div class="w-full flex justify-end items-center flex-col gap-2">
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("30")}}>Clear older than 1 month</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("60")}}>Clear older than 3 months</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("182")}}>Clear older than 6 months</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("365")}}>Clear older than 12 months</button>
                                 
                                 </div>
                             {:else}
-                                <button class="button" on:click={() => {understood2 = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
+                                <button class="button md:max-w-[200px] w-full" on:click={() => {understood2 = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
                             {/if}
                         </div>
                     </div>
@@ -80,6 +101,7 @@
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css';
     import '../siteDB.js';
+    import { getJourneysData, getLocationsData, getLogsData, getPlanningData } from '../siteDB';
 
     let dbStn = false;
     let advancedDropdown = false;
@@ -164,6 +186,32 @@
             console.log('Journeys cleared');
         } else {
             console.log('Action cancelled');
+        }
+    }
+
+    async function printData(arg){
+        if(arg == "logs"){
+            let logs = await getLogsData();
+            console.log("%c Your logs data", 'color:lime;background:black;');
+            logs.forEach(log => {
+                delete log.pictures;
+            });
+            console.log(logs);
+        }
+        if(arg == "jou"){
+            let journeys = await getJourneysData();
+            console.log("%c Your journeys data", 'color:lime;background:black;');
+            console.log(journeys);
+        }
+        if(arg == "loc"){
+            let locations = await getLocationsData();
+            console.log("%c Your locations data", 'color:lime;background:black;');
+            console.log(locations);
+        }
+        if(arg == "planning"){
+            let planning = await getPlanningData();
+            console.log("%c Your planning data", 'color:lime;background:black;');
+            console.log(planning);
         }
     }
 

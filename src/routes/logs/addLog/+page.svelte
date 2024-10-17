@@ -105,7 +105,7 @@
                                                         <h3 class="text-white text-sm">Select Variant</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
                                                             {#each $inputVariant as variant}
-                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, logItem)}>{variant.name}</button>
+                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, logItem, false)}>{variant.name}</button>
                                                             {/each}
                                                             <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'type'}>Back</button>
                                                         </div>
@@ -593,14 +593,14 @@
 
         let logs = await getLogsData();
         if (logs && logs.length > 0) {
-            const parsedLogs = JSON.parse(logs);
+            console.log(logs);
+            const parsedLogs = logs
             parsedLogs.forEach(item => {
                 if (item.number === logItem.name) {
                     item.type = logItem.type;
                     item.variant = logItem.variant;
                 }
             });
-            await writeLogsData(parsedLogs);
         }
     }
 
@@ -813,8 +813,9 @@
                 logNotes: inputNote,
             }));
 
-            const addNew = JSON.parse(logs).concat(numbersWithLocation);
+            const addNew = logs.concat(numbersWithLocation);
             await writeLogsData(addNew);
+            console.log("done")
             });
         }else{
             if(locationObj != null){
@@ -831,8 +832,10 @@
                     pictures: pictures,
                     logNotes: inputNote,
                 }))
-                const addNew = JSON.parse(logs).concat(numbersWithLocation);
+                const addNew = logs.concat(numbersWithLocation);
+                console.log(addNew);
                 await writeLogsData(addNew);
+                console.log("done")
             });
             }else{
 
@@ -840,13 +843,17 @@
                 const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
                     ...item,
                     log_location: location,
+                    log_lat: null,
+                    log_lon: null,
+                    log_loc_id: null,
                     log_date: inputDate,
                     log_time: inputTime,
                     pictures: pictures,
                     logNotes: inputNote,
                 }));
-                const addNew = JSON.parse(logs).concat(numbersWithLocation);
+                const addNew = logs.concat(numbersWithLocation);
                 await writeLogsData(addNew);
+                console.log("done")
             });
 
         }
@@ -854,7 +861,7 @@
 
         let logreplace = inputDate.replace('/', '-');
         // console.log(logreplace)
-        window.location.href = `../overview/${logreplace}`;
+        // window.location.href = `../overview/${logreplace}`;
     }
 
 
