@@ -24,7 +24,7 @@
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
                             </div>
                             <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle()}>
+                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={() => {locationToggle()}}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
                             
@@ -334,7 +334,6 @@
     var locations = []
 
     $: if (location) {
-        console.log(location.length)
         if(location.length < 2){
             locationObj = null;
         }
