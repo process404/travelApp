@@ -316,6 +316,21 @@
     @apply hover:bg-red-700 hover:text-white
 }
 
+
+.button.darkbefore{
+    @apply before:bg-black before:bg-opacity-10
+}
+
+.button.noanim{
+    @apply before:w-full rounded-none duration-100;
+}
+
+.button.noanim:hover:before{
+    animation: none;
+    @apply w-full opacity-100 rounded-none
+}
+
+
 @keyframes boxFillIn {
     0% {
         width: 50%;
