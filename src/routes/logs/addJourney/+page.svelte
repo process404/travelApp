@@ -724,7 +724,7 @@
             }
         }
 
-        var loc = await getAllLocations()
+        var loc = await getLocationsData()
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
             var found = false;
