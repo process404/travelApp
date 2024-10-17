@@ -347,7 +347,7 @@
     
         console.log(`Original file size: ${file.size} bytes`);
         new Compressor(file, {
-            quality: 0.4,
+            quality: 0.3,
             success(result) {
             console.log(`Compressed file size: ${result.size} bytes`);
             const reader = new FileReader();
