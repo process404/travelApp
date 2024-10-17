@@ -32,9 +32,13 @@
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="text-neutral-300 italic">Date / Time</h3>
-                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
+                        <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row" class:opacity-50={$noDT} class:pointer-events-none={$noDT} >
                             <input type="date" class="input blue mt-2 iconEdit w-full" bind:value={inputDate}>
                             <input type="time" class="input blue mt-2 iconEdit w-full" bind:value={inputTime}>
+                        </div>
+                        <div class="mt-3 flex gap-2 items-center">
+                            <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noDT}>
+                            <label for="no_location" class="text-neutral-500 italic  text-xs">No Date / Time</label>
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
@@ -315,6 +319,7 @@
     var preciseLat;
     var preciseLon;
     var noLocation = writable(false);
+    var noDT = writable(false)
     var id = 0
     
     var alrtTxt  = writable('')
@@ -392,7 +397,7 @@
         const module = await import('../../../db/vehicles.json');
         db = module.default; 
         locations = await getLocationsData();
-        console.log(locations)
+        // console.log(locations)
         if (locations != null) {
             locations = locations.concat(additionalStns);
         }else{
@@ -410,7 +415,7 @@
                 } else {
                     const worker = new Worker(new URL('../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
-                        console.log(event.data)
+                        // console.log(event.data)
                         allStns = event.data;
                         await tl_putData(allStns);
                         loadStns = false;
@@ -427,12 +432,12 @@
         }
 
         for(var area in db.vehTypes){
-            console.log(db.vehTypes)
-            console.log(db.vehTypes[area].area)
+            // console.log(db.vehTypes)
+            // console.log(db.vehTypes[area].area)
             logAreas.push(db.vehTypes[area])
         }
 
-        console.log(logAreas)
+        // console.log(logAreas)
     });
 
     function locationToggle() {
@@ -541,7 +546,7 @@
 
     
     function inputVType(type, logItem, photo){
-        console.log("ran")
+        // console.log("ran")
         if(!photo){
             logNumbers.update(numbers => {
                 return numbers.map(t => {
@@ -552,7 +557,7 @@
                     return t;
                 });
             });
-            console.log(logNumbers)
+            // console.log(logNumbers)
         }else{
             photoLogNumbers.update(numbers => {
             return numbers.map(t => {
@@ -764,7 +769,7 @@
             }
         }
 
-        if(inputDate == ''){
+        if(inputDate == '' && !$noDT){
             customAlertSummon("No date selected", "err");
             return;
         }
