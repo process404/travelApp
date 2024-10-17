@@ -49,7 +49,7 @@
                                                 <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
                                                     {#if logItem['dropdown_2'] == ''}
                                                     <div class="flex gap-2 min-w-[180px]">
-                                                        <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(logItem['id'])}>Remove</button>
+                                                        <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(logItem['id'], false)}>Remove</button>
                                                         <button class="sm button blue pl-2 pr-2 w-full" on:click={() => logItem['dropdown_2'] = "section"}>Edit type</button>
                                                     </div>
                                                     {/if}
@@ -58,9 +58,9 @@
                                                     <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                     <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                         
-                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem)}>Train</button>
-                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem)}>Bus / Coach</button>
-                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem)}>Other</button>
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem, false)}>Train</button>
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem, false)}>Bus / Coach</button>
+                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem, false)}>Other</button>
                                                     </div>
                                                     {/if}
 
@@ -68,7 +68,7 @@
                                                         <h3 class="text-white text-sm">Select Area</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                             {#each logAreas as area}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, logItem)}>{area.area}</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, logItem, false)}>{area.area}</button>
                                                             {/each}
                                                         </div>
                                                     {/if}
@@ -77,15 +77,15 @@
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                             {#if logItem['vehicletype'] == 'logItem'}
                                                             {#each $inputArea.logItemTypes as type}
-                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, false)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Bus / Coach"}
                                                             {#each $inputArea.busTypes as type}
-                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                    <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, false)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Others"}
                                                                 {#each $inputArea.otherTypes as type}
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, false)}>{type.name}</button>
                                                                 {/each}
                                                                 {/if}
                                                             <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'area'}>Back</button>
@@ -187,7 +187,7 @@
                                                         <div class="absolute z-40 left-0 top-100 bg-[rgb(15,15,15)] p-2 w-auto min-h-8 rounded-md rounded-t-none border-[1px] border-neutral-800 min-w-[75px] max-h-[200px] overflow-y-scroll sm:max-h-[300px] pr-0 ">
                                                             {#if logItem['dropdown_2'] == ''}
                                                             <div class="flex gap-2 min-w-[180px]">
-                                                                <button class="sm button red pl-2 pr-2 w-full" on:click={removeLogPhoto(logItem['id'])}>Remove</button>
+                                                                <button class="sm button red pl-2 pr-2 w-full" on:click={removeLog(logItem['id'], true)}>Remove</button>
                                                                 <button class="sm button blue pl-2 pr-2 w-full" on:click={() => logItem['dropdown_2'] = "section"}>Edit type</button>
                                                             </div>
                                                             {/if}
@@ -196,9 +196,9 @@
                                                             <h3 class="text-white text-sm">Select Vehicle Type</h3>
                                                             <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                 
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Train", logItem)}>Train</button>
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Bus / Coach", logItem)}>Bus / Coach</button>
-                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVTypePhoto("Others", logItem)}>Other</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Train", logItem,)}>Train</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Bus / Coach", logItem,)}>Bus / Coach</button>
+                                                                <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVType("Others", logItem,)}>Other</button>
                                                             </div>
                                                             {/if}
         
@@ -206,7 +206,7 @@
                                                                 <h3 class="text-white text-sm">Select Area</h3>
                                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                                     {#each logAreas as area}
-                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtnPhoto(area, logItem)}>{area.area}</button>
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputAreaBtn(area, logItem, true)}>{area.area}</button>
                                                                     {/each}
                                                                 </div>
                                                             {/if}
@@ -215,15 +215,15 @@
                                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
                                                                     {#if logItem['vehicletype'] == 'logItem'}
                                                                     {#each $inputArea.logItemTypes as type}
-                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, true)}>{type.name}</button>
                                                                         {/each}
                                                                     {:else if logItem['vehicletype'] == "Bus / Coach"}
                                                                     {#each $inputArea.busTypes as type}
-                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                            <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, true)}>{type.name}</button>
                                                                         {/each}
                                                                     {:else if logItem['vehicletype'] == "Others"}
                                                                         {#each $inputArea.otherTypes as type}
-                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputTypePhoto(type, logItem)}>{type.name}</button>
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, true)}>{type.name}</button>
                                                                         {/each}
                                                                         {/if}
                                                                     <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'area'}>Back</button>
@@ -233,7 +233,7 @@
                                                                 <h3 class="text-white text-sm">Select Variant</h3>
                                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1  sm:min-w-[450px]">
                                                                     {#each $inputVariant as variant}
-                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtnPhoto(variant, logItem)}>{variant.name}</button>
+                                                                        <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputVariantBtn(variant, logItem, true)}>{variant.name}</button>
                                                                     {/each}
                                                                     <button class="button sm red textWhite pl-2 pr-2" on:click={() => logItem.dropdown_2 = 'type'}>Back</button>
                                                                 </div>
@@ -425,40 +425,62 @@
         locationSuggestions = []
     }
     
-    function inputType(type, logItem) {
-        // console.log(type)
-        inputVariant.set(type.variants);
-        // console.log("variants");
-        // console.log(inputVariant);
+    function inputType(type, logItem, photo) {
+        if(photo){
+            inputVariant.set(type.variants);
+            photoLogNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.type = type.name;
+                        t.dropdown_2 = 'variant';
+                    }
+                    return t;
+                });
+            });
+        }else{
+            inputVariant.set(type.variants);
+        
+            logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.type = type.name;
+                        t.dropdown_2 = 'variant';
+                    }
+                    return t;
+                });
+            });
+
+        }
+    }
+
+
+    async function inputVariantBtn(variant, logItem, photo) {
+        if(!photo){
+            logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.variant = variant.name
+                        t.dropdown_2 = '';
+                        t.dropdown = false;
+                    }
+                    return t;
+                });
+            });
     
-        logNumbers.update(numbers => {
-            return numbers.map(t => {
-                if (t.id === logItem.id) {
-                    t.type = type.name;
-                    t.dropdown_2 = 'variant';
-                }
-                return t;
-            });
-        });
-    }
-
-    function inputTypePhoto(type, logItem) {
-
-        inputVariant.set(type.variants);
-        console.log(photoLogNumbers)
-        photoLogNumbers.update(numbers => {
-            return numbers.map(t => {
-                if (t.id === logItem.id) {
-                    t.type = type.name;
-                    t.dropdown_2 = 'variant';
-                }
-                return t;
-            });
-        });
-    }
-
-    async function inputVariantBtn(variant, logItem) {
-        logNumbers.update(numbers => {
+            let logs = await getLogsData();
+            // console.log(logs)
+            if (logs && logs.length > 0) {
+                const parsedLogs = JSON.parse(logs);
+                parsedLogs.forEach(item => {
+                    if(item.number === logItem.name){
+                        item.type = logItem.type;
+                        item.variant = logItem.variant;
+                    }
+                });
+               await writeLogsData(parsedLogs);
+            }
+        }else{
+            photoLogNumbers.update(numbers => {
             return numbers.map(t => {
                 if (t.id === logItem.id) {
                     t.variant = variant.name
@@ -472,136 +494,112 @@
         let logs = await getLogsData();
         // console.log(logs)
         if (logs && logs.length > 0) {
-            const parsedLogs = JSON.parse(logs);
-            parsedLogs.forEach(item => {
-                if(item.number === logItem.name){
-                    item.type = logItem.type;
-                    item.variant = logItem.variant;
-                }
-            });
-           await writeLogsData(parsedLogs);
+                const parsedLogs = JSON.parse(logs);
+                parsedLogs.forEach(item => {
+                    if(item.number === logItem.name){
+                        item.type = logItem.type;
+                        item.variant = logItem.variant;
+                    }
+                });
+            await writeLogsData(parsedLogs);
+            }
         }
     }
 
-    async function inputVariantBtnPhoto(variant, logItem) {
-        photoLogNumbers.update(numbers => {
-            return numbers.map(t => {
-                if (t.id === logItem.id) {
-                    t.variant = variant.name
-                    t.dropdown_2 = '';
-                    t.dropdown = false;
-                }
-                return t;
-            });
-        });
-
-        let logs = await getLogsData();
-        // console.log(logs)
-        if (logs && logs.length > 0) {
-            const parsedLogs = JSON.parse(logs);
-            parsedLogs.forEach(item => {
-                if(item.number === logItem.name){
-                    item.type = logItem.type;
-                    item.variant = logItem.variant;
-                }
-            });
-           await writeLogsData(parsedLogs);
-        }
-    }
     
-    function inputAreaBtn(area, logItem) {
+    function inputAreaBtn(area, logItem, photo) {
         inputArea.set(area);
-        // console.log(area);
-        logNumbers.update(numbers => {
-            return numbers.map(t => {
-                if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
-                    t.area = area.area;
-                    t.dropdown_2 = 'type';
-                }
-                return t;
+        if(!photo){
+            // console.log(area);
+            logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
+                        t.area = area.area;
+                        t.dropdown_2 = 'type';
+                    }
+                    return t;
+                });
             });
-        });
+        }else{
+            photoLogNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
+                        t.area = area.area;
+                        t.dropdown_2 = 'type';
+                    }
+                    return t;
+                });
+            });
+        }
     }
 
-    function inputAreaBtnPhoto(area, logItem) {
-        inputArea.set(area);
-        photoLogNumbers.update(numbers => {
-            return numbers.map(t => {
-                if (t.id === logItem.id && t.vehicleType === logItem.vehicleType) {
-                    t.area = area.area;
-                    t.dropdown_2 = 'type';
-                }
-                return t;
-            });
-        });
-    }
 
     function clearLocation(){
         location = ''
         locationSuggestions = []
     }
 
-    async function addNumber(){
-        id++;
-        // check local storage to see if logItem is already in logs
-        let logs = await getLogsData()
-        let vehFound = false
-        let veh = null;
-        if (logs && logs.length > 0) {
-            console.log("woop2")
-            console.log(logs)
-            vehFound = logs.some(log => log.number === inputNumber);
-            if (vehFound) {
-                veh = logs.find(log => log.number === inputNumber);
+    async function addNumber(photo){
+        if(!photo){
+            id++;
+            // check local storage to see if logItem is already in logs
+            let logs = await getLogsData()
+            let vehFound = false
+            let veh = null;
+            if (logs && logs.length > 0) {
+                console.log("woop2")
+                console.log(logs)
+                vehFound = logs.some(log => log.number === inputNumber);
+                if (vehFound) {
+                    veh = logs.find(log => log.number === inputNumber);
+                }
+            }else{
+                console.log("no log");
             }
-        }else{
-            console.log("no log");
-        }
-
-        if(vehFound && veh){
-            logNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
-            });
-        }else{
-            logNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","number":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
-            });
-        }
-
-
-        inputNumber = ''
-    };
-
-    async function addNumberPhoto(){
-        id++;
-        // check local storage to see if logItem is already in logs
-        let logs = await getLogsData()
-        let vehFound = false
-        let veh = null;
-        if (logs && logs.length > 0) {
-            console.log(logs)
-            vehFound = logs.some(log => log.number === inputNumberPhoto);
-            if (vehFound) {
-                veh = logs.find(log => log.number === inputNumberPhoto);
+    
+            if(vehFound && veh){
+                logNumbers.update(numbers => {
+                    return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
+                });
+            }else{
+                logNumbers.update(numbers => {
+                    return [...numbers, {"id": id, "vehicletype":"","number":inputNumber,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
+                });
             }
+    
+    
+            inputNumber = ''
         }else{
-            console.log("no log");
+            id++;
+            // check local storage to see if logItem is already in logs
+            let logs = await getLogsData()
+            let vehFound = false
+            let veh = null;
+            if (logs && logs.length > 0) {
+                console.log(logs)
+                vehFound = logs.some(log => log.number === inputNumberPhoto);
+                if (vehFound) {
+                    veh = logs.find(log => log.number === inputNumberPhoto);
+                }
+            }else{
+                console.log("no log");
+            }
+
+            if(vehFound && veh){
+                photoLogNumbers.update(numbers => {
+                    return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
+                });
+            }else{
+                photoLogNumbers.update(numbers => {
+                    return [...numbers, {"id": id, "vehicletype":"","number":inputNumberPhoto,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
+                });
+            }
+
+            console.log($photoLogNumbers)
+
+
+            inputNumberPhoto = ''
         }
-
-        if(vehFound && veh){
-            photoLogNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","number":veh.number,"type":veh.type,"variant":veh.variant, "dropdown":false, "dropdown_2":""}];
-            });
-        }else{
-            photoLogNumbers.update(numbers => {
-                return [...numbers, {"id": id, "vehicletype":"","number":inputNumberPhoto,"type":"","variant":"", "dropdown":false, "dropdown_2":""}];
-            });
-        }
-
-        console.log($photoLogNumbers)
-
-
-        inputNumberPhoto = ''
     };
         
 
@@ -615,7 +613,7 @@
                     }
                 });
                 if (!numberExists) {
-                    addNumber();
+                    addNumber(false);
                 }
             }
         }
@@ -639,7 +637,7 @@
                     }
                 });
                 if (!numberExists) {
-                    addNumberPhoto();
+                    addNumber(true);
                 }
             }
         }
@@ -653,17 +651,18 @@
         }
     }
 
-    function removeLog(logItemId){
-        logNumbers.update(numbers => {
+    function removeLog(logItemId, photo){
+        if(!photo){
+            logNumbers.update(numbers => {
+                return numbers.filter(number => number.id != logItemId);
+            });
+        }else{
+            photoLogNumbers.update(numbers => {
             return numbers.filter(number => number.id != logItemId);
         });
+        }
     }
 
-    function removeLogPhoto(logItemId){
-        photoLogNumbers.update(numbers => {
-            return numbers.filter(number => number.id != logItemId);
-        });
-    }
 
     function removePicture(picture){
         if (confirm("Are you sure you want to remove this picture?")) {
@@ -816,8 +815,19 @@
         }
         }
 
-        function inputVType(type, logItem){
-            logNumbers.update(numbers => {
+        function inputVType(type, logItem, photo){
+            if(!photo){
+                logNumbers.update(numbers => {
+                    return numbers.map(t => {
+                        if (t.id === logItem.id) {
+                            t.vehicletype = type;
+                            t.dropdown_2 = 'area';
+                        }
+                        return t;
+                    });
+                });
+            }else{
+                photoLogNumbers.update(numbers => {
                 return numbers.map(t => {
                     if (t.id === logItem.id) {
                         t.vehicletype = type;
@@ -826,20 +836,9 @@
                     return t;
                 });
             });
+            }
         }
 
-        function inputVTypePhoto(type, logItem){
-            console.log(type, logItem)
-            photoLogNumbers.update(numbers => {
-                return numbers.map(t => {
-                    if (t.id === logItem.id) {
-                        t.vehicletype = type;
-                        t.dropdown_2 = 'area';
-                    }
-                    return t;
-                });
-            });
-        }
 
 
 
