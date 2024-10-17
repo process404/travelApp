@@ -392,6 +392,7 @@
         const module = await import('../../../db/vehicles.json');
         db = module.default; 
         locations = await getLocationsData();
+        console.log(locations)
         if (locations != null) {
             locations = locations.concat(additionalStns);
         }else{
@@ -407,8 +408,9 @@
                     allStns = cachedStations[0].data;
                     loadStns = false;
                 } else {
-                    const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
+                    const worker = new Worker(new URL('../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
+                        console.log(event.data)
                         allStns = event.data;
                         await tl_putData(allStns);
                         loadStns = false;
@@ -772,7 +774,9 @@
             return;
         }
 
-        var loc = await getAllLocations();
+        
+
+        var loc = await getLocationsData();
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
             var found = false;

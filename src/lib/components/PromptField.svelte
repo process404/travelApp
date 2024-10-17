@@ -79,18 +79,34 @@
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));
 
-                const filteredStations2 = adDs.filter(set => {
-                    const lowerCaseName = set.name.toLowerCase();
-                    return lowerCaseName.startsWith(lowerCaseValue) && !suggestions.some(suggestion => suggestion.name === set.name) && !filteredStations.some(suggestion => suggestion.name === set.name);
-                });
 
-                const uniqueStations = filteredStations2.filter(set => !suggestions.some(suggestion => suggestion.name === set.name));
+                let filteredStations2 = null;
+                try{
+                    filteredStations2 = adDs.filter(set => {
+                        const lowerCaseName = set.name.toLowerCase();
+                        return lowerCaseName.startsWith(lowerCaseValue) && !suggestions.some(suggestion => suggestion.name === set.name) && !filteredStations.some(suggestion => suggestion.name === set.name);
+                    });
 
-                uniqueStations.forEach(set => {
-                    if (!suggestions.some(suggestion => suggestion.name === set.name)) {
-                        suggestions.push({ name: set.name, country: set.country, short: set.short });
-                    }
-                });
+                }catch(e){
+                    console.log(e)
+                }
+
+                let uniqueStations = null;
+                try{
+                    uniqueStations = filteredStations2.filter(set => !suggestions.some(suggestion => suggestion.name === set.name));
+                }catch(e){
+                    console.log(e)
+                }
+                
+                try{
+                    uniqueStations.forEach(set => {
+                        if (!suggestions.some(suggestion => suggestion.name === set.name)) {
+                            suggestions.push({ name: set.name, country: set.country, short: set.short });
+                        }
+                    });
+                }catch(e){
+                    console.log(e)
+                }
             } else {
                 const filteredStations = ds.filter(set => {
                     const lowerCaseName = set.name.toLowerCase();
