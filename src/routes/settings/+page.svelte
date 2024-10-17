@@ -1,3 +1,5 @@
+<Alert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
+
 <div style="width: 100vw; height: 100vh; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
     <div class="h-auto w-full flex flex-col items-center">
@@ -101,14 +103,20 @@
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css';
     import '../siteDB.js';
-    import { getJourneysData, getLocationsData, getLogsData, getPlanningData } from '../siteDB';
+    import { getJourneysData, getLocationsData, getLogsData, getPlanningData, writeJourneysData, writeLocationsData, writeLogsData, writePlanningData } from '../siteDB';
     import '../tl_stationsDB.js';
     import { tl_wipeAllData } from '../tl_stationsDB.js'
+    import Alert from '../../lib/components/Alert.svelte';
+	import { writable } from 'svelte/store';
 
     let dbStn = false;
     let advancedDropdown = false;
     let understood = false;
     let understood2 = false;
+
+    let alrtAct = writable(false);
+    let alrtTxt = writable('');
+    let alrtMode = writable('success');
 
     onMount(() => {
         document.title = 'Settings';
@@ -141,9 +149,16 @@
             journeys = [];
             await writeJourneysData(journeys);
             console.log('%c Journeys cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Journeys cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood = false;
     }
 
     async function clearUserLocations(){
@@ -152,17 +167,30 @@
             locations = [];
             await writeLocationsData(locations);
             console.log('%c User Locations cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('User Locations cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood = false;
     }
 
     async function clearDBLocations(){
         if (confirm('Are you sure you want to clear all database locations? If "Get stations from the Database" is enabled then station names will be regenerated unless this is disabled')) {
             await tl_wipeAllData();
             console.log('%c DB Locations cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('DB Locations cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
     }
 
@@ -174,9 +202,16 @@
             });
             await writeLogsData(logs);
             console.log('%c Log Photos cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Log Photos cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood = false;
     }
 
     async function clearLogsGeneral(){
@@ -185,9 +220,16 @@
             logs = [];
             await writeLogsData(logs);
             console.log('%c Logs cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Logs cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood = false;
     }
 
     async function clearPlanning(){
@@ -196,9 +238,16 @@
             planning = [];
             await writePlanningData(planning);
             console.log('%c Planning cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Planning cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood = false;
     }
 
     async function clearTimePeriod(timeInDays){
@@ -224,11 +273,17 @@
                     return diffDays > timeInDays;
                 });
             }
-    
-            console.log('%c Journeys cleared', 'color:lime;background:black;');
+            console.log('%c Data cleared', 'color:lime;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Data cleared');
+            alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
+            alrtAct.set(true);
+            alrtTxt.set('Action cancelled');
+            alrtMode.set('error');
         }
+        understood2 = false;
     }
 
     async function printData(arg){

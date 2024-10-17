@@ -352,8 +352,8 @@
                                                     {#if logItem.dropdown_2 === "type"}
                                                         <h3 class="text-white text-sm">Select Type</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                            {#if logItem['vehicletype'] == 'logItem'}
-                                                            {#each $inputArea.logItemTypes as type}
+                                                            {#if logItem['vehicletype'] == 'Train'}
+                                                            {#each $inputArea.trainTypes as type}
                                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Bus / Coach"}

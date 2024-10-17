@@ -85,8 +85,8 @@
                                                     {#if logItem.dropdown_2 === "type"}
                                                         <h3 class="text-white text-sm">Select Type</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                            {#if logItem['vehicletype'] == 'logItem'}
-                                                            {#each $inputArea.logItemTypes as type}
+                                                            {#if logItem['vehicletype'] == 'Train'}
+                                                            {#each $inputArea.trainTypes as type}
                                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, false)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Bus / Coach"}
@@ -223,8 +223,8 @@
                                                             {#if logItem.dropdown_2 === "type"}
                                                                 <h3 class="text-white text-sm">Select Type</h3>
                                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                                    {#if logItem['vehicletype'] == 'logItem'}
-                                                                    {#each $inputArea.logItemTypes as type}
+                                                                    {#if logItem['vehicletype'] == 'Train'}
+                                                                    {#each $inputArea.trainTypes as type}
                                                                             <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, true)}>{type.name}</button>
                                                                         {/each}
                                                                     {:else if logItem['vehicletype'] == "Bus / Coach"}
@@ -522,7 +522,7 @@
         locationObj = o.detail.text;
         location = o.detail.text.name;
         locationID = o.detail.text.id;
-        // console.log(location, locationID, locationObj);
+        console.log(location, locationID, locationObj);
     }
     
     function inputType(type, logItem, photo) {
@@ -607,6 +607,7 @@
     
     function inputAreaBtn(area, logItem, photo) {
         inputArea.set(area);
+        console.log($inputArea)
         if(!photo){
             logNumbers.update(numbers => {
                 return numbers.map(t => {
@@ -648,6 +649,15 @@
             if (vehFound) {
             veh = logs.find(log => log.number === input);
             }
+        }
+
+        if (!vehFound) {
+            logNumbers.subscribe(numbers => {
+                vehFound = numbers.some(log => log.number === input);
+                if (vehFound) {
+                    veh = numbers.find(log => log.number === input);
+                }
+            });
         }
 
         let newLogItem = {
@@ -808,7 +818,7 @@
                 log_date: inputDate,
                 log_time: inputTime,
                 log_lat: preciseLat,
-                log_lon: preciseLon,
+                log_long: preciseLon,
                 pictures: pictures,
                 logNotes: inputNote,
             }));
@@ -826,7 +836,7 @@
                     log_location: location,
                     log_loc_id: locationObj.id,
                     log_lat : locationObj.lat,
-                    log_lon : locationObj.lon,
+                    log_long : locationObj.long,
                     log_date: inputDate,
                     log_time: inputTime,
                     pictures: pictures,
@@ -844,7 +854,7 @@
                     ...item,
                     log_location: location,
                     log_lat: null,
-                    log_lon: null,
+                    log_long: null,
                     log_loc_id: null,
                     log_date: inputDate,
                     log_time: inputTime,
@@ -860,10 +870,16 @@
 
 
         let logreplace = inputDate.replace('/', '-');
-        // console.log(logreplace)
+        $alrtMode = 'info';
+        $alrtTxt = 'Processing...';
+        $alrtAct = true;
+        await sleep(3000)
         // window.location.href = `../overview/${logreplace}`;
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 
     function customAlertSummon(text, mode){

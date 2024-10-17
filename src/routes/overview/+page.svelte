@@ -24,51 +24,60 @@
                         {/each}
                     </select>
                 </div>
-                <div class="flex gap-2 flex-col mt-4">
-                    {#each Object.keys(logsByYear) as year}
-                        <div class="flex-wrap w-full">
-                        {#each Object.keys(logsByYear[year]) as month}
-                            {#if month != 'Unknown'}
-                                <h3 class="text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
-                            {:else}
-                                <h3 class="text-neutral-400 italic text-lg">No Date</h3>
-                            {/if}
-                            {#each Object.keys(logsByYear[year][month]) as date}
-                                <div class="flex flex-col mb-4 mt-2">
-                                    <div class="flex flex-wrap gap-2">
-                                        {#if getPicture(logsByYear[year][month][date]) == null}
-                                            <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
-                                                <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
+                {#if logsByYear.length == 0}
+                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
+                        <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                    </div>
+                {:else}
+                    <div class="flex gap-2 flex-col mt-4">
+                        {#each Object.keys(logsByYear) as year}
+                            <div class="flex-wrap w-full">
+                            {#each Object.keys(logsByYear[year]) as month}
+                                {#if month != 'Unknown'}
+                                    <h3 class="text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
+                                {:else}
+                                    <h3 class="text-neutral-400 italic text-lg">No Date</h3>
+                                {/if}
+                                {#each Object.keys(logsByYear[year][month]) as date}
+                                    <div class="flex flex-col mb-4 mt-2">
+                                        <div class="flex flex-wrap gap-2">
+                                            {#if getPicture(logsByYear[year][month][date]) == null}
+                                                <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
+                                                    <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
+                                                        {#if date != 'Unknown'}
+                                                            <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">{formatDate(date)}</h4>
+                                                        {:else}
+                                                            <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">No Date</h4>
+                                                        {/if}
+                                                        {#each getFirstLogs(logsByYear[year][month][date]) as log}
+                                                            <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
+                                                        {/each}
+                                                    </span>
+                                                </button>
+                                            {:else}
+                                            <button class="w-1/2 h-[125px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date.toLowerCase()}} class:w-full={date == 'Unknown'} class:max-w-none={date == 'Unknown'}>
+                                                <span class="bg-black block absolute w-full h-full bg-opacity-60 p-2 top-0">
                                                     {#if date != 'Unknown'}
                                                         <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">{formatDate(date)}</h4>
                                                     {:else}
-                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">No Date</h4>
+                                                        <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">All Items</h4>
                                                     {/if}
                                                     {#each getFirstLogs(logsByYear[year][month][date]) as log}
                                                         <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
                                                     {/each}
+        
                                                 </span>
+                                                <img src={getPicture(logsByYear[year][month][date]).src} class="rounded-md object-cover w-full h-full" alt="background"/>
                                             </button>
-                                        {:else}
-                                        <button class="w-1/2 h-[125px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date.toLowerCase()}} class:w-full={date == 'Unknown'} class:max-w-none={date == 'Unknown'}>
-                                            <span class="bg-black block absolute w-full h-full bg-opacity-60 p-2 top-0">
-                                                {#if date != 'Unknown'}
-                                                    <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left">{formatDate(date)}</h4>
-                                                {:else}
-                                                    <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left">All Items</h4>
-                                                {/if}
-    
-                                            </span>
-                                            <img src={getPicture(logsByYear[year][month][date]).src} class="rounded-md object-cover w-full h-full"/>
-                                        </button>
-                                        {/if}
+                                            {/if}
+                                        </div>
                                     </div>
-                                </div>
+                                {/each}
                             {/each}
+                            </div>
                         {/each}
-                        </div>
-                    {/each}
-                </div>
+                    </div>
+                {/if}
             </div>
         {/if}
     </div>
@@ -121,6 +130,10 @@
     function getPicture(logs){
         for (let log of logs) {
             if (log.pictures && log.pictures.length > 0) {
+            const priorityPicture = log.pictures.find(picture => picture.picturePriority === true);
+            if (priorityPicture) {
+                return priorityPicture;
+            }
             return log.pictures[0];
             }
         }
@@ -141,6 +154,7 @@
             }
         }
 
+        console.log(uniqueLogs);
         return uniqueLogs;
     }
 
@@ -201,3 +215,6 @@
 
 </script>
 
+<style>
+     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+</style>
