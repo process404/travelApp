@@ -299,7 +299,7 @@
     var combinedLocations = null;
     var locationSuggestions = []
     var logNumbers = writable([])
-    const photoLogNumbers = writable([]);
+    var photoLogNumbers = writable([]);
     var dbWriteable = writable([])
 
     var typeDropdown = false;
@@ -423,6 +423,14 @@
                 loadStns = false;
             }
         }
+
+        for(var area in db.vehTypes){
+            console.log(db.vehTypes)
+            console.log(db.vehTypes[area].area)
+            logAreas.push(db.vehTypes[area])
+        }
+
+        console.log(logAreas)
     });
 
     function locationToggle() {
@@ -521,16 +529,17 @@
             });
         };
 
+        inputVariant.set(type.variants);
         if (!photo) {
             logNumbers.update(updateNumbers);
         } else {
-            inputVariant.set(type.variants);
             photoLogNumbers.update(updateNumbers);
         }
     }
 
     
     function inputVType(type, logItem, photo){
+        console.log("ran")
         if(!photo){
             logNumbers.update(numbers => {
                 return numbers.map(t => {
@@ -541,6 +550,7 @@
                     return t;
                 });
             });
+            console.log(logNumbers)
         }else{
             photoLogNumbers.update(numbers => {
             return numbers.map(t => {
@@ -550,6 +560,7 @@
                 }
                 return t;
             });
+            console.log(photoLogNumbers)
         });
         }
     }
