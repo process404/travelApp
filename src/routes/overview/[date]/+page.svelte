@@ -5,7 +5,7 @@
             {#if param != "unknown"}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
             {:else}
-            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for Unknown Date</h2>
+            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for No Date</h2>
             {/if}
         </div>
     </div>
@@ -18,8 +18,6 @@
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
     
-    let imgArr = []
-
     let param = $page.params.date;
     let formatParam = param.replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1');
     onMount(() => {
