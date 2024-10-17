@@ -25,21 +25,7 @@
     onMount(() => {
         param = param.replace(/-/g, '/');
         document.title = 'Overview for ' + formatParam;
-        getImgArr();
     });
-
-    function getImgArr() {
-        const logs = $page.params.date;
-        const trainTypes = require('../../../database.json').trainTypes;
-        
-        const variant = logs.split('-')[1];
-        const trainType = trainTypes.find(type => type.variants.some(variant => variant.short === variant));
-        
-        if (trainType) {
-            const pictures = trainType.pictures;
-            imgArr.push(pictures)
-        }
-    }
 
     function formatDate(date){
         const d = new Date(date);
