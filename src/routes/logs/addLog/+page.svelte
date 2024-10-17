@@ -24,7 +24,7 @@
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
                             </div>
                             <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
+                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle()}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
                             
@@ -331,13 +331,21 @@
     var locationC = ''
     var locationID = ''
     var locationObj = null;
-    var locationToggle = writable(false);
     var locations = []
+
+    $: if (location) {
+        console.log(location.length)
+        if(location.length < 2){
+            locationObj = null;
+        }
+    }
     
     let selectedPhotoSrc = '';
     let selectedPhotoAlt = "Selected Photo";
     let selectedPhoto = ''
     let addPhoto = false;
+
+
 
 
     function handlePhotoProcess(){
@@ -416,7 +424,50 @@
                 loadStns = false;
             }
         }
-    })
+    });
+
+    function locationToggle() {
+        if($preciseLocation){
+            $preciseLocation = false;
+        }else{
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        preciseLat = latitude;
+                        preciseLon = longitude;
+                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
+                        $preciseLocation = true;
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.log("User denied the request for Geolocation.");
+                                customAlertSummon("User denied the request for Geolocation", "err");
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.log("Location information is unavailable.");
+                                customAlertSummon("Location information is unavailable", "err");
+                                break;
+                            case error.TIMEOUT:
+                                console.log("The request to get user location timed out.");
+                                customAlertSummon("The request to get user location timed out", "err");
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                console.log("An unknown error occurred.");
+                                customAlertSummon("An unknown error occurred", "err");
+                                break;
+                        }
+                        $preciseLocation = false;
+                    }
+                );
+            } else {
+                console.log("Geolocation is not supported by the browser.");
+                $preciseLocation = false;
+            }
+        }
+    }
 
 
     function addPhotoLog(){
@@ -476,6 +527,31 @@
         } else {
             inputVariant.set(type.variants);
             photoLogNumbers.update(updateNumbers);
+        }
+    }
+
+    
+    function inputVType(type, logItem, photo){
+        if(!photo){
+            logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.vehicletype = type;
+                        t.dropdown_2 = 'area';
+                    }
+                    return t;
+                });
+            });
+        }else{
+            photoLogNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === logItem.id) {
+                    t.vehicletype = type;
+                    t.dropdown_2 = 'area';
+                }
+                return t;
+            });
+        });
         }
     }
 
@@ -770,76 +846,8 @@
         $alrtMode = mode;
         $alrtAct = true;
     }
+}
 
-    function locationToggle() {
-        if($preciseLocation){
-            $preciseLocation = false;
-        }else{
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-                        preciseLat = latitude;
-                        preciseLon = longitude;
-                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
-                        $preciseLocation = true;
-                    },
-                    (error) => {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                console.log("User denied the request for Geolocation.");
-                                customAlertSummon("User denied the request for Geolocation", "err");
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                console.log("Location information is unavailable.");
-                                customAlertSummon("Location information is unavailable", "err");
-                                break;
-                            case error.TIMEOUT:
-                                console.log("The request to get user location timed out.");
-                                customAlertSummon("The request to get user location timed out", "err");
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                console.log("An unknown error occurred.");
-                                customAlertSummon("An unknown error occurred", "err");
-                                break;
-                        }
-                        $preciseLocation = false;
-                    }
-                );
-            } else {
-                console.log("Geolocation is not supported by the browser.");
-                $preciseLocation = false;
-            }
-        }
-        }
-
-        function inputVType(type, logItem, photo){
-            if(!photo){
-                logNumbers.update(numbers => {
-                    return numbers.map(t => {
-                        if (t.id === logItem.id) {
-                            t.vehicletype = type;
-                            t.dropdown_2 = 'area';
-                        }
-                        return t;
-                    });
-                });
-            }else{
-                photoLogNumbers.update(numbers => {
-                return numbers.map(t => {
-                    if (t.id === logItem.id) {
-                        t.vehicletype = type;
-                        t.dropdown_2 = 'area';
-                    }
-                    return t;
-                });
-            });
-            }
-        }
-
-
-    }
     
 </script>
 
