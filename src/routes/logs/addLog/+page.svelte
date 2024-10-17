@@ -134,7 +134,7 @@
                         {#if pictures.length == 0 && addPhoto == false}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
                                 <h4 class="text-neutral-500 italic w-full text-center mb-2 border-neutral-700 border-[1px] pt-2 pb-2">No Photographs</h4>
-                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true; console.log(addPhoto)}}>Add Photograph</button>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true;}}>Add Photograph</button>
                             </div>
                         {:else}
                             <ul class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
@@ -357,7 +357,6 @@
                 tick();
             };
             reader.readAsDataURL(result);
-            console.log("compressed");
             },
             error(err) {
             console.error(err.message);
@@ -369,7 +368,7 @@
     onMount(async () => {
         locations = [];
         locations = await getLocationsData();
-        console.log(locations)
+        // console.log(locations)
         document.title = 'Add Log';
         const loc = locations
         if(loc != null){
@@ -380,7 +379,7 @@
         const dbData = await db;
         const resolvedDbData = await dbData.default;
         logAreas = resolvedDbData.vehTypes;
-        console.log(resolvedDbData)
+        // console.log(resolvedDbData)
 
         inputDate = new Date().toISOString().split('T')[0];
 
@@ -704,14 +703,14 @@
 
 
         let logreplace = inputDate.replace('/', '-');
-        console.log(logreplace)
+        // console.log(logreplace)
         window.location.href = `../overview/${logreplace}`;
     }
 
 
 
     function customAlertSummon(text, mode){
-        console.log("Summoning alert")
+        // console.log("Summoning alert")
         $alrtTxt = text;
         $alrtMode = mode;
         $alrtAct = true;
