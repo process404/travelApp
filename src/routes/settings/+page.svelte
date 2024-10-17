@@ -52,12 +52,12 @@
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood}
                                 <div class="w-full flex justify-end items-center flex-col gap-2">
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearJourneys()}}>Clear Journeys</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearPlanning()}}>Clear Planning</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearJourneys()}}>Clear Journeys</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearPlanning()}}>Clear Planning</button>
                                 </div>
                             {:else}
                                 <button class="button w-full md:max-w-[200px]" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
@@ -66,17 +66,17 @@
                     </div>
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
-                            <h2 class="dark:text-neutral-300 mb-2">Clear logs, journeys and photographs over 1, 3, 6 or 12 months old</h2>
+                            <h2 class="dark:text-neutral-300 mb-2">Clear logs, journeys and photographs over 1, 3, 6 or 12 months old or those with no date</h2>
                             <p class="dark:text-neutral-400 text-sm italic">Clears all logs, journeys and associated photographs which are older than a certain time ago such as 1, 3, 6 or 12 months. <br><br><span class="text-yellow-300">Warning! This action is permenant and cannot be reversed.</span></p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood2}
                                 <div class="w-full flex justify-end items-center flex-col gap-2">
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("30")}}>Clear older than 1 month</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("60")}}>Clear older than 3 months</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("182")}}>Clear older than 6 months</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full" on:click={() => {clearTimePeriod("365")}}>Clear older than 12 months</button>
-                                
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearTimePeriod("30")}}>Clear older than 1 month</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearTimePeriod("60")}}>Clear older than 3 months</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearTimePeriod("182")}}>Clear older than 6 months</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearTimePeriod("365")}}>Clear older than 12 months</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearTimePeriod("no_date")}}>Clear items with no date</button>
                                 </div>
                             {:else}
                                 <button class="button md:max-w-[200px] w-full" on:click={() => {understood2 = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
@@ -102,6 +102,8 @@
     import '../../global.css';
     import '../siteDB.js';
     import { getJourneysData, getLocationsData, getLogsData, getPlanningData } from '../siteDB';
+    import '../tl_stationsDB.js';
+    import { tl_wipeAllData } from '../tl_stationsDB.js'
 
     let dbStn = false;
     let advancedDropdown = false;
@@ -133,59 +135,99 @@
         localStorage.setItem('settings', JSON.stringify(settings));
     }
     
-    function clearJourneys(){
+    async function clearJourneys(){
         if (confirm('Are you sure you want to clear all journeys? This action cannot be undone.')) {
-            console.log('Journeys cleared');
+            var journeys = await getJourneysData();
+            journeys = [];
+            await writeJourneysData(journeys);
+            console.log('%c Journeys cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearUserLocations(){
+    async function clearUserLocations(){
         if (confirm('Are you sure you want to clear all user locations? This action cannot be undone.')) {
-            console.log('Journeys cleared');
+            var locations = await getLocationsData();
+            locations = [];
+            await writeLocationsData(locations);
+            console.log('%c User Locations cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearDBLocations(){
+    async function clearDBLocations(){
         if (confirm('Are you sure you want to clear all database locations? If "Get stations from the Database" is enabled then station names will be regenerated unless this is disabled')) {
-            console.log('Journeys cleared');
+            await tl_wipeAllData();
+            console.log('%c DB Locations cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearLogPhotos(){
+    async function clearLogPhotos(){
         if (confirm('Are you sure you want to clear all photos within logs? This action cannot be undone.')) {
-            console.log('Journeys cleared');
+            var logs = await getLogsData();
+            logs.forEach(log => {
+                log.pictures = [];
+            });
+            await writeLogsData(logs);
+            console.log('%c Log Photos cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearLogsGeneral(){
+    async function clearLogsGeneral(){
         if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
-            console.log('Journeys cleared');
+            var logs = await getLogsData();
+            logs = [];
+            await writeLogsData(logs);
+            console.log('%c Logs cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearPlanning(){
+    async function clearPlanning(){
         if (confirm('Are you sure you want to clear all plans? This action cannot be undone.')) {
-            console.log('Journeys cleared');
+            var planning = await getPlanningData();
+            planning = [];
+            await writePlanningData(planning);
+            console.log('%c Planning cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
-    function clearTimePeriod(timeInDays){
+    async function clearTimePeriod(timeInDays){
         if (confirm(`Are you sure you want to clear all logs, journeys and associated photographs older than ${timeInDays} days? This action cannot be undone.`)) {
-            console.log('Journeys cleared');
+            var logs = await getLogsData();
+            var journeys = await getJourneysData();
+            if(timeInDays == "no_date"){
+                logs = logs.filter(log => log.log_date == null);
+                journeys = journeys.filter(journey => journey.journey_date == null);
+            }else{
+                logs = logs.filter(log => {
+                    const logDate = new Date(log.log_date);
+                    const currentDate = new Date();
+                    const timeDiff = Math.abs(currentDate - logDate);
+                    const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    return diffDays > timeInDays;
+                });
+                journeys = journeys.filter(journey => {
+                    const journeyDate = new Date(journey.journey_date);
+                    const currentDate = new Date();
+                    const timeDiff = Math.abs(currentDate - journeyDate);
+                    const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    return diffDays > timeInDays;
+                });
+            }
+    
+            console.log('%c Journeys cleared', 'color:lime;background:black;');
         } else {
-            console.log('Action cancelled');
+            console.log('%c Action cancelled', 'color:red;background:black;');
         }
     }
 
