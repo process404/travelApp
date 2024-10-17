@@ -2,7 +2,11 @@
     <Nav ver="back"/>
     <div class="h-full max-w-[1000px] w-full flex flex-col">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2">
-            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for {formatParam}</h2>
+            {#if param != "unknown"}
+                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
+            {:else}
+            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for Unknown Date</h2>
+            {/if}
         </div>
     </div>
     <Footer/>
@@ -21,20 +25,11 @@
     onMount(() => {
         param = param.replace(/-/g, '/');
         document.title = 'Overview for ' + formatParam;
-        getImgArr();
     });
 
-    function getImgArr() {
-        const logs = $page.params.date;
-        const trainTypes = require('../../../database.json').trainTypes;
-        
-        const variant = logs.split('-')[1];
-        const trainType = trainTypes.find(type => type.variants.some(variant => variant.short === variant));
-        
-        if (trainType) {
-            const pictures = trainType.pictures;
-            imgArr.push(pictures)
-        }
+    function formatDate(date){
+        const d = new Date(date);
+        return d.toLocaleDateString('en-GB', {month: 'long', day: 'numeric'});
     }
 </script>
 

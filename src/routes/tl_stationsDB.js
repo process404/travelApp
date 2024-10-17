@@ -13,3 +13,7 @@ export async function tl_getAllData() {
 export async function tl_putData(data) {
     await db.stations.put({ id: 1, data });
 }
+
+export async function tl_wipeAllData(){
+    await db.stations.clear();
+}
