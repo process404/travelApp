@@ -99,7 +99,7 @@
 
         logsBeforeUpd = logsByYear
 
-        console.log(logsByYear);
+        // console.log(logsByYear);
     });
 
     function getPicture(logs){
@@ -135,7 +135,7 @@
     }
 
     function sortByYear() {
-        console.log(sortBy);
+        // console.log(sortBy);
         if (sortBy === "All Time") {
             logsByYear = logs.reduce((acc, log) => {
                 const logDate = new Date(log.log_date);

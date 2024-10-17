@@ -516,7 +516,7 @@
     let loadStns = true;
     onMount(async () => {
         const module = await import('../../../db/vehicles.json');
-        db = module.default; // Access the default property to get the actual data
+        db = module.default; 
         locations = await getLocationsData();
         getTagsFromJourneys();
         if (locations != null) {
@@ -534,7 +534,6 @@
                     allStns = cachedStations[0].data;
                     loadStns = false;
                 } else {
-                    // Use a web worker to fetch stations
                     const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
                         allStns = event.data;
@@ -724,7 +723,7 @@
             }
         }
 
-        var loc = await getLocationsData()
+        var loc = await getAllLocations()
         if(loc != null){
             const parsedLoc = JSON.parse(loc);
             var found = false;
