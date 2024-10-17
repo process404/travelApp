@@ -9,16 +9,22 @@
                         <h3 class="text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
                             <div class="flex items-center w-full gap-3 mr-1">
-                                <PromptField ds={locations} bind:location on:select={selectLocation} disabled={$noLocation} ver="loc" class="w-full" bind:presetC={sCountry}/>
+                                {#if loadStns}
+                                    <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
+                                        <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                                    </div>
+                                {:else}
+                                    <PromptField ds={locations} on:select={selectLocation} bind:value={location} disabled={$noLocation} ver="loc" bind:presetC={locationC} adDs={allStns}/>
+                                {/if}
                             </div>
                         </div>
-                        <div class="flex gap-4">
+                        <div class="flex gap-4" class:disabledLoc={locationObj != null}>
                             <div class="mt-3 flex gap-2 items-center">
                                 <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noLocation}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
                             </div>
                             <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
+                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle()}>
                                 <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
                             </div>
                             
@@ -134,7 +140,7 @@
                         {#if pictures.length == 0 && addPhoto == false}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
                                 <h4 class="text-neutral-500 italic w-full text-center mb-2 border-neutral-700 border-[1px] pt-2 pb-2">No Photographs</h4>
-                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true; console.log(addPhoto)}}>Add Photograph</button>
+                                <button class="button blue w-full p-2 text-sm x-padding" on:click={() => {addPhoto = true;}}>Add Photograph</button>
                             </div>
                         {:else}
                             <ul class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
@@ -319,14 +325,27 @@
     var db = import ('../../../db/vehicles.json');
     var logAreas = []
     dbWriteable.set(db)
+    var loadStns = true;
 
     var location = ''
+    var locationC = ''
+    var locationID = ''
+    var locationObj = null;
     var locations = []
+
+    $: if (location) {
+        console.log(location.length)
+        if(location.length < 2){
+            locationObj = null;
+        }
+    }
     
     let selectedPhotoSrc = '';
     let selectedPhotoAlt = "Selected Photo";
     let selectedPhoto = ''
     let addPhoto = false;
+
+
 
 
     function handlePhotoProcess(){
@@ -357,7 +376,6 @@
                 tick();
             };
             reader.readAsDataURL(result);
-            console.log("compressed");
             },
             error(err) {
             console.error(err.message);
@@ -366,25 +384,91 @@
     }
 
     
+    import additionalStns from '../../../db/additionalStations.json'
+    import { tl_getAllData, tl_putData } from '../../tl_stationsDB';
+    let allStns = null;
+
+    // Get stations mount
     onMount(async () => {
-        locations = [];
+        const module = await import('../../../db/vehicles.json');
+        db = module.default; 
         locations = await getLocationsData();
-        console.log(locations)
-        document.title = 'Add Log';
-        const loc = locations
-        if(loc != null){
-            let joined = JSON.parse(loc);
-            combinedLocations = joined;
+        if (locations != null) {
+            locations = locations.concat(additionalStns);
+        }else{
+            locations = additionalStns;
         }
-    
-        const dbData = await db;
-        const resolvedDbData = await dbData.default;
-        logAreas = resolvedDbData.vehTypes;
-        console.log(resolvedDbData)
 
-        inputDate = new Date().toISOString().split('T')[0];
-
+        if (typeof window !== 'undefined') {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            if (settings && settings.dbStn) {
+                // Check if stations are already cached
+                const cachedStations = await tl_getAllData();
+                if (cachedStations.length > 0) {
+                    allStns = cachedStations[0].data;
+                    loadStns = false;
+                } else {
+                    const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
+                    worker.onmessage = async (event) => {
+                        allStns = event.data;
+                        await tl_putData(allStns);
+                        loadStns = false;
+                    };
+                    worker.onerror = (error) => {
+                        console.error('Error in worker:', error);
+                        loadStns = false; 
+                    };
+                    worker.postMessage('fetchStations');
+                }
+            } else {
+                loadStns = false;
+            }
+        }
     });
+
+    function locationToggle() {
+        if($preciseLocation){
+            $preciseLocation = false;
+        }else{
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        preciseLat = latitude;
+                        preciseLon = longitude;
+                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
+                        $preciseLocation = true;
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.log("User denied the request for Geolocation.");
+                                customAlertSummon("User denied the request for Geolocation", "err");
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.log("Location information is unavailable.");
+                                customAlertSummon("Location information is unavailable", "err");
+                                break;
+                            case error.TIMEOUT:
+                                console.log("The request to get user location timed out.");
+                                customAlertSummon("The request to get user location timed out", "err");
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                console.log("An unknown error occurred.");
+                                customAlertSummon("An unknown error occurred", "err");
+                                break;
+                        }
+                        $preciseLocation = false;
+                    }
+                );
+            } else {
+                console.log("Geolocation is not supported by the browser.");
+                $preciseLocation = false;
+            }
+        }
+    }
+
 
     function addPhotoLog(){
         // Use the store value reactively
@@ -421,8 +505,10 @@
     }
 
     function selectLocation(o){
-        location = o.detail.text
-        locationSuggestions = []
+        locationObj = o.detail.text;
+        location = o.detail.text.name;
+        locationID = o.detail.text.id;
+        // console.log(location, locationID, locationObj);
     }
     
     function inputType(type, logItem, photo) {
@@ -441,6 +527,31 @@
         } else {
             inputVariant.set(type.variants);
             photoLogNumbers.update(updateNumbers);
+        }
+    }
+
+    
+    function inputVType(type, logItem, photo){
+        if(!photo){
+            logNumbers.update(numbers => {
+                return numbers.map(t => {
+                    if (t.id === logItem.id) {
+                        t.vehicletype = type;
+                        t.dropdown_2 = 'area';
+                    }
+                    return t;
+                });
+            });
+        }else{
+            photoLogNumbers.update(numbers => {
+            return numbers.map(t => {
+                if (t.id === logItem.id) {
+                    t.vehicletype = type;
+                    t.dropdown_2 = 'area';
+                }
+                return t;
+            });
+        });
         }
     }
 
@@ -670,7 +781,7 @@
             logs = JSON.stringify([]);
         }
 
-        if($preciseLocation && preciseLat && preciseLon){
+        if($preciseLocation && preciseLat && preciseLon && locationObj == null){
             logNumbers.subscribe(async numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
                 ...item,
@@ -687,107 +798,64 @@
             await writeLogsData(addNew);
             });
         }else{
-            logNumbers.subscribe(async numbers => {
-            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                ...item,
-                log_location: location,
-                log_date: inputDate,
-                log_time: inputTime,
-                pictures: pictures,
-                logNotes: inputNote,
-            }));
-
-            const addNew = JSON.parse(logs).concat(numbersWithLocation);
-            await writeLogsData(addNew);
+            if(locationObj != null){
+            
+                logNumbers.subscribe(async numbers => {
+                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                    ...item,
+                    log_location: location,
+                    log_loc_id: locationObj.id,
+                    log_lat : locationObj.lat,
+                    log_lon : locationObj.lon,
+                    log_date: inputDate,
+                    log_time: inputTime,
+                    pictures: pictures,
+                    logNotes: inputNote,
+                }))
+                const addNew = JSON.parse(logs).concat(numbersWithLocation);
+                await writeLogsData(addNew);
             });
+            }else{
+
+                logNumbers.subscribe(async numbers => {
+                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                    ...item,
+                    log_location: location,
+                    log_date: inputDate,
+                    log_time: inputTime,
+                    pictures: pictures,
+                    logNotes: inputNote,
+                }));
+                const addNew = JSON.parse(logs).concat(numbersWithLocation);
+                await writeLogsData(addNew);
+            });
+
         }
 
 
         let logreplace = inputDate.replace('/', '-');
-        console.log(logreplace)
+        // console.log(logreplace)
         window.location.href = `../overview/${logreplace}`;
     }
 
 
 
     function customAlertSummon(text, mode){
-        console.log("Summoning alert")
+        // console.log("Summoning alert")
         $alrtTxt = text;
         $alrtMode = mode;
         $alrtAct = true;
     }
-
-    function locationToggle() {
-        if($preciseLocation){
-            $preciseLocation = false;
-        }else{
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-                        preciseLat = latitude;
-                        preciseLon = longitude;
-                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
-                        $preciseLocation = true;
-                    },
-                    (error) => {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                console.log("User denied the request for Geolocation.");
-                                customAlertSummon("User denied the request for Geolocation", "err");
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                console.log("Location information is unavailable.");
-                                customAlertSummon("Location information is unavailable", "err");
-                                break;
-                            case error.TIMEOUT:
-                                console.log("The request to get user location timed out.");
-                                customAlertSummon("The request to get user location timed out", "err");
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                console.log("An unknown error occurred.");
-                                customAlertSummon("An unknown error occurred", "err");
-                                break;
-                        }
-                        $preciseLocation = false;
-                    }
-                );
-            } else {
-                console.log("Geolocation is not supported by the browser.");
-                $preciseLocation = false;
-            }
-        }
-        }
-
-        function inputVType(type, logItem, photo){
-            if(!photo){
-                logNumbers.update(numbers => {
-                    return numbers.map(t => {
-                        if (t.id === logItem.id) {
-                            t.vehicletype = type;
-                            t.dropdown_2 = 'area';
-                        }
-                        return t;
-                    });
-                });
-            }else{
-                photoLogNumbers.update(numbers => {
-                return numbers.map(t => {
-                    if (t.id === logItem.id) {
-                        t.vehicletype = type;
-                        t.dropdown_2 = 'area';
-                    }
-                    return t;
-                });
-            });
-            }
-        }
-
-
-
-
+}
 
     
 </script>
+
+<style>
+     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+     .disabledLoc{
+        @apply opacity-50 pointer-events-none
+     }
+</style>
 
