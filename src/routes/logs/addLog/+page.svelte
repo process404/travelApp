@@ -42,7 +42,7 @@
                                                 <button on:click={() => {logItem['dropdown'] = !logItem['dropdown']; document.getElementById('numberEntryInput').blur()}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding mr-1">{logItem['number']} ({logItem['type']} - {logItem['variant']})</button>
                                                 
                                                 {#if logItem['dropdown']}
-                                                    <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(logItem)}></button>
+                                                    <button class="z-30 fixed w-screen h-screen hover:cursor-default left-0 top-0" on:click={closeDropdown(logItem, false)}></button>
                                                 {/if}
                                                 
                                                 {#if logItem['dropdown']}
@@ -180,7 +180,7 @@
                                                         <button on:click={() => {logItem['dropdown'] = !logItem['dropdown']; document.getElementById('numberEntryInput').blur()}} class=" bg-blue-800 button blue2 textWhite pl-2 pr-2 sm s-padding mr-1">{logItem['number']} ({logItem['type']} - {logItem['variant']})</button>
                                                         
                                                         {#if logItem['dropdown']}
-                                                            <button class="z-30 fixed w-screen h-screen hover:cursor-defaulleft-0 top-0" on:click={closeDropdown(logItem)}></button>
+                                                            <button class="z-30 fixed w-screen h-screen hover:cursor-default left-0 top-0" on:click={closeDropdown(logItem, true)}></button>
                                                         {/if}
                                                         
                                                         {#if logItem['dropdown']}
@@ -610,16 +610,22 @@
         pictures = pictures.filter(p => p.src != picture.src);
     }
 
-    function closeDropdown(logItem){
-        logNumbers.update(numbers => {
+    function closeDropdown(logItem, photo){
+        const updateNumbers = (numbers) => {
             return numbers.map(t => {
-                if (t.id === logItem.id) {
-                    t.dropdown = false;
-                    t.dropdown_2 = '';
-                }
-                return t;
+            if (t.id === logItem.id) {
+                t.dropdown = false;
+                t.dropdown_2 = '';
+            }
+            return t;
             });
-        });
+        };
+
+        if (!photo) {
+            logNumbers.update(updateNumbers);
+        } else {
+            photoLogNumbers.update(updateNumbers);
+        }
     }
 
     async function confirmLog(){
