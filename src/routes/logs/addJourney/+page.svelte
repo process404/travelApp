@@ -714,8 +714,6 @@
             journeys = JSON.stringify([]);
         }
 
-        console.log("Journeys ", journeys)
-
         logNumbers.subscribe(async numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
@@ -747,15 +745,17 @@
                 journeyNotes: journeyNotes
             }));
 
-            console.log(journeys)
             const addNew = journeys.concat(numbersWithLocation);
             let test = await writeJourneysData(addNew);
-            console.log("new", test)
-            console.log(addNew);
+            console.log("test", test)
+            $alrtMode = 'info';
+            $alrtTxt = 'Processing...';
+            $alrtAct = true;
+            await sleep(3000)
+            window.location.href = `../overview/` + inputDateStart; 
         });
 
 
-        // window.location.href = `../overview/` + inputDateStart; 
     }
 
 
@@ -879,6 +879,10 @@
             document.documentElement.classList.remove('dark');
         }
     });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 </script>
 

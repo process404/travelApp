@@ -57,7 +57,7 @@
                     "pictures": []
                 },
                 {
-                    "name": "Stadler (UK)",
+                    "name": "Stadler / UK",
                     "variants": [
                         { "name": "All / Others", "short": "STADLER_UK_ALL" },
                         { "name": "Class 745", "short": "745_UK"},
@@ -77,7 +77,7 @@
                     ],
                     "pictures": []
                 },
-                {"name":"Metro Cammell (UK)",
+                {"name":"Metro Cammell / UK",
                     "variants":[
                         {"name":"Class 101","short":"MC_UK_101"},
                         {"name":"Class 156","short":"MC_UK_156"},

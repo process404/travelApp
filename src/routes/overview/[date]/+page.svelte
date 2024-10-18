@@ -86,7 +86,7 @@
         mapVisible = true;
         mapErr = false;
 
-        console.log(journeys, journeyLocations);
+        // console.log(journeys, journeyLocations);
 
         if (typeof window !== 'undefined') {
             const L = await import('leaflet');
@@ -111,7 +111,7 @@
                         firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
                     }
                     const popupContent = firstSrc 
-                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='invert hue-rotate-180 rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg font-semibold text-neutral-100 invert'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 invert">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='invert hue-rotate-180 rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100 invert'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 invert">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
                         : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100 invert'>${item.location}</h3></div>`;
                     L.marker([item.lat, item.long]).addTo(map)
                     .bindPopup(popupContent)
@@ -140,7 +140,7 @@
         if (logs[year] && logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })] && logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })][`${year}-${month}-${day}`]) {
             logsToday = logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })][`${year}-${month}-${day}`];
             uniqueLocs = getUniqueLoc();
-            console.log(logsToday, "logsToday");
+            // console.log(logsToday, "logsToday");
         }
     }
 
@@ -150,7 +150,7 @@
     
     async function getJourneysLogs() {
         journeys = await getJourneysData();
-        console.log(journeys, "journeys")
+        // console.log(journeys, "journeys")
         journeys = journeys.filter(journey => {
             const journeyDate = new Date(journey.start_date);
             const [year, month, day] = param.split('/');
@@ -162,7 +162,7 @@
         // console.log(journeys, "output")
         journeyLocations = await getUniqueJourneyLocations();
         combined = await combineLists();
-        console.log("combined", combined);  
+        // console.log("combined", combined);  
         return journeys;
     }
 
