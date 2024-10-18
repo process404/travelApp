@@ -116,6 +116,9 @@
                     L.marker([item.lat, item.long]).addTo(map)
                     .bindPopup(popupContent)
                     .openPopup();
+                    
+                    // poly lines go here
+                    // in future, get railway routes to make them more accurate
                 }
 
 
