@@ -287,7 +287,6 @@
     let darkMode = false;
     onMount(() => {
         const settings = JSON.parse(localStorage.getItem('settings')) || {};
-        console.log(settings.darkMode);
         if (settings.darkMode === true) {
             darkMode = true;
             document.documentElement.classList.add('dark');

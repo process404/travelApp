@@ -17,12 +17,21 @@
             <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full pt-4 sm:pb-6 pl-4 pr-4 pb-4">
                 <div class="flex gap-6 justify-between items-center">
                     <h2 class="text-white font-semibold text-2xl w-full text-left">Logs by date</h2>
-                    <select class="input blue reduced"   bind:value={sortBy}>
-                        <option>All Time</option>
-                        {#each Object.keys(logsBeforeUpd) as year}
-                            <option>{year}</option>
-                        {/each}
-                    </select>
+                    <div class="flex gap-2 w-full justify-end">
+                        <select class="input blue reduced"   bind:value={sortBy}>
+                            <option>All Time</option>
+                            {#each Object.keys(logsBeforeUpd) as year}
+                                <option>{year}</option>
+                            {/each}
+                        </select>
+                        <button class="button blue2 text-sm" on:click={() => addGroupOpen()}>
+                            Add Group
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                              </svg>
+                              
+                        </button>
+                    </div>
                 </div>
                 {#if logsByYear.length == 0}
                     <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
@@ -31,7 +40,7 @@
                 {:else}
                     <div class="flex gap-2 flex-col mt-4">
                         {#each Object.keys(logsByYear) as year}
-                            <div class="flex-wrap w-full">
+                            <ul class="flex-wrap w-full">
                             {#each Object.keys(logsByYear[year]) as month}
                                 {#if month != 'Unknown'}
                                     <h3 class="text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
@@ -40,7 +49,7 @@
                                 {/if}
                                 {#each Object.keys(logsByYear[year][month]) as date}
                                     <div class="flex flex-col mb-4 mt-2">
-                                        <div class="flex flex-wrap gap-2">
+                                        <ul class="flex flex-wrap gap-2">
                                             {#if getPicture(logsByYear[year][month][date]) == null}
                                                 <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
                                                     <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
@@ -70,11 +79,11 @@
                                                 <img src={getPicture(logsByYear[year][month][date]).src} class="rounded-md object-cover w-full h-full" alt="background"/>
                                             </button>
                                             {/if}
-                                        </div>
+                                        </ul>
                                     </div>
                                 {/each}
                             {/each}
-                            </div>
+                            </ul>
                         {/each}
                     </div>
                 {/if}
@@ -93,17 +102,24 @@
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css'
     import '../siteDB.js'
-    import { getJourneysData, getLocationsData, getLogsData, getPlanningData } from '../siteDB';
+    import { getJourneysData, getLocationsData, getLogsData, getPlanningData, getGroupsData } from '../siteDB';
     import { fade } from 'svelte/transition';
     var sortBy = 'All Time';
     let logsBeforeUpd = []
     let logsByYear = [];
     var logs = null;
+    let groups = null;
     var page = 'logs'
+    
 
     onMount(async () => {
         document.title = 'Overview';
+        await generateLogs();
+    });
+
+    async function generateLogs() {
         logs = await getLogsData();
+        groups = await getGroupsData();
         logsByYear = logs.reduce((acc, log) => {
             const logDate = new Date(log.log_date);
             const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
@@ -122,10 +138,35 @@
             return acc;
         }, {});
 
-        logsBeforeUpd = logsByYear
+        // Combine months if groups contain 'startDate' and 'endDate' that span multiple months
+        if(groups != null && groups.length != 0){
+            groups.forEach(group => {
+                if (group.startDate && group.endDate) {
+                    const startDate = new Date(group.startDate);
+                    const endDate = new Date(group.endDate);
+                    if (startDate.getFullYear() === endDate.getFullYear() && startDate.getMonth() !== endDate.getMonth()) {
+                        const year = startDate.getFullYear();
+                        const startMonth = startDate.toLocaleString('default', { month: 'long' });
+                        const endMonth = endDate.toLocaleString('default', { month: 'long' });
+                        const combinedMonth = `${startMonth} / ${endMonth}`;
+                        if (!logsByYear[year]) {
+                            logsByYear[year] = {};
+                        }
+                        logsByYear[year][combinedMonth] = {
+                            ...logsByYear[year][startMonth],
+                            ...logsByYear[year][endMonth]
+                        };
+                        delete logsByYear[year][startMonth];
+                        delete logsByYear[year][endMonth];
+                    }
+                }
+            });
+        }
 
-        // console.log(logsByYear);
-    });
+        logsBeforeUpd = logsByYear;
+
+        console.log(logsByYear);
+    }
 
     function getPicture(logs){
         for (let log of logs) {
@@ -154,7 +195,7 @@
             }
         }
 
-        console.log(uniqueLogs);
+        // console.log(uniqueLogs);
         return uniqueLogs;
     }
 
@@ -207,9 +248,20 @@
         }
     }
 
-    function formatDate(date){
+    function formatDate(date) {
         const d = new Date(date);
-        return d.toLocaleDateString('en-GB', {month: 'long', day: 'numeric'});
+        const day = d.getDate();
+        const month = d.toLocaleString('default', { month: 'long' });
+        const suffix = (day) => {
+            if (day > 3 && day < 21) return 'th';
+            switch (day % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        };
+        return `${month} ${day}${suffix(day)}`;
     }
 
     onMount(() => {
@@ -220,6 +272,12 @@
             document.documentElement.classList.remove('dark');
         }
     });
+
+    import AddGroup from './components/AddGroup.svelte'
+
+    function addGroupOpen(){
+
+    }
 
 </script>
 

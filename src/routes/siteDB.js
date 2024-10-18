@@ -4,10 +4,11 @@ import LZString from 'lz-string';
 
 export const db = new Dexie('siteDB');
 db.version(1).stores({
-  planning: '++id, data', // Store for planning JSON data
-  locations: '++id, data', // Store for locations JSON data
-  journeys: '++id, data', // Store for journeys JSON data
-  logs: '++id, data' // Store for logs JSON data
+  planning: '++id, data',
+  locations: '++id, data', 
+  journeys: '++id, data', 
+  logs: '++id, data' ,
+  details: '++id, ind, groups',
 });
 
 
@@ -121,5 +122,70 @@ export async function getLogsData() {
     } catch (error) {
         console.error("Failed to get data from logs store:", error);
         return null;
+    }
+}
+
+export async function getIndividualDetails() {
+    try {
+        const record = await db.details.get(1);
+        if (record && record.ind) {
+            const decompressedData = LZString.decompress(record.individual);
+            return JSON.parse(decompressedData);
+        } else {
+            console.log("No individual data found in details store");
+            return null;
+        }
+    } catch (error) {
+        console.error("Failed to get individual data from details store:", error);
+        return null;
+    }
+}
+
+export async function getGroupsData() {
+    try {
+        const record = await db.details.get(1);
+        if (record && record.groups) {
+            const decompressedData = LZString.decompress(record.groups);
+            return JSON.parse(decompressedData);
+        } else {
+            console.log("No groups data found in details store");
+            return null;
+        }
+    } catch (error) {
+        console.error("Failed to get groups data from details store:", error);
+        return null;
+    }
+}
+
+
+export async function writeIndData(data) {
+    try {
+        const compressedData = LZString.compress(JSON.stringify(data));
+        const existingRecord = await db.details.get(1);
+        const updatedRecord = {
+            id: 1,
+            ind: compressedData,
+            groups: existingRecord ? existingRecord.groups : null
+        };
+        await db.details.put(updatedRecord);
+        console.log("New data written to individual store");
+    } catch (error) {
+        console.error("Failed to write data to individual store:", error);
+    }
+}
+
+export async function writeGroupsData(data) {
+    try {
+        const compressedData = LZString.compress(JSON.stringify(data));
+        const existingRecord = await db.details.get(1);
+        const updatedRecord = {
+            id: 1,
+            ind: existingRecord ? existingRecord.ind : null,
+            groups: compressedData
+        };
+        await db.details.put(updatedRecord);
+        console.log("New data written to groups store");
+    } catch (error) {
+        console.error("Failed to write data to groups store:", error);
     }
 }
