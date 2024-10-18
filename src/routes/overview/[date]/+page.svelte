@@ -110,6 +110,16 @@
 
 
                 let firstSrc = null;
+
+                var blackIcon = L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
                 for(let item of combined){
                     firstSrc = null;
                     for(let picture of item.pictures){
@@ -118,9 +128,12 @@
                     const popupContent = firstSrc 
                         ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='invert hue-rotate-180 rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100 invert'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 invert">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
                         : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100 invert'>${item.location}</h3></div>`;
-                    L.marker([item.lat, item.long]).addTo(map)
-                    .bindPopup(popupContent)
-                    .openPopup();
+                    
+                    const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
+                    const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
+                    
+                    L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
+                    .bindPopup(popupContent);
                     
                     // poly lines go here
                     // in future, get railway routes to make them more accurate
