@@ -286,8 +286,9 @@
 
     let darkMode = false;
     onMount(() => {
-        const settings = JSON.parse(localStorage.getItem('settings'));
-        if (settings.darkMode) {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        console.log(settings.darkMode);
+        if (settings.darkMode === true) {
             darkMode = true;
             document.documentElement.classList.add('dark');
         } else {
@@ -300,19 +301,13 @@
 <style>
      .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-     :global(.leaflet-popup-content-wrapper) {
-        background-color: #131313 !important;
-        color: #f9fafb !important;
-        border: 1px solid #2c2c2c !important;
-        border-radius: 0.3rem !important;
-        padding: 0.2rem !important;
-        
-     }
+    :global(.leaflet-popup-content-wrapper) {
+       @apply bg-white text-black border border-gray-300 rounded-md p-1 dark:bg-[#131313] dark:text-[#f9fafb] dark:border-[#2c2c2c];
+    }
 
-     :global(.leaflet-popup-tip){
-        background-color: #131313 !important;
-        border: 1px solid #2c2c2c !important;
-     }
+    :global(.leaflet-popup-tip){
+       @apply bg-white border border-gray-300 dark:bg-[#131313] dark:border-[#2c2c2c] !important;
+    }
 </style>
 
 
