@@ -7,6 +7,8 @@ An intended evolution of a simple tool created to allow the creation of physical
 - [TailwindCSS](https://tailwindcss.com/)
 - [Dexie.js](https://dexie.org/)
 - [Compressor.js](https://github.com/fengyuanchen/compressorjs)
+- [Leaflet](https://leafletjs.com/index.html)
+- [leaflet-providers](https://github.com/leaflet-extras/leaflet-providers)
 
 ### Data / API's
 - [Flags API](https://flagsapi.com/)
