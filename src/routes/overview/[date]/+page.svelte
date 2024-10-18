@@ -19,7 +19,7 @@
                                 <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
                             </div>
                         {:else if !mapErr}
-                            <div id="map" class="w-full h-full rounded-md bg-black" class:invert={darkMode} class:hue-rotate-180={darkMode} class:brightness-[95%]={darkMode} class:contrast-[90%]={darkMode}></div>
+                            <div id="map" class="w-full h-full rounded-md bg-black"></div>
                         {:else}
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
                             </div>
@@ -103,10 +103,25 @@
                     [54.635, -10.854], 
                     [47.270, 16.979]  
                 ]).setZoom(5);
+                let tileLayerDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+                    minZoom: 0,
+                    maxZoom: 20,
+                    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    ext: 'png'
+                });
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
+                let tileLayerLight = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+                    minZoom: 0,
+                    maxZoom: 20,
+                    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    ext: 'png'
+                });
+
+                if (darkMode) {
+                    tileLayerDark.addTo(map);
+                } else {
+                    tileLayerLight.addTo(map);
+                }
 
 
                 let firstSrc = null;
@@ -134,13 +149,14 @@
                     
                     const marker = L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
                     .bindPopup(popupContent);
+                    
 
-                    if (darkMode) {
-                        const markerElement = marker.getElement();
-                        if (markerElement) {
-                            markerElement.style.filter = 'invert(1) hue-rotate(180deg)';
-                        }
-                    }
+                    // if (darkMode) {
+                    //     const markerElement = marker.getElement();
+                    //     if (markerElement) {
+                    //         markerElement.style.filter = 'invert(1) hue-rotate(180deg)';
+                    //     }
+                    // }
                     
                     // poly lines go here
                     // in future, get railway routes to make them more accurate
@@ -283,7 +299,6 @@
 
 <style>
      .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-
 </style>
 
 
