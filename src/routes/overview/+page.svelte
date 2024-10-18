@@ -114,6 +114,10 @@
 
     onMount(async () => {
         document.title = 'Overview';
+        await generateLogs();
+    });
+
+    async function generateLogs() {
         logs = await getLogsData();
         groups = await getGroupsData();
         logsByYear = logs.reduce((acc, log) => {
@@ -122,13 +126,13 @@
             const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
             const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
             if (!acc[year]) {
-            acc[year] = {};
+                acc[year] = {};
             }
             if (!acc[year][month]) {
-            acc[year][month] = {};
+                acc[year][month] = {};
             }
             if (!acc[year][month][date]) {
-            acc[year][month][date] = [];
+                acc[year][month][date] = [];
             }
             acc[year][month][date].push(log);
             return acc;
@@ -138,23 +142,23 @@
         if(groups != null && groups.length != 0){
             groups.forEach(group => {
                 if (group.startDate && group.endDate) {
-                const startDate = new Date(group.startDate);
-                const endDate = new Date(group.endDate);
-                if (startDate.getFullYear() === endDate.getFullYear() && startDate.getMonth() !== endDate.getMonth()) {
-                    const year = startDate.getFullYear();
-                    const startMonth = startDate.toLocaleString('default', { month: 'long' });
-                    const endMonth = endDate.toLocaleString('default', { month: 'long' });
-                    const combinedMonth = `${startMonth} / ${endMonth}`;
-                    if (!logsByYear[year]) {
-                    logsByYear[year] = {};
+                    const startDate = new Date(group.startDate);
+                    const endDate = new Date(group.endDate);
+                    if (startDate.getFullYear() === endDate.getFullYear() && startDate.getMonth() !== endDate.getMonth()) {
+                        const year = startDate.getFullYear();
+                        const startMonth = startDate.toLocaleString('default', { month: 'long' });
+                        const endMonth = endDate.toLocaleString('default', { month: 'long' });
+                        const combinedMonth = `${startMonth} / ${endMonth}`;
+                        if (!logsByYear[year]) {
+                            logsByYear[year] = {};
+                        }
+                        logsByYear[year][combinedMonth] = {
+                            ...logsByYear[year][startMonth],
+                            ...logsByYear[year][endMonth]
+                        };
+                        delete logsByYear[year][startMonth];
+                        delete logsByYear[year][endMonth];
                     }
-                    logsByYear[year][combinedMonth] = {
-                    ...logsByYear[year][startMonth],
-                    ...logsByYear[year][endMonth]
-                    };
-                    delete logsByYear[year][startMonth];
-                    delete logsByYear[year][endMonth];
-                }
                 }
             });
         }
@@ -162,7 +166,7 @@
         logsBeforeUpd = logsByYear;
 
         console.log(logsByYear);
-    });
+    }
 
     function getPicture(logs){
         for (let log of logs) {
@@ -269,7 +273,7 @@
         }
     });
 
-    import AddGroup from './Components/AddGroup.svelte'
+    import AddGroup from './components/AddGroup.svelte'
 
     function addGroupOpen(){
 
