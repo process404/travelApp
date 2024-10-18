@@ -12,7 +12,7 @@
                     <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
                 </div>
             {:else}
-            <div class="flex gap-4 h-full w-full mt-8">
+            <div class="flex gap-4 h-full w-full mt-8 sm:flex-row flex-col">
                     <div class="w-full h-full">
                         {#if !mapVisible && !mapErr}
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
@@ -141,8 +141,8 @@
                         firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
                     }
                     const popupContent = firstSrc 
-                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='invert hue-rotate-180 rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100 invert'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 invert">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
-                        : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100 invert'>${item.location}</h3></div>`;
+                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+                        : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
                     
                     const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
                     const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
@@ -286,8 +286,9 @@
 
     let darkMode = false;
     onMount(() => {
-        const settings = JSON.parse(localStorage.getItem('settings'));
-        if (settings.darkMode) {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        console.log(settings.darkMode);
+        if (settings.darkMode === true) {
             darkMode = true;
             document.documentElement.classList.add('dark');
         } else {
@@ -299,6 +300,14 @@
 
 <style>
      .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+    :global(.leaflet-popup-content-wrapper) {
+       @apply bg-white text-black border border-gray-300 rounded-md p-1 dark:bg-[#131313] dark:text-[#f9fafb] dark:border-[#2c2c2c];
+    }
+
+    :global(.leaflet-popup-tip){
+       @apply bg-white border border-gray-300 dark:bg-[#131313] dark:border-[#2c2c2c] !important;
+    }
 </style>
 
 
