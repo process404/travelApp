@@ -124,17 +124,6 @@
                                 {/if}
                             </div>
                         </div>
-                        <!-- <div class="flex gap-4"> -->
-                            <!-- <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noLocation}>
-                                <label for="no_location" class="text-neutral-500 italic  text-xs">No location</label>
-                            </div> -->
-                            <!-- <div class="mt-3 flex gap-2 items-center">
-                                <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$preciseLocation} on:click={locationToggle}>
-                                <label for="no_location" class="text-neutral-500 italic  text-xs">Include device location</label>
-                            </div> -->
-        
-                        <!-- </div> -->
                     </div>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex gap-4">
@@ -352,8 +341,8 @@
                                                     {#if logItem.dropdown_2 === "type"}
                                                         <h3 class="text-white text-sm">Select Type</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                            {#if logItem['vehicletype'] == 'logItem'}
-                                                            {#each $inputArea.logItemTypes as type}
+                                                            {#if logItem['vehicletype'] == 'Train'}
+                                                            {#each $inputArea.trainTypes as type}
                                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Bus / Coach"}
@@ -436,13 +425,14 @@
     var inputTimeStart = ''
     var inputDateEnd = ''
     var inputTimeEnd = ''
-    var preciseLocation = writable(false)
-    var preciseLat;
-    var preciseLon;
     var noLocation = writable(false);
     var id = 0
     var toC = ''
     var fromC = ''
+    var fromLat = ''
+    var fromLong = ''
+    var toLat = ''
+    var toLong = ''
     var delayMinutes;
     var delayHours; 
     var operator;
@@ -692,10 +682,6 @@
     }
 
     async function confirmLog(){
-        // stuff here
-
-        var lat;
-        var lon;
 
 
         if(from === '' || to === ''){
@@ -723,49 +709,26 @@
             }
         }
 
-        var loc = await getAllLocations()
-        if(loc != null){
-            const parsedLoc = JSON.parse(loc);
-            var found = false;
-            for(var locs in parsedLoc){
-                if(locs == from){
-                    found = true;
-                }
-            }
-            if(found = false){
-                parsedLoc.push({"name":from, "country":fromCountry})
-            }
-
-            found = false
-            for(var locs in parsedLoc){
-                if(locs == to){
-                    found = true;
-                }
-            }
-            if(found = false){
-                parsedLoc.push({"name":to, "country":toCountry})
-            } 
-        }
-
-        let journeys = await getAllJourneys();
+        let journeys = await getJourneysData();
         if (!journeys) {
             journeys = JSON.stringify([]);
         }
 
-        if($preciseLocation && preciseLat && preciseLon){
-            logNumbers.subscribe(async numbers => {
+        logNumbers.subscribe(async numbers => {
             const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                 ...train,
                 from: from,
                 fromCountry: fromC,
                 to: to,
                 toCountry: toC,
+                fromLat: fromLat,
+                fromLong: fromLong,
+                toLat: toLat,
+                toLong: toLong,
                 start_date: inputDateStart,
                 start_time: inputTimeStart,
                 end_date: inputDateEnd,
                 end_time: inputTimeEnd,
-                log_lat: preciseLat,
-                log_lon: preciseLon,
                 viaPoints: viaPoints,
                 operator: operator,
                 delayHours: delayHours,
@@ -782,28 +745,17 @@
                 journeyNotes: journeyNotes
             }));
 
-            const addNew = JSON.parse(journeys).concat(numbersWithLocation);
-            await writeAllJourneys(addNew);
+            const addNew = journeys.concat(numbersWithLocation);
+            let test = await writeJourneysData(addNew);
+            console.log("test", test)
+            $alrtMode = 'info';
+            $alrtTxt = 'Processing...';
+            $alrtAct = true;
+            await sleep(3000)
+            window.location.href = `../overview/` + inputDateStart; 
         });
-        }else{
-            logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
-                    ...train,
-                    from: from,
-                    to: to,
-                    start_date: inputDateStart,
-                    start_time: inputTimeStart,
-                    end_date: inputDateEnd,
-                    end_time: inputTimeEnd,
-                }));
-
-                const addNew = JSON.parse(journeys).concat(numbersWithLocation);
-                await writeAllJourneys(addNew);
-            });
-        }
 
 
-        window.location.href = `../overview/` + inputDateStart; 
     }
 
 
@@ -814,49 +766,6 @@
         $alrtMode = mode;
         $alrtAct = true;
     }
-
-    function locationToggle() {
-        if($preciseLocation){
-            $preciseLocation = false;
-        }else{
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-                        preciseLat = latitude;
-                        preciseLon = longitude;
-                        console.log(`Latitude: ${preciseLat}, Longitude: ${preciseLon}`);
-                        $preciseLocation = true;
-                    },
-                    (error) => {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                console.log("User denied the request for Geolocation.");
-                                customAlertSummon("User denied the request for Geolocation", "err");
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                console.log("Location information is unavailable.");
-                                customAlertSummon("Location information is unavailable", "err");
-                                break;
-                            case error.TIMEOUT:
-                                console.log("The request to get user location timed out.");
-                                customAlertSummon("The request to get user location timed out", "err");
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                console.log("An unknown error occurred.");
-                                customAlertSummon("An unknown error occurred", "err");
-                                break;
-                        }
-                        $preciseLocation = false;
-                    }
-                );
-            } else {
-                console.log("Geolocation is not supported by the browser.");
-                $preciseLocation = false;
-            }
-        }
-        }
 
         async function inputVType(type, train){
             logAreas = []
@@ -906,11 +815,15 @@
         function selectFrom(o){
             from = o.detail.text.name;
             fromId = o.detail.text.id;
+            fromLat = o.detail.text.lat;
+            fromLong = o.detail.text.long;
         }
 
         function selectTo(o){
             to = o.detail.text.name;
             toId = o.detail.text.id;
+            toLat = o.detail.text.lat;
+            toLong = o.detail.text.long;
             console.log(from, to, fromId, toId);
         }
 
@@ -957,6 +870,19 @@
                 journeyTags = journeyTags.slice(0, -1);
             }
         }
+
+        onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 </script>
 

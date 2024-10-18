@@ -85,8 +85,8 @@
                                                     {#if logItem.dropdown_2 === "type"}
                                                         <h3 class="text-white text-sm">Select Type</h3>
                                                         <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                            {#if logItem['vehicletype'] == 'logItem'}
-                                                            {#each $inputArea.logItemTypes as type}
+                                                            {#if logItem['vehicletype'] == 'Train'}
+                                                            {#each $inputArea.trainTypes as type}
                                                                     <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, false)}>{type.name}</button>
                                                                 {/each}
                                                             {:else if logItem['vehicletype'] == "Bus / Coach"}
@@ -223,8 +223,8 @@
                                                             {#if logItem.dropdown_2 === "type"}
                                                                 <h3 class="text-white text-sm">Select Type</h3>
                                                                 <div class="min-w-[200px] w-full flex flex-wrap gap-1 mt-1">
-                                                                    {#if logItem['vehicletype'] == 'logItem'}
-                                                                    {#each $inputArea.logItemTypes as type}
+                                                                    {#if logItem['vehicletype'] == 'Train'}
+                                                                    {#each $inputArea.trainTypes as type}
                                                                             <button class="button sm blue2 textWhite pl-2 pr-2" on:click={() => inputType(type, logItem, true)}>{type.name}</button>
                                                                         {/each}
                                                                     {:else if logItem['vehicletype'] == "Bus / Coach"}
@@ -522,7 +522,7 @@
         locationObj = o.detail.text;
         location = o.detail.text.name;
         locationID = o.detail.text.id;
-        // console.log(location, locationID, locationObj);
+        console.log(location, locationID, locationObj);
     }
     
     function inputType(type, logItem, photo) {
@@ -607,6 +607,7 @@
     
     function inputAreaBtn(area, logItem, photo) {
         inputArea.set(area);
+        console.log($inputArea)
         if(!photo){
             logNumbers.update(numbers => {
                 return numbers.map(t => {
@@ -648,6 +649,15 @@
             if (vehFound) {
             veh = logs.find(log => log.number === input);
             }
+        }
+
+        if (!vehFound) {
+            logNumbers.subscribe(numbers => {
+                vehFound = numbers.some(log => log.number === input);
+                if (vehFound) {
+                    veh = numbers.find(log => log.number === input);
+                }
+            });
         }
 
         let newLogItem = {
@@ -802,68 +812,88 @@
 
         if($preciseLocation && preciseLat && preciseLon && locationObj == null){
             logNumbers.subscribe(async numbers => {
-            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                ...item,
-                log_location: location,
-                log_date: inputDate,
-                log_time: inputTime,
-                log_lat: preciseLat,
-                log_lon: preciseLon,
-                pictures: pictures,
-                logNotes: inputNote,
-            }));
+                const numbersWithLocation = {
+                    log_location: location,
+                    log_loc_id: locationObj ? locationObj.id : null,
+                    log_lat: locationObj ? locationObj.lat : null,
+                    log_long: locationObj ? locationObj.long : null,
+                    log_date: inputDate,
+                    log_time: inputTime,
+                    pictures: pictures,
+                    logNotes: inputNote,
+                    country: locationObj ? locationObj.country : sCountry,
+                    numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                        ...item
+                    }))
+                };
 
-            const addNew = logs.concat(numbersWithLocation);
-            await writeLogsData(addNew);
-            console.log("done")
+                const addNew = logs.concat(numbersWithLocation);
+                console.log(addNew);
+                await writeLogsData(addNew);
+                console.log("done");
             });
         }else{
             if(locationObj != null){
             
                 logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                    ...item,
-                    log_location: location,
-                    log_loc_id: locationObj.id,
-                    log_lat : locationObj.lat,
-                    log_lon : locationObj.lon,
-                    log_date: inputDate,
-                    log_time: inputTime,
-                    pictures: pictures,
-                    logNotes: inputNote,
-                }))
-                const addNew = logs.concat(numbersWithLocation);
-                console.log(addNew);
-                await writeLogsData(addNew);
-                console.log("done")
-            });
+                    const numbersWithLocation = {
+                        log_location: location,
+                        log_loc_id: locationObj ? locationObj.id : null,
+                        log_lat: locationObj ? locationObj.lat : null,
+                        log_long: locationObj ? locationObj.long : null,
+                        log_date: inputDate,
+                        log_time: inputTime,
+                        pictures: pictures,
+                        logNotes: inputNote,
+                        country: locationObj ? locationObj.country : sCountry,
+                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                            ...item
+                        }))
+                    };
+
+                    const addNew = logs.concat(numbersWithLocation);
+                    console.log(addNew);
+                    await writeLogsData(addNew);
+                    console.log("done");
+                });
             }else{
 
                 logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                    ...item,
-                    log_location: location,
-                    log_lat: null,
-                    log_lon: null,
-                    log_loc_id: null,
-                    log_date: inputDate,
-                    log_time: inputTime,
-                    pictures: pictures,
-                    logNotes: inputNote,
-                }));
-                const addNew = logs.concat(numbersWithLocation);
-                await writeLogsData(addNew);
-                console.log("done")
-            });
+                    const numbersWithLocation = {
+                        log_location: location,
+                        log_loc_id: locationObj ? locationObj.id : null,
+                        log_lat: locationObj ? locationObj.lat : null,
+                        log_long: locationObj ? locationObj.long : null,
+                        log_date: inputDate,
+                        log_time: inputTime,
+                        pictures: pictures,
+                        logNotes: inputNote,
+                        country: locationObj ? locationObj.country : sCountry,
+                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                            ...item
+                        }))
+                    };
+
+                    const addNew = logs.concat(numbersWithLocation);
+                    console.log(addNew);
+                    await writeLogsData(addNew);
+                    console.log("done");
+                });
 
         }
 
 
         let logreplace = inputDate.replace('/', '-');
-        // console.log(logreplace)
+        $alrtMode = 'info';
+        $alrtTxt = 'Processing...';
+        $alrtAct = true;
+        await sleep(3000)
         // window.location.href = `../overview/${logreplace}`;
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 
     function customAlertSummon(text, mode){
@@ -872,6 +902,15 @@
         $alrtMode = mode;
         $alrtAct = true;
     }
+
+    onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
 }
 
     

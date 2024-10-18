@@ -32,7 +32,7 @@
                     "pictures": []
                 },
                 {
-                    "name": "Dutch",
+                    "name": "NS",
                     "variants": [
                         { "name": "All / Others", "short": "NL_ALL" },
                         { "name": "ICRm", "short": "NL_ICRM" },
@@ -52,7 +52,20 @@
                         { "name": "All / Others", "short": "STADLER_ALL" },
                         { "name": "GTW", "short": "GTW_ALL" },
                         { "name": "FLIRT", "short": "FLIRT_ALL" },
-                        { "name": "KISS", "short": "KISS_ALL" }
+                        { "name": "KISS", "short": "KISS_ALL"}
+                    ],
+                    "pictures": []
+                },
+                {
+                    "name": "Stadler / UK",
+                    "variants": [
+                        { "name": "All / Others", "short": "STADLER_UK_ALL" },
+                        { "name": "Class 745", "short": "745_UK"},
+                        { "name": "Class 755", "short": "755_UK"},
+                        { "name": "Class 777", "short": "777_UK"},
+                        { "name":"Class 231","short":"231_UK"},
+                        {"name":"Class 756","short":"756_UK"},
+                        {"name":"Class 399","short":"399_UK"}
                     ],
                     "pictures": []
                 },
@@ -63,6 +76,22 @@
                         { "name": "TRAXX", "short": "TRAXX_ALL" }
                     ],
                     "pictures": []
+                },
+                {"name":"Metro Cammell / UK",
+                    "variants":[
+                        {"name":"Class 101","short":"MC_UK_101"},
+                        {"name":"Class 156","short":"MC_UK_156"},
+                        {"name":"Class 465","short":"MC_UK_465"},
+                        {"name":"Class 466","short":"MC_UK_466"},
+                        {"name":"Class 483","short":"MC_UK_483"},
+                        {"name":"MK4 Coach","short":"MC_UK_MK4"},
+                        {"name":"LU 1938","short":"MC_UK_LU_1938"},
+                        {"name":"LU 1973","short":"MC_UK_LU_1973"},
+                        {"name":"LU 1995","short":"MC_UK_LU_1995"},
+                        {"name":"LU 1996","short":"MC_UK_LU_1996"},
+                        {"name":"GLS SUBW","short":"MC_UK_GLS_SUBW"},
+                        {"name":"T&W METRO","short":"MC_UK_TW_METRO"}
+                    ]
                 }
             ],
             "busTypes": [
