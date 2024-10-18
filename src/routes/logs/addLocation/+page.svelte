@@ -18,5 +18,14 @@
     onMount(() => {
         document.title = 'Add Location';
     });
+
+    onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
 </script>
 

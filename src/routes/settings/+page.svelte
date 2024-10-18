@@ -7,10 +7,19 @@
             <h2 class="text-white text-2xl font-semibold sm:mt-1 mt-4 mb-4">Settings</h2>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
                 <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
-                    <div class="w-1/4 flex items-center justify-center">
+                    <div class="w-[125px] flex items-center justify-center">
+                        <input type="checkbox" class="switch blue" bind:checked={darkMode} on:click={toggle_darkMode}>
+                    </div>
+                    <div class="w-full">
+                        <h2 class="dark:text-neutral-300 mb-2">Dark Mode</h2>
+                        <p class="dark:text-neutral-400 text-sm italic">Change website appearance between Dark and Light modes.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
+                    <div class="w-[125px] flex items-center justify-center">
                         <input type="checkbox" class="switch blue" bind:checked={dbStn} on:click={toggle_dbStn}>
                     </div>
-                    <div>
+                    <div class="w-full">
                         <h2 class="dark:text-neutral-300 mb-2">Get all stations from the database</h2>
                         <p class="dark:text-neutral-400 text-sm italic">When enabled, prompts to enter a station name will be compared to a database of all European stations in addition to your own previous entries. If not enabled, the app will only compare against only stations which you have entered previously. Please note that enabling this option will incur a time delay while the stations are loaded.</p>
                     </div>
@@ -310,6 +319,51 @@
             console.log("%c Your planning data", 'color:lime;background:black;');
             console.log(planning);
         }
+    }
+
+    let darkMode = false;
+
+    onMount(() => {
+        document.title = 'Settings';
+        if (typeof localStorage === 'undefined') {
+            console.error('localStorage is not supported');
+        } else {
+            if (localStorage.getItem('settings') == null) {
+                localStorage.setItem('settings', JSON.stringify({ dbStn: false, darkMode: false }));
+            } else {
+                var settings = JSON.parse(localStorage.getItem('settings'));
+                if (settings.length === 0) {
+                    settings = { dbStn: false, darkMode: false };
+                    localStorage.setItem('settings', JSON.stringify(settings));
+                }
+                dbStn = settings.dbStn;
+                darkMode = settings.darkMode;
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+        }
+    });
+
+    onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
+
+    function toggle_darkMode(){
+        darkMode = !darkMode;
+        if(darkMode){
+            document.documentElement.classList.add('dark');
+        }else{
+            document.documentElement.classList.remove('dark');
+        }
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        settings.darkMode = darkMode;
+        localStorage.setItem('settings', JSON.stringify(settings));
     }
 
 </script>

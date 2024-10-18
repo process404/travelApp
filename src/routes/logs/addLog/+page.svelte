@@ -812,59 +812,73 @@
 
         if($preciseLocation && preciseLat && preciseLon && locationObj == null){
             logNumbers.subscribe(async numbers => {
-            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                ...item,
-                log_location: location,
-                log_date: inputDate,
-                log_time: inputTime,
-                log_lat: preciseLat,
-                log_long: preciseLon,
-                pictures: pictures,
-                logNotes: inputNote,
-            }));
+                    const numbersWithLocation = {
+                        log_location: location,
+                        log_loc_id: locationObj ? locationObj.id : null,
+                        log_lat: locationObj ? locationObj.lat : null,
+                        log_long: locationObj ? locationObj.long : null,
+                        log_date: inputDate,
+                        log_time: inputTime,
+                        pictures: pictures,
+                        logNotes: inputNote,
+                        country: locationObj ? locationObj.country : sCountry,
+                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                            ...item
+                        }))
+                    };
 
-            const addNew = logs.concat(numbersWithLocation);
-            await writeLogsData(addNew);
-            console.log("done")
-            });
+                    const addNew = logs.concat(numbersWithLocation);
+                    console.log(addNew);
+                    await writeLogsData(addNew);
+                    console.log("done");
+                });
         }else{
             if(locationObj != null){
             
                 logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                    ...item,
-                    log_location: location,
-                    log_loc_id: locationObj.id,
-                    log_lat : locationObj.lat,
-                    log_long : locationObj.long,
-                    log_date: inputDate,
-                    log_time: inputTime,
-                    pictures: pictures,
-                    logNotes: inputNote,
-                }))
-                const addNew = logs.concat(numbersWithLocation);
-                console.log(addNew);
-                await writeLogsData(addNew);
-                console.log("done")
-            });
+                    const numbersWithLocation = {
+                        log_location: location,
+                        log_loc_id: locationObj ? locationObj.id : null,
+                        log_lat: locationObj ? locationObj.lat : null,
+                        log_long: locationObj ? locationObj.long : null,
+                        log_date: inputDate,
+                        log_time: inputTime,
+                        pictures: pictures,
+                        logNotes: inputNote,
+                        country: locationObj ? locationObj.country : sCountry,
+                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                            ...item
+                        }))
+                    };
+
+                    const addNew = logs.concat(numbersWithLocation);
+                    console.log(addNew);
+                    await writeLogsData(addNew);
+                    console.log("done");
+                });
             }else{
 
                 logNumbers.subscribe(async numbers => {
-                const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                    ...item,
-                    log_location: location,
-                    log_lat: null,
-                    log_long: null,
-                    log_loc_id: null,
-                    log_date: inputDate,
-                    log_time: inputTime,
-                    pictures: pictures,
-                    logNotes: inputNote,
-                }));
-                const addNew = logs.concat(numbersWithLocation);
-                await writeLogsData(addNew);
-                console.log("done")
-            });
+                    const numbersWithLocation = {
+                        log_location: location,
+                        log_loc_id: locationObj ? locationObj.id : null,
+                        log_lat: locationObj ? locationObj.lat : null,
+                        log_long: locationObj ? locationObj.long : null,
+                        log_date: inputDate,
+                        log_time: inputTime,
+                        pictures: pictures,
+                        logNotes: inputNote,
+                        country: locationObj ? locationObj.country : sCountry,
+                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                            ...item
+                        }))
+                    };
+
+                    const addNew = logs.concat(numbersWithLocation);
+                    console.log(addNew);
+                    await writeLogsData(addNew);
+                    console.log("done");
+                });
 
         }
 
@@ -888,6 +902,15 @@
         $alrtMode = mode;
         $alrtAct = true;
     }
+
+    onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
 }
 
     

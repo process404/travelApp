@@ -7,18 +7,44 @@
             {:else}
             <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for No Date</h2>
             {/if}
+            {#if logsToday == null || logsToday == null}
+                <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
+                    <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                </div>
+            {:else}
+            <div class="flex gap-4 h-full w-full mt-8">
+                    <div class="w-full h-full">
+                        {#if !mapVisible && !mapErr}
+                            <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
+                                <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
+                            </div>
+                        {:else if !mapErr}
+                            <div id="map" class="w-full h-full rounded-md bg-black" class:invert={darkMode} class:hue-rotate-180={darkMode} class:brightness-[95%]={darkMode} class:contrast-[90%]={darkMode}></div>
+                        {:else}
+                            <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
+                            </div>
+                        {/if}
+                    </div>
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md">
+
+                    </div>
+                </div>
+            {/if}
         </div>
     </div>
     <Footer/>
 </div>
-
 <script>
-    import { onMount } from 'svelte';
+    import { onMount} from 'svelte';
     import { page } from '$app/stores';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
     import '../../siteDB.js';
-    import { getLogsData } from '../../siteDB.js';
+    import { getJourneysData, getLogsData } from '../../siteDB.js';
+
+    let map;
+
+
     
     let param = $page.params.date;
     let formatParam = param.replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1');
@@ -26,6 +52,9 @@
     let logsToday = null;
     let logsSorted = null;
     let uniqueLocs = null;
+
+    let mapVisible = false;
+    let mapErr = true;
 
     onMount(async () => {
         param = param.replace(/-/g, '/');
@@ -51,6 +80,56 @@
 
         logsToday = logsSorted
         getDaysLogs(logsSorted);
+
+        journeys = await getJourneysLogs();
+        journeyLocations = await getUniqueJourneyLocations();
+
+        console.log(journeys, journeyLocations);
+
+        if (typeof window !== 'undefined') {
+            const L = await import('leaflet');
+            await import('leaflet/dist/leaflet.css');
+
+            const mapContainer = document.getElementById('map');
+            if (mapContainer) {
+                map = L.map('map').fitBounds([
+                    [54.635, -10.854], 
+                    [47.270, 16.979]  
+                ]).setZoom(5);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+
+                let firstSrc = null;
+                for(let item of combined){
+                    for(let log of item.logs){
+                        console.log("log", log);
+                        if (log.pictures && log.pictures.length > 0) {
+                            const priorityPicture = log.pictures.find(picture => picture.picturePriority === true);
+                            if (priorityPicture) {
+                                firstSrc = priorityPicture.pictureSrc;
+                            } else {
+                                firstSrc = log.pictures[0].pictureSrc
+                            }
+                        }
+                    }
+                    L.marker([item.lat, item.long]).addTo(map)
+                    .bindPopup(`<div class='flex gap-2'><img src='${firstSrc}'></div>`)
+                    .openPopup();
+                }
+
+                mapVisible = true
+
+
+                    
+            } else {
+                console.error('Map container not found');
+            }
+
+        }
+
     });
 
     function formatDate(date){
@@ -59,15 +138,91 @@
     }
 
     function getDaysLogs(logs){
-        console.log(logs);
+        // console.log(logs);
         const [year, month, day] = param.split('/');
-        console.log(year, month, day);
+        // console.log(year, month, day);
         if (logs[year] && logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })] && logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })][`${year}-${month}-${day}`]) {
             logsToday = logs[year][new Date(year, month - 1).toLocaleString('default', { month: 'long' })][`${year}-${month}-${day}`];
-            console.log(logsToday);
             uniqueLocs = getUniqueLoc();
-            console.log(uniqueLocs);
+            console.log(logsToday, "logsToday");
         }
+    }
+
+    let journeys = null;
+    let journeyLocations = null;
+
+    
+    async function getJourneysLogs() {
+        journeys = await getJourneysData();
+        console.log(journeys, "journeys")
+        journeys = journeys.filter(journey => {
+            const journeyDate = new Date(journey.start_date);
+            const [year, month, day] = param.split('/');
+            return journeyDate.getFullYear() === parseInt(year) &&
+               journeyDate.getMonth() + 1 === parseInt(month) &&
+               journeyDate.getDate() === parseInt(day);
+        });
+
+        // console.log(journeys, "output")
+        journeyLocations = await getUniqueJourneyLocations();
+        combined = await combineLists();
+        console.log("combined", combined);  
+        return journeys;
+    }
+
+    async function getUniqueJourneyLocations() {
+        let uniqueLocations = [];
+        let locationSet = new Set();
+        for (let journey of journeys) {
+            const fromKey = `${journey.from}-${journey.fromCountry}-${journey.fromLong}-${journey.fromLat}`;
+            const toKey = `${journey.to}-${journey.toCountry}-${journey.toLong}-${journey.toLat}`;
+            
+            if (!locationSet.has(fromKey)) {
+                locationSet.add(fromKey);
+                uniqueLocations.push({
+                    location: journey.from,
+                    country: journey.fromCountry,
+                    lat: journey.fromLat,
+                    long: journey.fromLong
+                });
+            }
+            
+            if (!locationSet.has(toKey)) {
+                locationSet.add(toKey);
+                uniqueLocations.push({
+                    location: journey.to,
+                    country: journey.toCountry,
+                    lat: journey.toLat,
+                    long: journey.toLong
+                });
+            }
+        }
+        // console.log("unique", uniqueLocations);
+        return uniqueLocations;
+    }
+
+    let combined = [];
+
+    function combineLists(){
+        let temp = null;
+        try {
+            temp = journeyLocations.map(journeyLoc => {
+                const matchingLogs = logsToday.filter(log => 
+                    log.log_location === journeyLoc.location
+                );
+                return {
+                    ...journeyLoc,
+                    logs: matchingLogs,
+                    journeys: journeys.filter(journey => 
+                        journey.from === journeyLoc.location || journey.to === journeyLoc.location
+                    )
+                };
+            });
+        } catch (error) {
+            console.error('Error combining lists:', error);
+            mapErr = true;
+        }
+        return temp;
     }
 
     function getUniqueLoc(){
@@ -79,6 +234,18 @@
         }
         return locs;
     }
+
+    let darkMode = false;
+    onMount(() => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        if (settings.darkMode) {
+            darkMode = true;
+            document.documentElement.classList.add('dark');
+        } else {
+            darkMode = false;
+            document.documentElement.classList.remove('dark');
+        }
+    });
 </script>
 
 <style>
