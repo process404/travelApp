@@ -31,7 +31,7 @@
                 {:else}
                     <div class="flex gap-2 flex-col mt-4">
                         {#each Object.keys(logsByYear) as year}
-                            <div class="flex-wrap w-full">
+                            <ul class="flex-wrap w-full">
                             {#each Object.keys(logsByYear[year]) as month}
                                 {#if month != 'Unknown'}
                                     <h3 class="text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
@@ -40,7 +40,7 @@
                                 {/if}
                                 {#each Object.keys(logsByYear[year][month]) as date}
                                     <div class="flex flex-col mb-4 mt-2">
-                                        <div class="flex flex-wrap gap-2">
+                                        <ul class="flex flex-wrap gap-2">
                                             {#if getPicture(logsByYear[year][month][date]) == null}
                                                 <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
                                                     <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
@@ -70,11 +70,11 @@
                                                 <img src={getPicture(logsByYear[year][month][date]).src} class="rounded-md object-cover w-full h-full" alt="background"/>
                                             </button>
                                             {/if}
-                                        </div>
+                                        </ul>
                                     </div>
                                 {/each}
                             {/each}
-                            </div>
+                            </ul>
                         {/each}
                     </div>
                 {/if}
@@ -93,38 +93,65 @@
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css'
     import '../siteDB.js'
-    import { getJourneysData, getLocationsData, getLogsData, getPlanningData } from '../siteDB';
+    import { getJourneysData, getLocationsData, getLogsData, getPlanningData, getGroupsData } from '../siteDB';
     import { fade } from 'svelte/transition';
     var sortBy = 'All Time';
     let logsBeforeUpd = []
     let logsByYear = [];
     var logs = null;
+    let groups = null;
     var page = 'logs'
 
     onMount(async () => {
         document.title = 'Overview';
         logs = await getLogsData();
+        groups = await getGroupsData();
         logsByYear = logs.reduce((acc, log) => {
             const logDate = new Date(log.log_date);
             const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
             const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
             const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
             if (!acc[year]) {
-                acc[year] = {};
+            acc[year] = {};
             }
             if (!acc[year][month]) {
-                acc[year][month] = {};
+            acc[year][month] = {};
             }
             if (!acc[year][month][date]) {
-                acc[year][month][date] = [];
+            acc[year][month][date] = [];
             }
             acc[year][month][date].push(log);
             return acc;
         }, {});
 
-        logsBeforeUpd = logsByYear
+        // Combine months if groups contain 'startDate' and 'endDate' that span multiple months
+        if(groups != null && groups.length != 0){
+            groups.forEach(group => {
+                if (group.startDate && group.endDate) {
+                const startDate = new Date(group.startDate);
+                const endDate = new Date(group.endDate);
+                if (startDate.getFullYear() === endDate.getFullYear() && startDate.getMonth() !== endDate.getMonth()) {
+                    const year = startDate.getFullYear();
+                    const startMonth = startDate.toLocaleString('default', { month: 'long' });
+                    const endMonth = endDate.toLocaleString('default', { month: 'long' });
+                    const combinedMonth = `${startMonth} / ${endMonth}`;
+                    if (!logsByYear[year]) {
+                    logsByYear[year] = {};
+                    }
+                    logsByYear[year][combinedMonth] = {
+                    ...logsByYear[year][startMonth],
+                    ...logsByYear[year][endMonth]
+                    };
+                    delete logsByYear[year][startMonth];
+                    delete logsByYear[year][endMonth];
+                }
+                }
+            });
+        }
 
-        // console.log(logsByYear);
+        logsBeforeUpd = logsByYear;
+
+        console.log(logsByYear);
     });
 
     function getPicture(logs){
@@ -154,7 +181,7 @@
             }
         }
 
-        console.log(uniqueLogs);
+        // console.log(uniqueLogs);
         return uniqueLogs;
     }
 
