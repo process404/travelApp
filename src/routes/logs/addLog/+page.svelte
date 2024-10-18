@@ -888,7 +888,7 @@
         $alrtTxt = 'Processing...';
         $alrtAct = true;
         await sleep(3000)
-        // window.location.href = `../overview/${logreplace}`;
+        window.location.href = `../overview/${logreplace}`;
     }
 
     function sleep(ms) {
