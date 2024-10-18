@@ -83,6 +83,8 @@
 
         journeys = await getJourneysLogs();
         journeyLocations = await getUniqueJourneyLocations();
+        mapVisible = true;
+        mapErr = false;
 
         console.log(journeys, journeyLocations);
 
@@ -104,23 +106,17 @@
 
                 let firstSrc = null;
                 for(let item of combined){
-                    for(let log of item.logs){
-                        console.log("log", log);
-                        if (log.pictures && log.pictures.length > 0) {
-                            const priorityPicture = log.pictures.find(picture => picture.picturePriority === true);
-                            if (priorityPicture) {
-                                firstSrc = priorityPicture.pictureSrc;
-                            } else {
-                                firstSrc = log.pictures[0].pictureSrc
-                            }
-                        }
+                    firstSrc = null;
+                    for(let picture of item.pictures){
+                        firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
                     }
+                    const popupContent = firstSrc 
+                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='invert hue-rotate-180 rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg font-semibold text-neutral-100 invert'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 invert">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+                        : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100 invert'>${item.location}</h3></div>`;
                     L.marker([item.lat, item.long]).addTo(map)
-                    .bindPopup(`<div class='flex gap-2'><img src='${firstSrc}'></div>`)
+                    .bindPopup(popupContent)
                     .openPopup();
                 }
-
-                mapVisible = true
 
 
                     
@@ -209,13 +205,22 @@
             temp = journeyLocations.map(journeyLoc => {
                 const matchingLogs = logsToday.filter(log => 
                     log.log_location === journeyLoc.location
-                );
+                ).map(log => {
+                    const { pictures, ...rest } = log;
+                    return rest;
+                });
+
+                const pictures = logsToday
+                    .filter(log => log.log_location === journeyLoc.location)
+                    .flatMap(log => log.pictures || []);
+
                 return {
                     ...journeyLoc,
                     logs: matchingLogs,
                     journeys: journeys.filter(journey => 
-                        journey.from === journeyLoc.location || journey.to === journeyLoc.location
-                    )
+                        journey.from === journeyLoc.location
+                    ),
+                    pictures: pictures
                 };
             });
         } catch (error) {
@@ -250,5 +255,7 @@
 
 <style>
      .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
 </style>
+
 

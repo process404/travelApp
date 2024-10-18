@@ -812,26 +812,26 @@
 
         if($preciseLocation && preciseLat && preciseLon && locationObj == null){
             logNumbers.subscribe(async numbers => {
-                    const numbersWithLocation = {
-                        log_location: location,
-                        log_loc_id: locationObj ? locationObj.id : null,
-                        log_lat: locationObj ? locationObj.lat : null,
-                        log_long: locationObj ? locationObj.long : null,
-                        log_date: inputDate,
-                        log_time: inputTime,
-                        pictures: pictures,
-                        logNotes: inputNote,
-                        country: locationObj ? locationObj.country : sCountry,
-                        numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
-                            ...item
-                        }))
-                    };
+                const numbersWithLocation = {
+                    log_location: location,
+                    log_loc_id: locationObj ? locationObj.id : null,
+                    log_lat: locationObj ? locationObj.lat : null,
+                    log_long: locationObj ? locationObj.long : null,
+                    log_date: inputDate,
+                    log_time: inputTime,
+                    pictures: pictures,
+                    logNotes: inputNote,
+                    country: locationObj ? locationObj.country : sCountry,
+                    numbers: numbers.map(({ dropdown, dropdown_2, id, ...item }) => ({
+                        ...item
+                    }))
+                };
 
-                    const addNew = logs.concat(numbersWithLocation);
-                    console.log(addNew);
-                    await writeLogsData(addNew);
-                    console.log("done");
-                });
+                const addNew = logs.concat(numbersWithLocation);
+                console.log(addNew);
+                await writeLogsData(addNew);
+                console.log("done");
+            });
         }else{
             if(locationObj != null){
             
