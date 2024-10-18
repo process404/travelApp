@@ -17,12 +17,21 @@
             <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full pt-4 sm:pb-6 pl-4 pr-4 pb-4">
                 <div class="flex gap-6 justify-between items-center">
                     <h2 class="text-white font-semibold text-2xl w-full text-left">Logs by date</h2>
-                    <select class="input blue reduced"   bind:value={sortBy}>
-                        <option>All Time</option>
-                        {#each Object.keys(logsBeforeUpd) as year}
-                            <option>{year}</option>
-                        {/each}
-                    </select>
+                    <div class="flex gap-2 w-full justify-end">
+                        <select class="input blue reduced"   bind:value={sortBy}>
+                            <option>All Time</option>
+                            {#each Object.keys(logsBeforeUpd) as year}
+                                <option>{year}</option>
+                            {/each}
+                        </select>
+                        <button class="button blue2 text-sm" on:click={() => addGroupOpen()}>
+                            Add Group
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                              </svg>
+                              
+                        </button>
+                    </div>
                 </div>
                 {#if logsByYear.length == 0}
                     <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
@@ -101,6 +110,7 @@
     var logs = null;
     let groups = null;
     var page = 'logs'
+    
 
     onMount(async () => {
         document.title = 'Overview';
@@ -258,6 +268,12 @@
             document.documentElement.classList.remove('dark');
         }
     });
+
+    import AddGroup from './Components/AddGroup.svelte'
+
+    function addGroupOpen(){
+
+    }
 
 </script>
 
