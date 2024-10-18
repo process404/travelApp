@@ -1,7 +1,7 @@
-<div style="width: 100vw; display: flex; flex-direction: column" id="app">
+<div style="width: 100vw; display: flex; flex-direction: column" class="overflow-x-hidden" id="app">
     <Nav ver="back"/>
     <div class="h-full w-full flex flex-col items-center pl-4 pr-4">
-        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
+        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
             {#if param != "unknown"}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
             {:else}
@@ -25,11 +25,16 @@
                             </div>
                         {/if}
                     </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md">
-
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4">
+                        <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
                     </div>
                 </div>
             {/if}
+        </div>
+    </div>
+    <div class="h-full w-full flex flex-col items-center pl-4 pr-4 mt-4">
+        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen pl-4 pr-4 pb-4 pt-4 max-w-[1500px] w-full">
+            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3 w-full text-left">Your Logs</h2>
         </div>
     </div>
     <Footer/>
