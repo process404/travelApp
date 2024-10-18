@@ -132,8 +132,15 @@
                     const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
                     const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
                     
-                    L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
+                    const marker = L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
                     .bindPopup(popupContent);
+
+                    if (darkMode) {
+                        const markerElement = marker.getElement();
+                        if (markerElement) {
+                            markerElement.style.filter = 'invert(1) hue-rotate(180deg)';
+                        }
+                    }
                     
                     // poly lines go here
                     // in future, get railway routes to make them more accurate
