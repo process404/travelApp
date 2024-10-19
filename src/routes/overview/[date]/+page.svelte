@@ -221,9 +221,9 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
                                      <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
-                                        <span class="text-neutral-500 italic text-xs">Arrival: </span>
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
-                                            <span class="flex flex-col pl-3">
+                                            <span class="flex flex-col">
                                                 <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
                                                     ${journey.end_time}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
@@ -258,9 +258,9 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
-                                        <span class="text-neutral-500 italic text-xs">Arrival: </span>
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
-                                            <span class="flex flex-col pl-3">
+                                            <span class="flex flex-col">
                                                 <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
                                                     ${journey.end_time}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
