@@ -29,7 +29,7 @@
                         <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
                         <div class="flex flex-col mt-4 gap-2">
                             {#each sortedJourneys as journey}
-                                <div class="border-neutral-700 rounded-md border-[1px] p-2">
+                                <button class="border-neutral-700 rounded-md border-[1px] p-2" on:click={() => {journey.dropdown = !journey.dropdown}}>
                                     <div class="length-diagram ">
                                         {#if journey.journeySecondClass && !journey.journeySleeper}
                                             <div class="flex justify-center items-center w-full mb-1">
@@ -115,12 +115,51 @@
                                             </span>
                                             {/if}
                                         </div>
-                                        <div class="border-neutral-700 border-[1px] rounded-md mt-2">
+                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
+                                            <h3 class="text-left text-white text-sm">More Information</h3>
+                                            <hr class="mt-1 mb-1 border-neutral-700">
+                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                            {#if checkForPictureToday(true,journey.numbers) != false}
+                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
+                                                <div class="flex flex-col gap-2">
+                                                    {#each journey.numbers as number}
+                                                        {#if checkForPictureToday(false, number.number) != false}
+                                                            <div class="flex gap-4 mt-1 rounded-md border-[1px] border-transparent hover:border-white duration-200">
+                                                                <div class="max-h-[150px] w-3/5 rounded-sm">
+                                                                    <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
+                                                                </div>
+                                                                <div class="flex items-center justify-center w-2/5">
+                                                                    <p class="text-center text-lg text-white">{number.number}</p>
+                                                                    {#if number.variant && number.type}
+                                                                        <p class="text-center text-sm text-white">{number.type} / {number.variant}</p>
+                                                                    {:else if number.variant}
+                                                                        <p class="text-center text-sm text-white">{number.variant}</p>
+                                                                    {/if}
+                                                                </div>
+                                                            </div>
+                                                        {:else}
+                                                        <div class="flex gap-4 mt-1">
+                                                                <div class="max-h-[150px] min-h-[45px] w-3/5 rounded-sm bg-neutral-600 flex items-center justify-center">
+                                                                    <p class="text-neutral-800 font-semibold text-2xl">?</p>
+                                                                </div>
+                                                                <div class="flex items-center justify-center w-2/5">
+                                                                    <p class="text-left text-lg text-white">{number.number}</p>
+                                                                </div>
+                                                            </div>
+                                                        {/if}
+                                                    {/each}
+                                                </div>
+                                                <div class="flex">
 
+                                                </div>
+                                            {:else}
+                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
+                                            {/if}
                                         </div>
                                         
                                     </div>
-                                </div>
+                                </button>
                             {/each}
                         </div>
                     </div>
@@ -179,6 +218,7 @@
             return acc;
         }, {});
 
+
         logsToday = logsSorted
         getDaysLogs(logsSorted);
 
@@ -235,8 +275,6 @@
                 // console.log(combined)
                 for(let item of combined){
                     firstSrc = null;
-                    let endPoints = [];
-
                     const uniqueEndpoints = new Set();
                     combined.forEach(item => {
                         item.journeys.forEach(journey => {
@@ -244,34 +282,48 @@
                         });
                     });
 
-                    for(let picture of item.pictures){
-                        firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
-                    }
-                    const popupContent = firstSrc 
-                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
-                        : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
+                    // Add markers for each item in the combined list
+                    combined.forEach(item => {
+                        let firstSrc = null;
+                        for (let picture of item.pictures) {
+                            firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
+                        }
+                        const popupContent = firstSrc 
+                            ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+                            : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
 
-                    const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
-                    const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
-                    
-                    const marker = L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
-                    .bindPopup(popupContent);
+                        const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
+                        const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
 
+                        const marker = L.marker([parseFloat(item.lat), parseFloat(item.long)], { icon: markerIcon }).addTo(map)
+                            .bindPopup(popupContent);
+                    });
+
+                    combined.forEach(item => {
+                        if (item.logs.length > 0 && item.journeys.length === 0) {
+                            let firstSrc = null;
+                            for (let picture of item.pictures) {
+                                firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
+                            }
+                            const popupContent = firstSrc 
+                                ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><hr class="border-neutral-700 mb-2 mt-1"><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 text-md">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+
+                                : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3><hr class="border-neutral-700 mb-2 mt-1"></div>`;
+                              
+
+                            const logMarker = L.marker([parseFloat(item.lat), parseFloat(item.long)], { icon: blackIcon }).addTo(map)
+                                .bindPopup(popupContent);
+                            map.addLayer(logMarker);
+                        }
+                    });
+
+                    // Add endpoint markers separately
                     uniqueEndpoints.forEach(endpoint => {
                         const endpointItem = combined.find(item => item.location === endpoint);
                         if (endpointItem) {
                             const marker = L.marker([parseFloat(endpointItem.lat), parseFloat(endpointItem.long)], { icon: new L.Icon.Default() }).addTo(map)
                                 .bindPopup(`<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${endpointItem.location}</h3></div>`);
                             map.addLayer(marker);
-                        }
-                    });
-
-                    // Add markers for locations that only have logs
-                    combined.forEach(item => {
-                        if (item.logs.length > 0 && item.journeys.length === 0) {
-                            const logMarker = L.marker([item.lat, item.long], { icon: blackIcon }).addTo(map)
-                                .bindPopup(popupContent);
-                            map.addLayer(logMarker);
                         }
                     });
                     
@@ -355,7 +407,7 @@
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
+                                    
                                 </div>
                             ` : `
                                 <div style="min-width: 200px;">
@@ -402,7 +454,7 @@
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
+                                   
                                 </div>
                             `;
                             polyline.bindPopup(popupContent);
@@ -551,7 +603,8 @@
         // console.log(journeyLocations, logsToday, journeys);
         let temp = [];
         try {
-            if(journeyLocations == null || journeyLocations.length == 0){
+            console.log("BBBB", logsToday);
+            if (journeyLocations == null || journeyLocations.length == 0) {
                 temp = logsToday.map(log => {
                     const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
                     return {
@@ -564,29 +617,51 @@
                         pictures: pictures || []
                     };
                 });
-                
-            }else{
+            } else {
+                // Create a map to store logs by location
+                const logsByLocation = new Map();
+                logsToday.forEach(log => {
+                    if (!logsByLocation.has(log.log_location)) {
+                        logsByLocation.set(log.log_location, []);
+                    }
+                    logsByLocation.get(log.log_location).push(log);
+                });
+
                 temp = journeyLocations.map(journeyLoc => {
-                    const matchingLogs = logsToday.filter(log => 
-                        log.log_location === journeyLoc.location
-                    ).map(log => {
-                        const { pictures, ...rest } = log;
-                        return rest;
-                    });
-    
-                    const pictures = logsToday
-                        .filter(log => log.log_location === journeyLoc.location)
-                        .flatMap(log => log.pictures || []);
-    
+                    const matchingLogs = logsByLocation.get(journeyLoc.location) || [];
+                    const pictures = matchingLogs.flatMap(log => log.pictures || []);
+
                     return {
                         ...journeyLoc,
-                        logs: matchingLogs,
+                        logs: matchingLogs.map(log => {
+                            const { pictures, ...rest } = log;
+                            return rest;
+                        }),
                         journeys: journeys.filter(journey => 
                             journey.from === journeyLoc.location || journey.to === journeyLoc.location
                         ),
                         pictures: pictures
                     };
-                }).filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
+                });
+
+                // Add logs that are not in journeyLocations
+                logsToday.forEach(log => {
+                    if (!journeyLocations.some(journeyLoc => journeyLoc.location === log.log_location)) {
+                        const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
+                        temp.push({
+                            ...rest,
+                            lat: log_lat,
+                            long: log_long,
+                            location: log_location,
+                            logs: [{ ...rest, numbers }], // Keep numbers within the logs section
+                            journeys: [],
+                            pictures: pictures || []
+                        });
+                    }
+                });
+
+                temp = temp.filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
+                console.log("CCCC", combined);
             }
             return temp;
         } catch (error) {
@@ -701,7 +776,8 @@
         let uniqueJourneys = new Set();
         for (var item of combined) {
             for (var journey of item.journeys) {
-                uniqueJourneys.add(journey);
+            journey.dropdownOpen = false;
+            uniqueJourneys.add(journey);
             }
         }
         sortedJourneys = Array.from(uniqueJourneys);
@@ -722,6 +798,58 @@
         let minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
         return `${hours}h ${minutes}m`;
     }
+
+        function checkForPictureAllTime(multi, number) {
+            console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
+            let picture = null;
+            if (multi) {
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+                picture = log.pictures[0];
+                console.log("Picture found:", picture);
+                return picture;
+                }
+            }
+            } else {
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => num.number === number)) {
+                picture = log.pictures[0];
+                // console.log("Picture found:", picture);
+                return picture;
+                }
+            }
+            }
+            console.log("No picture found");
+            return false;
+        }
+
+        function checkForPictureToday(multi, number) {
+            console.log("checkForPictureToday called with multi:", multi, "and number:", number);
+            let picture = null;
+            if (multi) {
+                for (let log of logsToday) {
+                    // console.log("Checking log:", log);
+                    if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+                        picture = log.pictures[0];
+                        console.log("Picture found:", picture);
+                        return picture;
+                    }
+                }
+            } else {
+                for (let log of logsToday) {
+                    // console.log("Checking log:", log);
+                    if (log.numbers.some(num => num.number === number)) {
+                        picture = log.pictures[0];
+                        // console.log("Picture found:", picture);
+                        return picture;
+                    }
+                }
+            }
+            console.log("No picture found");
+            return false;
+        }
 
 
 </script>
