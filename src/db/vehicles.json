@@ -92,7 +92,13 @@
                         {"name":"GLS SUBW","short":"MC_UK_GLS_SUBW"},
                         {"name":"T&W METRO","short":"MC_UK_TW_METRO"}
                     ]
-                }
+                },
+                {"name":"Brush Traction / UK", "variants":[
+                    {"name":"Class 92","short":"B_UK_92"},
+                    {"name":"Class 60","short":"B_UK_60"},
+                    {"name":"Class 47","short":"B_UK_47"},
+                    {"name":"Class 57","short":"B_UK_47"}
+                ]}
             ],
             "busTypes": [
                 {

@@ -844,7 +844,7 @@
             isMobileDevice = isMobile || isAndroid || isIOS;
         });
 
-        import { countryFlags } from '../../countries.js'
+        import { countryFlags } from '../../../db/countries.js'
 
         function getFlag(item){
             let country = item.country

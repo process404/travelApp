@@ -8,7 +8,9 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
-
+			transitionProperty: {
+				'dropdown': 'height, opacity, margin',
+			  }
 		},
 	},
 	plugins: [

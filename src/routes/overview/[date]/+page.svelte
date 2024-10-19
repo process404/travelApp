@@ -1,7 +1,7 @@
 <div style="width: 100vw; display: flex; flex-direction: column" class="overflow-x-hidden" id="app">
     <Nav ver="back"/>
-    <div class="h-full w-full flex flex-col items-center pl-4 pr-4">
-        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
+    <div class="h-auto w-full flex flex-col items-center pl-4 pr-4">
+        <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 min-h-screen h-auto sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
             {#if param != "unknown"}
                 <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
             {:else}
@@ -19,14 +19,151 @@
                                 <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
                             </div>
                         {:else if !mapErr}
-                            <div id="map" class="w-full h-full rounded-md bg-black"></div>
+                            <div id="map" class="w-full h-full rounded-md bg-black min-h-[400px]"></div>
                         {:else}
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
                             </div>
                         {/if}
                     </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4">
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible customScrollbar">
                         <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
+                        <div class="flex flex-col mt-4 gap-2">
+                            {#each sortedJourneys as journey}
+                                <button class="border-neutral-700 rounded-md border-[1px] p-2" on:click={() => {journey.dropdown = !journey.dropdown}}>
+                                    <div class="length-diagram ">
+                                        {#if journey.journeySecondClass && !journey.journeySleeper}
+                                            <div class="flex justify-center items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                        <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                        <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                            <hr class="w-full  h-[2px] bg-neutral-500 border-none">
+                                        {:else if journey.journeyFirstClass}
+                                            {#if !isMobileDevice}
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                            {:else}
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                            {/if}
+                                            <hr class="w-full h-[2px] bg-yellow-500 border-none">
+                                        {:else if journey.journeyOvernight && !journey.journeySleeper}
+                                            <div class="flex justify-between items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                        <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                        <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                        
+                                            <hr class="w-full  h-[2px] bg-green-800 border-none">
+                                        {:else if journey.journeySleeper}
+                                            <div class="flex justify-between items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                            <hr class="w-full  h-[2px] bg-teal-800 border-none">
+                                        {/if}
+                                        <div class="flex justify-between items-center">
+                                            <p class="text-white text-sm">{journey.start_time}</p>
+                                            {#if !journey.delayHours && !journey.delayMinutes}
+                                            <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                            {:else}
+                                                <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
+                                            {/if}
+                                            {#if !journey.delayHours && !journey.delayMinutes}
+                                                <p class="text-white text-sm">{journey.end_time}</p>
+                                            {:else}
+                                            <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
+                                                <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
+                                                <span class="flex flex-col"> 
+                                                    <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                        {/if}
+                                                    </p>
+                                                    {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
+                                                        <p class="text-green-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                    {:else}
+                                                        <p class="text-red-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                    {/if}
+                                                    <p class="text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                        {/if}
+                                                    </p>
+                                                </span>
+                                            </span>
+                                            {/if}
+                                        </div>
+                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
+                                            <h3 class="text-left text-white text-sm">More Information</h3>
+                                            <hr class="mt-1 mb-2 border-neutral-700">
+                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                            {#if checkForPictureAllTime(true,journey.numbers) != false}
+                                            <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
+                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
+                                                <div class="flex flex-col gap-2">
+                                                    {#each journey.numbers as number}
+                                                        {#if checkForPictureAllTime(false, number.number) != false}
+                                                            <div class="flex gap-4 mt-1 rounded-md ">
+                                                                <div class="max-h-[150px] w-3/5 rounded-sm">
+                                                                    <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
+                                                                </div>
+                                                                <div class="flex items-center justify-center w-2/5">
+                                                                    <p class="text-center text-lg text-white">{number.number}</p>
+                                                                    {#if number.variant && number.type}
+                                                                        <p class="text-center text-sm text-white">{number.type} / {number.variant}</p>
+                                                                    {:else if number.variant}
+                                                                        <p class="text-center text-sm text-white">{number.variant}</p>
+                                                                    {/if}
+                                                                </div>
+                                                            </div>
+                                                        {:else}
+                                                        <div class="flex gap-4 mt-1">
+                                                                <div class="max-h-[150px] min-h-[45px] w-3/5 rounded-sm bg-neutral-600 flex items-center justify-center">
+                                                                    <p class="text-neutral-800 font-semibold text-2xl">?</p>
+                                                                </div>
+                                                                <div class="flex items-center justify-center w-2/5">
+                                                                    <p class="text-left text-lg text-white">{number.number}</p>
+                                                                </div>
+                                                            </div>
+                                                        {/if}
+                                                    {/each}
+                                                </div>
+                                                <div class="flex">
+
+                                                </div>
+                                            </div>
+                                            {:else}
+                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
+                                            {/if}
+                                        </div>
+                                        
+                                    </div>
+                                </button>
+                            {/each}
+                        </div>
                     </div>
                 </div>
             {/if}
@@ -46,11 +183,11 @@
     import Footer from '../../../lib/components/Footer.svelte';
     import '../../siteDB.js';
     import { getJourneysData, getLogsData } from '../../siteDB.js';
+    import { countryFlags } from "../../../db/countries.js";
 
     let map;
 
 
-    
     let param = $page.params.date;
     let formatParam = param.replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1');
     let logs = null;
@@ -82,6 +219,7 @@
             acc[year][month][date].push(log);
             return acc;
         }, {});
+
 
         logsToday = logsSorted
         getDaysLogs(logsSorted);
@@ -136,11 +274,9 @@
                     shadowSize: [41, 41]
                 });
 
-                console.log(combined)
+                // console.log(combined)
                 for(let item of combined){
                     firstSrc = null;
-                    let endPoints = [];
-
                     const uniqueEndpoints = new Set();
                     combined.forEach(item => {
                         item.journeys.forEach(journey => {
@@ -148,34 +284,48 @@
                         });
                     });
 
-                    for(let picture of item.pictures){
-                        firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
-                    }
-                    const popupContent = firstSrc 
-                        ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
-                        : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
+                    // Add markers for each item in the combined list
+                    combined.forEach(item => {
+                        let firstSrc = null;
+                        for (let picture of item.pictures) {
+                            firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
+                        }
+                        const popupContent = firstSrc 
+                            ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+                            : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
 
-                    const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
-                    const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
-                    
-                    const marker = L.marker([item.lat, item.long], { icon: markerIcon }).addTo(map)
-                    .bindPopup(popupContent);
+                        const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
+                        const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
 
+                        const marker = L.marker([parseFloat(item.lat), parseFloat(item.long)], { icon: markerIcon }).addTo(map)
+                            .bindPopup(popupContent);
+                    });
+
+                    combined.forEach(item => {
+                        if (item.logs.length > 0 && item.journeys.length === 0) {
+                            let firstSrc = null;
+                            for (let picture of item.pictures) {
+                                firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
+                            }
+                            const popupContent = firstSrc 
+                                ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><hr class="border-neutral-700 mb-2 mt-1"><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500 text-md">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
+
+                                : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3><hr class="border-neutral-700 mb-2 mt-1"></div>`;
+                              
+
+                            const logMarker = L.marker([parseFloat(item.lat), parseFloat(item.long)], { icon: blackIcon }).addTo(map)
+                                .bindPopup(popupContent);
+                            map.addLayer(logMarker);
+                        }
+                    });
+
+                    // Add endpoint markers separately
                     uniqueEndpoints.forEach(endpoint => {
                         const endpointItem = combined.find(item => item.location === endpoint);
                         if (endpointItem) {
                             const marker = L.marker([parseFloat(endpointItem.lat), parseFloat(endpointItem.long)], { icon: new L.Icon.Default() }).addTo(map)
                                 .bindPopup(`<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${endpointItem.location}</h3></div>`);
                             map.addLayer(marker);
-                        }
-                    });
-
-                    // Add markers for locations that only have logs
-                    combined.forEach(item => {
-                        if (item.logs.length > 0 && item.journeys.length === 0) {
-                            const logMarker = L.marker([item.lat, item.long], { icon: blackIcon }).addTo(map)
-                                .bindPopup(popupContent);
-                            map.addLayer(logMarker);
                         }
                     });
                     
@@ -206,7 +356,7 @@
                         if (fromLocation && toLocation) {
                             const points = [[fromLocation.lat, fromLocation.long]];
 
-                            console.log(journey)
+                            // console.log(journey)
                             if (journey.viaPoints && journey.viaPoints.length > 0) {
                                 for (let viapoint of journey.viaPoints) {
                                     points.push([viapoint.lat, viapoint.long]);
@@ -224,8 +374,8 @@
                                        ${journey.journeySecondClass && !journey.journeySleeper ? '<span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>' : journey.journeyFirstClass ? '<span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>' : journey.journeyOvernight && !journey.journeySleeper ? `<span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight (${journey.journeyFirstClass ? '1st' : '2nd'})</span>` : journey.journeySleeper ? '<span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>' : ''}
                                     </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}"></p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}"></p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}</p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
@@ -259,7 +409,7 @@
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
+                                    
                                 </div>
                             ` : `
                                 <div style="min-width: 200px;">
@@ -306,11 +456,15 @@
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
+                                   
                                 </div>
                             `;
                             polyline.bindPopup(popupContent);
-                            polyline.openPopup();
+
+                            const bounds = L.latLngBounds(points);
+                            map.fitBounds(bounds, { padding: [50, 50] });
+
+                            // polyline.openPopup();
                         }
                     }
                 }
@@ -394,6 +548,7 @@
         // console.log(journeys, "output")
         journeyLocations = await getUniqueJourneyLocations();
         combined = await combineLists();
+        await sortJourneys();
         // console.log("combined", combined);  
         return journeys;
     }
@@ -447,10 +602,10 @@
     let combined = [];
 
     function combineLists() {
-        console.log(journeyLocations, logsToday, journeys);
+        // console.log(journeyLocations, logsToday, journeys);
         let temp = [];
         try {
-            if(journeyLocations == null || journeyLocations.length == 0){
+            if (journeyLocations == null || journeyLocations.length == 0) {
                 temp = logsToday.map(log => {
                     const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
                     return {
@@ -463,29 +618,50 @@
                         pictures: pictures || []
                     };
                 });
-                
-            }else{
+            } else {
+                // Create a map to store logs by location
+                const logsByLocation = new Map();
+                logsToday.forEach(log => {
+                    if (!logsByLocation.has(log.log_location)) {
+                        logsByLocation.set(log.log_location, []);
+                    }
+                    logsByLocation.get(log.log_location).push(log);
+                });
+
                 temp = journeyLocations.map(journeyLoc => {
-                    const matchingLogs = logsToday.filter(log => 
-                        log.log_location === journeyLoc.location
-                    ).map(log => {
-                        const { pictures, ...rest } = log;
-                        return rest;
-                    });
-    
-                    const pictures = logsToday
-                        .filter(log => log.log_location === journeyLoc.location)
-                        .flatMap(log => log.pictures || []);
-    
+                    const matchingLogs = logsByLocation.get(journeyLoc.location) || [];
+                    const pictures = matchingLogs.flatMap(log => log.pictures || []);
+
                     return {
                         ...journeyLoc,
-                        logs: matchingLogs,
+                        logs: matchingLogs.map(log => {
+                            const { pictures, ...rest } = log;
+                            return rest;
+                        }),
                         journeys: journeys.filter(journey => 
                             journey.from === journeyLoc.location || journey.to === journeyLoc.location
                         ),
                         pictures: pictures
                     };
-                }).filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
+                });
+
+                // Add logs that are not in journeyLocations
+                logsToday.forEach(log => {
+                    if (!journeyLocations.some(journeyLoc => journeyLoc.location === log.log_location)) {
+                        const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
+                        temp.push({
+                            ...rest,
+                            lat: log_lat,
+                            long: log_long,
+                            location: log_location,
+                            logs: [{ ...rest, numbers }], // Keep numbers within the logs section
+                            journeys: [],
+                            pictures: pictures || []
+                        });
+                    }
+                });
+
+                temp = temp.filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
             }
             return temp;
         } catch (error) {
@@ -572,15 +748,16 @@
         return countries;
     }
     
+
     function getCountryEmoji(code) {
         if (countries.length === 0) {
             getFlags();
         }
         if(!isMobileDevice){
             const country = countries.find(country => country.code === code);
-            console.log(code)
+            // console.log(code)
             if (country) {
-                console.log("src", country.src);
+                // console.log("src", country.src);
                 return country.src;
             }
             return "";
@@ -592,6 +769,86 @@
             return "";
         }
     }
+
+    let sortedJourneys = []
+    async function sortJourneys() {
+        // Sort by start time
+        let uniqueJourneys = new Set();
+        for (var item of combined) {
+            for (var journey of item.journeys) {
+            journey.dropdownOpen = false;
+            uniqueJourneys.add(journey);
+            }
+        }
+        sortedJourneys = Array.from(uniqueJourneys);
+    }
+
+    function calcDuration(sd, st, ed, et, dh, dm) {
+        // calculate time and return in h and m e.g 10h 30m
+        const start = new Date(`${st} ${sd}`);
+        const end = new Date(`${et} ${ed}`);
+        let diffTime = Math.abs(end - start);
+
+        // Add delay hours and minutes
+        const delayInMilliseconds = (parseInt(dh) * 60 * 60 * 1000) + (parseInt(dm) * 60 * 1000);
+        diffTime += delayInMilliseconds;
+
+        let hours = Math.floor(diffTime / (1000 * 60 * 60));
+        let minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+        return `${hours}h ${minutes}m`;
+    }
+
+        function checkForPictureAllTime(multi, number) {
+            // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
+            let picture = null;
+            if (multi) {
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+                picture = log.pictures[0];
+                // console.log("Picture found:", picture);
+                return picture;
+                }
+            }
+            } else {
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => num.number === number)) {
+                picture = log.pictures[0];
+                // console.log("Picture found:", picture);
+                return picture;
+                }
+            }
+            }
+            // console.log("No picture found");
+            return false;
+        }
+
+        function checkForPictureToday(multi, number) {
+            // console.log("checkForPictureToday called with multi:", multi, "and number:", number);
+            let picture = null;
+            if (multi) {
+                for (let log of logsToday) {
+                    // console.log("Checking log:", log);
+                    if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+                        picture = log.pictures[0];
+                        // console.log("Picture found:", picture);
+                        return picture;
+                    }
+                }
+            } else {
+                for (let log of logsToday) {
+                    // console.log("Checking log:", log);
+                    if (log.numbers.some(num => num.number === number)) {
+                        picture = log.pictures[0];
+                        // console.log("Picture found:", picture);
+                        return picture;
+                    }
+                }
+            }
+            // console.log("No picture found");
+            return false;
+        }
 
 
 </script>
@@ -605,6 +862,11 @@
 
     :global(.leaflet-popup-tip){
        @apply bg-white border border-gray-300 dark:bg-[#131313] dark:border-[#2c2c2c] !important;
+    }
+
+    .customScrollbar{
+        scrollbar-width: thin;
+        scrollbar-color: #575757 #202020;
     }
 </style>
 
