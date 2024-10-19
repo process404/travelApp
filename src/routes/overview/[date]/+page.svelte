@@ -319,18 +319,17 @@
 
     });
 
-    function getNewArrivalTime(at, dh, dm){
-        let [hours, minutes] = at.split(':');
-        hours = parseInt(hours);
-        minutes = parseInt(minutes);
+    function getNewArrivalTime(at, dh, dm) {
+        let [hours, minutes] = at.split(':').map(Number);
         let delayHours = parseInt(dh);
         let delayMinutes = parseInt(dm);
+
         minutes += delayMinutes;
-        if (minutes >= 60) {
-            hours += 1;
-            minutes -= 60;
-        }
-        hours += delayHours;
+        hours += delayHours + Math.floor(minutes / 60);
+        minutes = minutes % 60;
+
+        hours = hours % 24; // Ensure hours wrap around after 24
+
         return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     }
 
@@ -432,13 +431,13 @@
         try {
             if(journeyLocations == null || journeyLocations.length == 0){
                 temp = logsToday.map(log => {
-                    const { pictures, log_lat, log_long, log_location, ...rest } = log;
+                    const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
                     return {
                         ...rest,
                         lat: log_lat,
                         long: log_long,
                         location: log_location,
-                        logs: [rest],
+                        logs: [{ ...rest, numbers }], // Keep numbers within the logs section
                         journeys: [],
                         pictures: pictures || []
                     };
