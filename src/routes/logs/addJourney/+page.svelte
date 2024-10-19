@@ -164,8 +164,8 @@
                                     </div>
                                     <div class="flex gap-4">
                                         <div class="w-full">
-                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Train Code</h3>
-                                            <input class="input blue w-full reduced h-auto" bind:value={trainCode}/>
+                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Service Code</h3>
+                                            <input class="input blue w-full reduced h-auto" bind:value={serviceCode}/>
                                         </div>
                                         <div class="w-full sm:hidden">
                                             <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
@@ -477,7 +477,7 @@
     var journeyTags = []
     var existingTags = []
     var journeyNotes = ''
-    let trainCode = ''
+    let serviceCode = ''
 
     function selectVia(o) {
         via = o.detail.text.name;
@@ -739,7 +739,7 @@
                 journeySleeper: journeySleeper,
                 journeyTags: journeyTags,
                 journeyNotes: journeyNotes,
-                trainCode: trainCode
+                serviceCode: serviceCode
             }));
 
             const addNew = journeys.concat(numbersWithLocation);
