@@ -230,7 +230,7 @@
                                                 </span>
                                                 <span>
                                                     ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
-                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date, journey.delayHours, journey.delayMinutes)}d</span>` : ''}
                                                 </span>
                                                 
                                             </span> 
@@ -369,11 +369,18 @@
         return journeys;
     }
 
-    function workOutDays(sd, ed){
+    function workOutDays(sd, ed, dh, dm){
         const start = new Date(sd);
         const end = new Date(ed);
         const diffTime = Math.abs(end - start);
-        const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (dh || dm) {
+            const delayInMinutes = (parseInt(dh) * 60) + parseInt(dm);
+            const delayInDays = delayInMinutes / (24 * 60);
+            days += Math.ceil(delayInDays);
+        }
+
         return days;
     }
 

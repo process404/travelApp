@@ -190,7 +190,7 @@
                                             <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
                                             <div class="flex gap-1">
                                                 <select class="input reduced iconEdit w-full" bind:value={delayHours}>
-                                                    {#each Array.from({ length: 13 }, (_, i) => i) as hour}
+                                                    {#each Array.from({ length: 8 }, (_, i) => i) as hour}
                                                         <option>{hour < 10 ? `0${hour}` : hour}</option>
                                                     {/each}
                                                 </select>
