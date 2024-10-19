@@ -127,7 +127,6 @@
             selectedStation = adDs.find(station => station.name === name.name);
         }
         if (adDs && selectedStation) {
-            console.log("test")
             value = selectedStation.name;
             presetC = selectedStation.country;
             const stationInfo = {
@@ -137,7 +136,7 @@
                 lat: selectedStation.latitude,
                 long: selectedStation.longitude,
             };
-            console.log(stationInfo);
+            // console.log(stationInfo);
             value = stationInfo;
             dispatch('select', {
                 text: value
@@ -149,7 +148,7 @@
             if(locSearch){
                 value = locSearch;
                 presetC = locSearch.country;
-                console.log(value)
+                // console.log(value)
                 dispatch('select', {
                     text: value
                 });

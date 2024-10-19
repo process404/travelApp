@@ -244,12 +244,14 @@
                                                 
                                             </span> 
                                             </span>
-                                            ${journey.delayHours || journey.delayMinutes ? `<span class="text-red-500 no-underline">+${getDelayMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                              ${journey.delayHours || journey.delayMinutes ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    ${journey.numbers.length > 0 ? `
+                                    ${journey.numbers.some(number => number.vehicletype && number.vehicletype.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.numbers.map(number => number.vehicletype).filter(vt => vt && vt.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.variant && number.variant.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.numbers.map(number => number.variant).filter(v => v && v.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.number && number.number.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.numbers.map(number => number.number).filter(n => n && n.trim()).join(', ')}</p>` : ''}
+                                    ` : ''}
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs">OC:</span> 
                                         ${journey.operator ? journey.operator : 'Unknown'} 
@@ -286,14 +288,17 @@
                                                 
                                             </span> 
                                             </span>
-                                            ${journey.delayHours || journey.delayMinutes ? `<span class="text-red-500 no-underline">+${getDelayMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                            ${journey.delayHours || journey.delayMinutes ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                             
             
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    ${journey.numbers.length > 0 ? `
+                                    ${journey.numbers.some(number => number.vehicletype && number.vehicletype.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.numbers.map(number => number.vehicletype).filter(vt => vt && vt.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.variant && number.variant.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.numbers.map(number => number.variant).filter(v => v && v.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.number && number.number.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.numbers.map(number => number.number).filter(n => n && n.trim()).join(', ')}</p>` : ''}
+                                    ` : ''}
+
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs">OC:</span> 
                                         ${journey.operator ? journey.operator : 'Unknown'} 
@@ -325,18 +330,34 @@
         let delayMinutes = parseInt(dm);
 
         minutes += delayMinutes;
-        hours += delayHours + Math.floor(minutes / 60);
-        minutes = minutes % 60;
+        if (minutes < 0) {
+            hours -= Math.ceil(Math.abs(minutes) / 60);
+            minutes = (minutes % 60 + 60) % 60;
+        } else {
+            hours += Math.floor(minutes / 60);
+            minutes = minutes % 60;
+        }
 
-        hours = hours % 24; // Ensure hours wrap around after 24
+        hours += delayHours;
+        if (hours < 0) {
+            hours = (hours % 24 + 24) % 24;
+        } else {
+            hours = hours % 24;
+        }
 
         return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     }
 
-    function getDelayMinutes(dh, dm){
-        let delayHours = parseInt(dh);
-        let delayMinutes = parseInt(dm);
-        return delayHours * 60 + delayMinutes;
+    function getDiffMinutes(dh, dm) {
+        let diffHours = parseInt(dh);
+        let diffMinutes = parseInt(dm);
+
+        if (isNaN(diffHours)) diffHours = 0;
+        if (isNaN(diffMinutes)) diffMinutes = 0;
+
+        const totalMinutes = diffHours * 60 + diffMinutes;
+
+        return totalMinutes;
     }
 
     function formatDate(date){
