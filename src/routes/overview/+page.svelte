@@ -16,7 +16,7 @@
         {#if page == 'logs'}
             <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full pt-4 sm:pb-6 pl-4 pr-4 pb-4">
                 <div class="flex gap-6 justify-between items-center">
-                    <h2 class="text-white font-semibold text-2xl w-full text-left">Logs by date</h2>
+                    <h2 class="text-white font-semibold text-2xl w-full text-left">Overviews by date</h2>
                     <div class="flex gap-2 w-full justify-end">
                         <select class="input blue reduced"   bind:value={sortBy}>
                             <option>All Time</option>
