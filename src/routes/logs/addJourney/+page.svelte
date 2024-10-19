@@ -697,11 +697,6 @@
             return;
         }
 
-        if($logNumbers.length == 0){
-            customAlertSummon("No numbers added", "err");
-            return;
-        }
-
         if(fromC == '' || toC == ''){
             if(!$noLocation){
                 customAlertSummon("No country selected", "err");

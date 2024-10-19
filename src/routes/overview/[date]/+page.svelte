@@ -206,47 +206,81 @@
 
                             points.push([toLocation.lat, toLocation.long]);
 
-                            const polyline = L.polyline(points, { color: 'red' }).addTo(map);
+                            const polyline = L.polyline(points, { color: darkMode ? 'white' : '#0077b6' }).addTo(map);
 
-                            const popupContent = isMobileDevice ? `
+                            let popupContent = isMobileDevice ? `
                                 <div style="min-width: 200px;">
                                     <div class="flex items-center justify-between">
                                         <h3>Journey</h3>
-                                        ${journey.vehicletype === 'Second Class' ? '<span class="text-xs text-neutral-500 italic">Second Class</span>' : journey.vehicletype === 'First Class' ? '<span class="text-xs text-neutral-500 italic">First Class</span>' : journey.vehicletype === 'Overnight (Standard)' ? '<span class="text-xs text-neutral-500 italic">Overnight (Standard)</span>' : journey.vehicletype === 'Overnight (Sleeper)' ? '<span class="text-xs text-neutral-500 italic">Overnight (Sleeper)</span>' : ''}
+                                       ${journey.journeySecondClass && !journey.journeySleeper ? '<span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>' : journey.journeyFirstClass ? '<span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>' : journey.journeyOvernight && !journey.journeySleeper ? `<span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight (${journey.journeyFirstClass ? '1st' : '2nd'})</span>` : journey.journeySleeper ? '<span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>' : ''}
                                     </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p><span class="text-neutral-500 italic text-xs">From: </span>${journey.from}, ${getCountryEmoji(journey.fromCountry)}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">To: </span>${journey.to}, ${getCountryEmoji(journey.toCountry)}</p>
-                                      <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Departure: </span>${journey.start_time}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Arrival: </span>${journey.end_time}${new Date(journey.end_date) > new Date(journey.start_date) ? ` +${Math.ceil((new Date(journey.end_date) - new Date(journey.start_date)) / (1000 * 60 * 60 * 24))}d` : ''}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Vehicle Type: </span>${journey.vehicletype}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Variant: </span>${journey.variant}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Number: </span>${journey.number}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Tags: </span>${journey.journeyTags.join(', ')}</p>
-                                    <p><span class="text-neutral-500 italic text-xs">Notes: </span>${journey.journeyNotes}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}"></p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}"></p>
+                                    <hr class="border-neutral-700 mb-2 mt-1">
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                    <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
+                                     <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival: </span>
+                                        <span class="flex gap-1">
+                                            <span class="flex flex-col">
+                                                <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
+                                                    ${journey.end_time}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                </span>
+                                                <span>
+                                                    ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                </span>
+                                                
+                                            </span> 
+                                            </span>
+                                            ${journey.delayHours || journey.delayMinutes ? `<span class="text-red-500 no-underline">+${getDelayMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                    </p>
+                                    <hr class="border-neutral-700 mb-2 mt-1">
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    <hr class="border-neutral-700 mb-2 mt-1">
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
                                 </div>
                             ` : `
                                 <div style="min-width: 200px;">
                                     <div class="flex items-center justify-between">
                                         <h3>Journey</h3>
-                                        ${journey.vehicletype === 'Second Class' ? '<span class="text-xs text-neutral-500 italic">Second Class</span>' : journey.vehicletype === 'First Class' ? '<span class="text-xs text-neutral-500 italic">First Class</span>' : journey.vehicletype === 'Overnight (Standard)' ? '<span class="text-xs text-neutral-500 italic">Overnight (Standard)</span>' : journey.vehicletype === 'Overnight (Sleeper)' ? '<span class="text-xs text-neutral-500 italic">Overnight (Sleeper)</span>' : ''}
+                                        ${journey.journeySecondClass && !journey.journeySleeper ? '<span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>' : journey.journeyFirstClass ? '<span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>' : journey.journeyOvernight && !journey.journeySleeper ? `<span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight (${journey.journeyFirstClass ? '1st' : '2nd'})</span>` : journey.journeySleeper ? '<span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>' : ''}
                                     </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} <img class="w-5 h-5" src="${getCountryEmoji(journey.fromCountry)}" alt="${journey.fromCountry}"></p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} <img class="w-5 h-5" src="${getCountryEmoji(journey.toCountry)}" alt="${journey.toCountry} flag"></p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Departure Time:</span> ${journey.start_time}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0">
-                                        <span class="text-neutral-500 italic text-xs">Arrival: </span>
-                                        <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
-                                            ${journey.end_time}${new Date(journey.end_date) > new Date(journey.start_date) ? ` +${Math.ceil((new Date(journey.end_date) - new Date(journey.start_date)) / (1000 * 60 * 60 * 24))}d` : ''}
-                                        </span>
-                                        ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic text-xs">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}<span class="text-red-500">+${getDelayMinutes(delayHours, delayMinutes)}</span>)</span>` : ''}
+                                    <hr class="border-neutral-700 mb-2 mt-1">
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival: </span>
+                                        <span class="flex gap-1">
+                                            <span class="flex flex-col">
+                                                <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
+                                                    ${journey.end_time}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                </span>
+                                                <span>
+                                                    ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                </span>
+                                                
+                                            </span> 
+                                            </span>
+                                            ${journey.delayHours || journey.delayMinutes ? `<span class="text-red-500 no-underline">+${getDelayMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                            
+            
                                     </p>
+                                    <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
                                 </div>
@@ -265,6 +299,27 @@
         }
 
     });
+
+    function getNewArrivalTime(at, dh, dm){
+        let [hours, minutes] = at.split(':');
+        hours = parseInt(hours);
+        minutes = parseInt(minutes);
+        let delayHours = parseInt(dh);
+        let delayMinutes = parseInt(dm);
+        minutes += delayMinutes;
+        if (minutes >= 60) {
+            hours += 1;
+            minutes -= 60;
+        }
+        hours += delayHours;
+        return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+    }
+
+    function getDelayMinutes(dh, dm){
+        let delayHours = parseInt(dh);
+        let delayMinutes = parseInt(dm);
+        return delayHours * 60 + delayMinutes;
+    }
 
     function formatDate(date){
         const d = new Date(date);
@@ -302,6 +357,14 @@
         combined = await combineLists();
         // console.log("combined", combined);  
         return journeys;
+    }
+
+    function workOutDays(sd, ed){
+        const start = new Date(sd);
+        const end = new Date(ed);
+        const diffTime = Math.abs(end - start);
+        const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return days;
     }
 
     async function getUniqueJourneyLocations() {
