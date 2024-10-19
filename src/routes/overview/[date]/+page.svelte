@@ -136,9 +136,10 @@
                     shadowSize: [41, 41]
                 });
 
+                console.log(combined)
                 for(let item of combined){
                     firstSrc = null;
-                    let endPoints = []
+                    let endPoints = [];
 
                     const uniqueEndpoints = new Set();
                     combined.forEach(item => {
@@ -147,14 +148,13 @@
                         });
                     });
 
-
                     for(let picture of item.pictures){
                         firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
                     }
                     const popupContent = firstSrc 
                         ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
                         : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
-                    
+
                     const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
                     const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
                     
@@ -167,6 +167,15 @@
                             const marker = L.marker([parseFloat(endpointItem.lat), parseFloat(endpointItem.long)], { icon: new L.Icon.Default() }).addTo(map)
                                 .bindPopup(`<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${endpointItem.location}</h3></div>`);
                             map.addLayer(marker);
+                        }
+                    });
+
+                    // Add markers for locations that only have logs
+                    combined.forEach(item => {
+                        if (item.logs.length > 0 && item.journeys.length === 0) {
+                            const logMarker = L.marker([item.lat, item.long], { icon: blackIcon }).addTo(map)
+                                .bindPopup(popupContent);
+                            map.addLayer(logMarker);
                         }
                     });
                     
@@ -417,35 +426,52 @@
 
     let combined = [];
 
-    function combineLists(){
-        let temp = null;
+    function combineLists() {
+        console.log(journeyLocations, logsToday, journeys);
+        let temp = [];
         try {
-            temp = journeyLocations.map(journeyLoc => {
-                const matchingLogs = logsToday.filter(log => 
-                    log.log_location === journeyLoc.location
-                ).map(log => {
-                    const { pictures, ...rest } = log;
-                    return rest;
+            if(journeyLocations == null || journeyLocations.length == 0){
+                temp = logsToday.map(log => {
+                    const { pictures, log_lat, log_long, log_location, ...rest } = log;
+                    return {
+                        ...rest,
+                        lat: log_lat,
+                        long: log_long,
+                        location: log_location,
+                        logs: [rest],
+                        journeys: [],
+                        pictures: pictures || []
+                    };
                 });
-
-                const pictures = logsToday
-                    .filter(log => log.log_location === journeyLoc.location)
-                    .flatMap(log => log.pictures || []);
-
-                return {
-                    ...journeyLoc,
-                    logs: matchingLogs,
-                    journeys: journeys.filter(journey => 
-                        journey.from === journeyLoc.location
-                    ),
-                    pictures: pictures
-                };
-            });
+                
+            }else{
+                temp = journeyLocations.map(journeyLoc => {
+                    const matchingLogs = logsToday.filter(log => 
+                        log.log_location === journeyLoc.location
+                    ).map(log => {
+                        const { pictures, ...rest } = log;
+                        return rest;
+                    });
+    
+                    const pictures = logsToday
+                        .filter(log => log.log_location === journeyLoc.location)
+                        .flatMap(log => log.pictures || []);
+    
+                    return {
+                        ...journeyLoc,
+                        logs: matchingLogs,
+                        journeys: journeys.filter(journey => 
+                            journey.from === journeyLoc.location || journey.to === journeyLoc.location
+                        ),
+                        pictures: pictures
+                    };
+                }).filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
+            }
+            return temp;
         } catch (error) {
             console.error('Error combining lists:', error);
             mapErr = true;
         }
-        return temp;
     }
 
     function getUniqueLoc(){
@@ -493,7 +519,7 @@
                     if (fromCountryIndex === -1) {
                         countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
                     }
-                }else{
+                } else {
                     const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
                     if (fromCountryIndex !== -1 && !countries.some(country => country.code === journey.fromCountry)) {
                         countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
@@ -502,6 +528,23 @@
             } else {
                 // console.log(journey)
                 // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+            }
+
+            if (journey.toCountry && typeof journey.toCountry === 'string') {
+                if(!isMobileDevice){
+                    const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                    if (toCountryIndex === -1) {
+                        countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                    }
+                } else {
+                    const toCountryIndex = countryFlags.findIndex(country => country.code === journey.toCountry);
+                    if (toCountryIndex !== -1 && !countries.some(country => country.code === journey.toCountry)) {
+                        countries.push({ "code": journey.toCountry, "emoji": countryFlags[toCountryIndex].emoji });
+                    }
+                }
+            } else {
+                // console.log(journey)
+                // console.log(`Invalid toCountry code: ${journey.toCountry}`);
             }
 
         }
