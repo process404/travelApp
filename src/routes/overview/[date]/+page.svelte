@@ -242,8 +242,8 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
-                                        <span class="text-neutral-500 italic text-xs">TOC:</span> 
-                                        ${journey.operator ? journey.operator : 'Unknown Operator'} 
+                                        <span class="text-neutral-500 italic text-xs">OC:</span> 
+                                        ${journey.operator ? journey.operator : 'Unknown'} 
                                         ${journey.trainCode ? `(${journey.trainCode})` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
@@ -286,8 +286,8 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
-                                        <span class="text-neutral-500 italic text-xs">TOC:</span> 
-                                        ${journey.operator ? journey.operator : 'Unknown Operator'} 
+                                        <span class="text-neutral-500 italic text-xs">OC:</span> 
+                                        ${journey.operator ? journey.operator : 'Unknown'} 
                                         ${journey.trainCode ? `(${journey.trainCode})` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
