@@ -1,5 +1,5 @@
 {#if active}
-<button class="z-40 w-screen h-screen fixed left-0 top-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center pl-4 pr-4" on:click|self={closeAlert}>
+<button class="z-40 w-screen h-screen fixed left-0 top-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center pl-4 pr-4" class:cursor-pointer={mode == 'info_nc'} on:click|self={closeAlert}>
     {#if mode == 'err'}
     <div class="bg-red-700 p-4 w-full rounded-md flex flex-col gap-3 hover:cursor-default max-w-[500px]">
         <div class="flex gap-3 items-center">
@@ -27,7 +27,7 @@
         <h4 class="text-white text-center mt-4 mb-2">{text}</h4>
     </div>
     {/if}
-    {#if mode == 'info'}
+    {#if mode == 'info' || mode == 'info_nc'}
     <div class="bg-neutral-700 p-4 w-full rounded-md max-w-[500px]">
         <div class="flex gap-3 items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white w-5 h-5" viewBox="0 0 16 16">
@@ -35,7 +35,6 @@
                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
               </svg>
             <h2 class="text-white font-bold text-xl">Information</h2>
-            <h4 class="text-white ml-auto text-xs text-opacity-60">Click outside of this box to close</h4>
         </div>
         <hr class="mt-1">
         <h4 class="text-white text-center mt-4 mb-2">{text}</h4>
@@ -53,7 +52,9 @@ import { createEventDispatcher } from 'svelte';
 
 const dispatch = createEventDispatcher();
 function closeAlert() {
-    active = false;
-    dispatch('close');
+    if(mode != 'info_nc'){
+        active = false;
+        dispatch('close');
+    }
 }
 </script>

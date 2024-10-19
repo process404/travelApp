@@ -247,9 +247,11 @@
                                               ${journey.delayHours || journey.delayMinutes ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    ${journey.numbers.length > 0 ? `
+                                    ${journey.numbers.some(number => number.vehicletype && number.vehicletype.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.numbers.map(number => number.vehicletype).filter(vt => vt && vt.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.variant && number.variant.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.numbers.map(number => number.variant).filter(v => v && v.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.number && number.number.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.numbers.map(number => number.number).filter(n => n && n.trim()).join(', ')}</p>` : ''}
+                                    ` : ''}
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs">OC:</span> 
                                         ${journey.operator ? journey.operator : 'Unknown'} 
@@ -291,9 +293,12 @@
             
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    ${journey.numbers.length > 0 ? `
+                                    ${journey.numbers.some(number => number.vehicletype && number.vehicletype.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.numbers.map(number => number.vehicletype).filter(vt => vt && vt.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.variant && number.variant.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.numbers.map(number => number.variant).filter(v => v && v.trim()).join(', ')}</p>` : ''}
+                                    ${journey.numbers.some(number => number.number && number.number.trim()) ? `<p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.numbers.map(number => number.number).filter(n => n && n.trim()).join(', ')}</p>` : ''}
+                                    ` : ''}
+
                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs">OC:</span> 
                                         ${journey.operator ? journey.operator : 'Unknown'} 

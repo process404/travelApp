@@ -713,8 +713,7 @@
         }
 
         logNumbers.subscribe(async numbers => {
-            const numbersWithLocation = numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
-                ...train,
+            const journey = {
                 from: from,
                 fromCountry: fromC,
                 to: to,
@@ -732,8 +731,8 @@
                 delayHours: delayHours,
                 delayMinutes: delayMinutes,
                 journeyReason: journeyReason,
-                journeyFirstClass, journeyFirstClass,
-                journeySecondClass, journeySecondClass,
+                journeyFirstClass: journeyFirstClass,
+                journeySecondClass: journeySecondClass,
                 journeyWifi: journeyWifi,
                 journeyCycles: journeyCycles,
                 journeyRestauraunt: journeyRestauraunt,
@@ -741,18 +740,23 @@
                 journeySleeper: journeySleeper,
                 journeyTags: journeyTags,
                 journeyNotes: journeyNotes,
-                serviceCode: serviceCode
-            }));
+                serviceCode: serviceCode,
+                numbers: numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
+                    ...train
+                }))
+            };
 
-            const addNew = journeys.concat(numbersWithLocation);
+            const addNew = journeys.concat(journey);
+            // console.log(addNew);
             let test = await writeJourneysData(addNew);
-            // console.log("test", test)
-            $alrtMode = 'info';
+            $alrtMode = 'info_nc';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
             await sleep(3000)
             window.location.href = `../overview/` + inputDateStart; 
         });
+
+        // console.log($logNumbers)
 
 
     }

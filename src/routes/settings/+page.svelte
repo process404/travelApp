@@ -167,6 +167,8 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood = false;
     }
 
@@ -185,6 +187,8 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood = false;
     }
 
@@ -201,6 +205,8 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
     }
 
     async function clearLogPhotos(){
@@ -220,6 +226,8 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood = false;
     }
 
@@ -238,7 +246,10 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood = false;
+        
     }
 
     async function clearPlanning(){
@@ -250,13 +261,21 @@
             alrtAct.set(true);
             alrtTxt.set('Planning cleared');
             alrtMode.set('success');
+            sleep(3000)
+            location.reload();
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
             alrtAct.set(true);
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood = false;
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async function clearTimePeriod(timeInDays){
@@ -292,6 +311,8 @@
             alrtTxt.set('Action cancelled');
             alrtMode.set('error');
         }
+        sleep(3000)
+        location.reload();
         understood2 = false;
     }
 
