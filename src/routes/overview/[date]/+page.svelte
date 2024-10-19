@@ -118,8 +118,20 @@
                                         <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
                                             <h3 class="text-left text-white text-sm">More Information</h3>
                                             <hr class="mt-1 mb-2 border-neutral-700">
-                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
-                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                            <div class="flex gap-2 justify-between">
+                                                <div class="w-full">
+                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                                </div>
+                                                <div class="flex gap-2 items-baseline">
+                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                    <div class="flex gap-2 flex-wrap w-full mt-1">
+                                                        {#each journey.journeyTags as tag}
+                                                            <p class="text-left text-sm text-white bg-blue-900 p-1 rounded-sm">{tag}</p>
+                                                        {/each}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {#if checkForPictureAllTime(true,journey.numbers) != false}
                                             <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
                                                 <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
@@ -151,15 +163,11 @@
                                                         {/if}
                                                     {/each}
                                                 </div>
-                                                <div class="flex">
-
-                                                </div>
                                             </div>
                                             {:else}
                                                 <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
                                             {/if}
                                         </div>
-                                        
                                     </div>
                                 </button>
                             {/each}
@@ -299,6 +307,12 @@
 
                         const marker = L.marker([parseFloat(item.lat), parseFloat(item.long)], { icon: markerIcon }).addTo(map)
                             .bindPopup(popupContent);
+
+                        marker.on('popupopen', () => {
+                            setTimeout(() => {
+                                marker.getPopup().update();
+                            }, 100);
+                        });
                     });
 
                     combined.forEach(item => {
@@ -867,6 +881,10 @@
     .customScrollbar{
         scrollbar-width: thin;
         scrollbar-color: #575757 #202020;
+    }
+
+    .leaflet-popup-content{
+        min-width: 300px;
     }
 </style>
 
