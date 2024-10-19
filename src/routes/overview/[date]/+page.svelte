@@ -136,9 +136,10 @@
                     shadowSize: [41, 41]
                 });
 
+                console.log(combined)
                 for(let item of combined){
                     firstSrc = null;
-                    let endPoints = []
+                    let endPoints = [];
 
                     const uniqueEndpoints = new Set();
                     combined.forEach(item => {
@@ -147,14 +148,13 @@
                         });
                     });
 
-
                     for(let picture of item.pictures){
                         firstSrc = typeof picturePriority !== 'undefined' && picturePriority ? picture.src : firstSrc || picture.src;
                     }
                     const popupContent = firstSrc 
                         ? `<div class='flex gap-2 w-auto'><img src='${firstSrc}' class='rounded-sm' style='max-width: 300px; max-height: 100px;'><div class='flex ml-2 flex-col gap-2'><h3 class='text-lg text-neutral-100'>${item.location}</h3><div class="overflow-y-auto flex flex-col h-full"><h4 class="italic text-neutral-500">${Array.isArray(item.logs) && item.logs.flatMap(log => log.numbers.map(num => num.number)).join(', ')}</h4></div></div></div>`
                         : `<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${item.location}</h3></div>`;
-                    
+
                     const hasJourneys = item.journeys.length > 0 || combined.some(j => j.journeys.some(journey => journey.to === item.location));
                     const markerIcon = hasJourneys ? new L.Icon.Default() : blackIcon;
                     
@@ -167,6 +167,15 @@
                             const marker = L.marker([parseFloat(endpointItem.lat), parseFloat(endpointItem.long)], { icon: new L.Icon.Default() }).addTo(map)
                                 .bindPopup(`<div class='flex gap-2 w-auto'><h3 class='text-sm font-regular text-neutral-100'>${endpointItem.location}</h3></div>`);
                             map.addLayer(marker);
+                        }
+                    });
+
+                    // Add markers for locations that only have logs
+                    combined.forEach(item => {
+                        if (item.logs.length > 0 && item.journeys.length === 0) {
+                            const logMarker = L.marker([item.lat, item.long], { icon: blackIcon }).addTo(map)
+                                .bindPopup(popupContent);
+                            map.addLayer(logMarker);
                         }
                     });
                     
@@ -221,16 +230,16 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
                                      <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
-                                        <span class="text-neutral-500 italic text-xs">Arrival: </span>
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
-                                            <span class="flex flex-col pl-3">
+                                            <span class="flex flex-col">
                                                 <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
                                                     ${journey.end_time}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
                                                 </span>
                                                 <span>
                                                     ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
-                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
+                                                    ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date, journey.delayHours, journey.delayMinutes)}d</span>` : ''}
                                                 </span>
                                                 
                                             </span> 
@@ -241,6 +250,11 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0">
+                                        <span class="text-neutral-500 italic text-xs">OC:</span> 
+                                        ${journey.operator ? journey.operator : 'Unknown'} 
+                                        ${journey.trainCode ? `(${journey.trainCode})` : ''}
+                                    </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
@@ -258,9 +272,9 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
-                                        <span class="text-neutral-500 italic text-xs">Arrival: </span>
+                                        <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
-                                            <span class="flex flex-col pl-3">
+                                            <span class="flex flex-col">
                                                 <span class="${journey.delayHours || journey.delayMinutes ? 'line-through text-neutral-500' : ''}">
                                                     ${journey.end_time}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
@@ -280,6 +294,11 @@
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Vehicle Type:</span> ${journey.vehicletype}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Variant:</span> ${journey.variant}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Number:</span> ${journey.number}</p>
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0">
+                                        <span class="text-neutral-500 italic text-xs">OC:</span> 
+                                        ${journey.operator ? journey.operator : 'Unknown'} 
+                                        ${journey.trainCode ? `(${journey.trainCode})` : ''}
+                                    </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Tags:</span> ${journey.journeyTags.join(', ')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">Notes:</span> ${journey.journeyNotes}</p>
@@ -300,18 +319,17 @@
 
     });
 
-    function getNewArrivalTime(at, dh, dm){
-        let [hours, minutes] = at.split(':');
-        hours = parseInt(hours);
-        minutes = parseInt(minutes);
+    function getNewArrivalTime(at, dh, dm) {
+        let [hours, minutes] = at.split(':').map(Number);
         let delayHours = parseInt(dh);
         let delayMinutes = parseInt(dm);
+
         minutes += delayMinutes;
-        if (minutes >= 60) {
-            hours += 1;
-            minutes -= 60;
-        }
-        hours += delayHours;
+        hours += delayHours + Math.floor(minutes / 60);
+        minutes = minutes % 60;
+
+        hours = hours % 24; // Ensure hours wrap around after 24
+
         return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     }
 
@@ -359,11 +377,18 @@
         return journeys;
     }
 
-    function workOutDays(sd, ed){
+    function workOutDays(sd, ed, dh, dm){
         const start = new Date(sd);
         const end = new Date(ed);
         const diffTime = Math.abs(end - start);
-        const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (dh || dm) {
+            const delayInMinutes = (parseInt(dh) * 60) + parseInt(dm);
+            const delayInDays = delayInMinutes / (24 * 60);
+            days += Math.ceil(delayInDays);
+        }
+
         return days;
     }
 
@@ -400,35 +425,52 @@
 
     let combined = [];
 
-    function combineLists(){
-        let temp = null;
+    function combineLists() {
+        console.log(journeyLocations, logsToday, journeys);
+        let temp = [];
         try {
-            temp = journeyLocations.map(journeyLoc => {
-                const matchingLogs = logsToday.filter(log => 
-                    log.log_location === journeyLoc.location
-                ).map(log => {
-                    const { pictures, ...rest } = log;
-                    return rest;
+            if(journeyLocations == null || journeyLocations.length == 0){
+                temp = logsToday.map(log => {
+                    const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
+                    return {
+                        ...rest,
+                        lat: log_lat,
+                        long: log_long,
+                        location: log_location,
+                        logs: [{ ...rest, numbers }], // Keep numbers within the logs section
+                        journeys: [],
+                        pictures: pictures || []
+                    };
                 });
-
-                const pictures = logsToday
-                    .filter(log => log.log_location === journeyLoc.location)
-                    .flatMap(log => log.pictures || []);
-
-                return {
-                    ...journeyLoc,
-                    logs: matchingLogs,
-                    journeys: journeys.filter(journey => 
-                        journey.from === journeyLoc.location
-                    ),
-                    pictures: pictures
-                };
-            });
+                
+            }else{
+                temp = journeyLocations.map(journeyLoc => {
+                    const matchingLogs = logsToday.filter(log => 
+                        log.log_location === journeyLoc.location
+                    ).map(log => {
+                        const { pictures, ...rest } = log;
+                        return rest;
+                    });
+    
+                    const pictures = logsToday
+                        .filter(log => log.log_location === journeyLoc.location)
+                        .flatMap(log => log.pictures || []);
+    
+                    return {
+                        ...journeyLoc,
+                        logs: matchingLogs,
+                        journeys: journeys.filter(journey => 
+                            journey.from === journeyLoc.location || journey.to === journeyLoc.location
+                        ),
+                        pictures: pictures
+                    };
+                }).filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
+            }
+            return temp;
         } catch (error) {
             console.error('Error combining lists:', error);
             mapErr = true;
         }
-        return temp;
     }
 
     function getUniqueLoc(){
@@ -476,7 +518,7 @@
                     if (fromCountryIndex === -1) {
                         countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
                     }
-                }else{
+                } else {
                     const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
                     if (fromCountryIndex !== -1 && !countries.some(country => country.code === journey.fromCountry)) {
                         countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
@@ -485,6 +527,23 @@
             } else {
                 // console.log(journey)
                 // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
+            }
+
+            if (journey.toCountry && typeof journey.toCountry === 'string') {
+                if(!isMobileDevice){
+                    const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                    if (toCountryIndex === -1) {
+                        countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                    }
+                } else {
+                    const toCountryIndex = countryFlags.findIndex(country => country.code === journey.toCountry);
+                    if (toCountryIndex !== -1 && !countries.some(country => country.code === journey.toCountry)) {
+                        countries.push({ "code": journey.toCountry, "emoji": countryFlags[toCountryIndex].emoji });
+                    }
+                }
+            } else {
+                // console.log(journey)
+                // console.log(`Invalid toCountry code: ${journey.toCountry}`);
             }
 
         }

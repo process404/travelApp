@@ -164,8 +164,8 @@
                                     </div>
                                     <div class="flex gap-4">
                                         <div class="w-full">
-                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Train Code</h3>
-                                            <input class="input blue w-full reduced h-auto"/>
+                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Service Code</h3>
+                                            <input class="input blue w-full reduced h-auto" bind:value={serviceCode}/>
                                         </div>
                                         <div class="w-full sm:hidden">
                                             <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
@@ -190,7 +190,7 @@
                                             <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
                                             <div class="flex gap-1">
                                                 <select class="input reduced iconEdit w-full" bind:value={delayHours}>
-                                                    {#each Array.from({ length: 13 }, (_, i) => i) as hour}
+                                                    {#each Array.from({ length: 8 }, (_, i) => i) as hour}
                                                         <option>{hour < 10 ? `0${hour}` : hour}</option>
                                                     {/each}
                                                 </select>
@@ -477,6 +477,7 @@
     var journeyTags = []
     var existingTags = []
     var journeyNotes = ''
+    let serviceCode = ''
 
     function selectVia(o) {
         via = o.detail.text.name;
@@ -737,7 +738,8 @@
                 journeyOvernight: journeyOvernight,
                 journeySleeper: journeySleeper,
                 journeyTags: journeyTags,
-                journeyNotes: journeyNotes
+                journeyNotes: journeyNotes,
+                serviceCode: serviceCode
             }));
 
             const addNew = journeys.concat(numbersWithLocation);
