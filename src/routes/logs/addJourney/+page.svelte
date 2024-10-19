@@ -190,13 +190,15 @@
                                             <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
                                             <div class="flex gap-1">
                                                 <select class="input reduced iconEdit w-full" bind:value={delayHours}>
-                                                    {#each Array.from({ length: 8 }, (_, i) => i) as hour}
-                                                        <option>{hour < 10 ? `0${hour}` : hour}</option>
+                                                    {#each Array.from({ length: 13 }, (_, i) => i - 2) as hour}
+                                                        <option selected={hour === 0}>{hour < 10 && hour >= 0 ? `0${hour}` : hour < 0 && hour > -10 ? `-0${Math.abs(hour)}` : hour}</option>
                                                     {/each}
                                                 </select>
                                                 <select class="input reduced iconEdit w-full" bind:value={delayMinutes}>
-                                                    {#each Array.from({ length: 60 }, (_, i) => i) as minutes}
-                                                        <option>{minutes < 10 ? `0${minutes}` : minutes}</option>
+                                                    {#each Array.from({ length: 119 }, (_, i) => i - 59) as minutes}
+                                                        <option selected={minutes === 0}>
+                                                            {minutes < 10 && minutes > -10 ? `${minutes < 0 ? '-0' : '0'}${Math.abs(minutes)}` : minutes}
+                                                        </option>
                                                     {/each}
                                                 </select>
                                             </div>
@@ -575,7 +577,7 @@
         });
 
         let logs = await getLogsData();
-        console.log(logs)
+        // console.log(logs)
         if (logs) {
             logs.forEach(item => {
                 if(item.number === train.name){
@@ -590,7 +592,7 @@
     function inputAreaBtn(area, train) {
         inputArea.set(area);
         // Add debugging log to check the structure of logAreas
-        console.log('logAreas:', logAreas);
+        // console.log('logAreas:', logAreas);
         logNumbers.update(numbers => {
             return numbers.map(t => {
             if (t.id === train.id && t.vehicleType === train.vehicleType) {
@@ -615,11 +617,11 @@
         let logs = await getLogsData();
         let vehFound = false
         let veh = null;
-        console.log(logs)
-        console.log(inputNumber)
+        // console.log(logs)
+        // console.log(inputNumber)
         if (logs) {
             vehFound = logs.some(log => log.number === inputNumber);
-            console.log(vehFound)
+            // console.log(vehFound)
             if (vehFound) {
                 veh = logs.find(log => log.number === inputNumber);
             }
@@ -744,7 +746,7 @@
 
             const addNew = journeys.concat(numbersWithLocation);
             let test = await writeJourneysData(addNew);
-            console.log("test", test)
+            // console.log("test", test)
             $alrtMode = 'info';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
@@ -771,29 +773,29 @@
                 db = module.default
             }
             
-            console.log(type)
-            console.log(db)
+            // console.log(type)
+            // console.log(db)
             if (type === "Train") {
                 console.log("TR");
                 db.vehTypes.forEach(item => {
                     console.log(item)
                     if (item.trainTypes) {
                         logAreas.push(item);
-                        console.log(item);
+                        // console.log(item);
                     }
                 });
             } else if (type === "Bus / Coach") {
                 db.vehTypes.forEach(item => {
                     if (item.busTypes) {
                         logAreas.push(item);
-                        console.log(item);
+                        // console.log(item);
                     }
                 });
             } else if (type === "Others") {
                 db.vehTypes.forEach(item => {
                     if (item.others) {
                         logAreas.push(item);
-                        console.log(item);
+                        // console.log(item);
                     }
                 });
             }
@@ -821,7 +823,7 @@
             toId = o.detail.text.id;
             toLat = o.detail.text.lat;
             toLong = o.detail.text.long;
-            console.log(from, to, fromId, toId);
+            // console.log(from, to, fromId, toId);
         }
 
 
