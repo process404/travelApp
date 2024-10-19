@@ -19,14 +19,110 @@
                                 <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
                             </div>
                         {:else if !mapErr}
-                            <div id="map" class="w-full h-full rounded-md bg-black"></div>
+                            <div id="map" class="w-full h-full rounded-md bg-black min-h-[400px]"></div>
                         {:else}
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
                             </div>
                         {/if}
                     </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4">
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 overflow-y-scroll customScrollbar">
                         <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
+                        <div class="flex flex-col mt-4 gap-2">
+                            {#each sortedJourneys as journey}
+                                <div class="border-neutral-700 rounded-md border-[1px] p-2">
+                                    <div class="length-diagram ">
+                                        {#if journey.journeySecondClass && !journey.journeySleeper}
+                                            <div class="flex justify-center items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                        <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                        <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                            <hr class="w-full  h-[2px] bg-neutral-500 border-none">
+                                        {:else if journey.journeyFirstClass}
+                                            {#if !isMobileDevice}
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                            {:else}
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                            {/if}
+                                            <hr class="w-full h-[2px] bg-yellow-500 border-none">
+                                        {:else if journey.journeyOvernight && !journey.journeySleeper}
+                                            <div class="flex justify-between items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                        <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                        <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                        
+                                            <hr class="w-full  h-[2px] bg-green-800 border-none">
+                                        {:else if journey.journeySleeper}
+                                            <div class="flex justify-between items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                            </div>
+                                            <hr class="w-full  h-[2px] bg-teal-800 border-none">
+                                        {/if}
+                                        <div class="flex justify-between items-center">
+                                            <p class="text-white text-sm">{journey.start_time}</p>
+                                            {#if !journey.delayHours && !journey.delayMinutes}
+                                            <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                            {:else}
+                                                <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
+                                            {/if}
+                                            {#if !journey.delayHours && !journey.delayMinutes}
+                                                <p class="text-white text-sm">{journey.end_time}</p>
+                                            {:else}
+                                            <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
+                                                <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
+                                                <span class="flex flex-col"> 
+                                                    <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                        {/if}
+                                                    </p>
+                                                    {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
+                                                        <p class="text-green-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                    {:else}
+                                                        <p class="text-red-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                    {/if}
+                                                    <p class="text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                        {/if}
+                                                    </p>
+                                                </span>
+                                            </span>
+                                            {/if}
+                                        </div>
+                                        <div class="border-neutral-700 border-[1px] rounded-md mt-2">
+
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            {/each}
+                        </div>
                     </div>
                 </div>
             {/if}
@@ -46,11 +142,11 @@
     import Footer from '../../../lib/components/Footer.svelte';
     import '../../siteDB.js';
     import { getJourneysData, getLogsData } from '../../siteDB.js';
+    import { countryFlags } from "../../../db/countries.js";
 
     let map;
 
 
-    
     let param = $page.params.date;
     let formatParam = param.replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1');
     let logs = null;
@@ -136,7 +232,7 @@
                     shadowSize: [41, 41]
                 });
 
-                console.log(combined)
+                // console.log(combined)
                 for(let item of combined){
                     firstSrc = null;
                     let endPoints = [];
@@ -206,7 +302,7 @@
                         if (fromLocation && toLocation) {
                             const points = [[fromLocation.lat, fromLocation.long]];
 
-                            console.log(journey)
+                            // console.log(journey)
                             if (journey.viaPoints && journey.viaPoints.length > 0) {
                                 for (let viapoint of journey.viaPoints) {
                                     points.push([viapoint.lat, viapoint.long]);
@@ -310,7 +406,11 @@
                                 </div>
                             `;
                             polyline.bindPopup(popupContent);
-                            polyline.openPopup();
+
+                            const bounds = L.latLngBounds(points);
+                            map.fitBounds(bounds, { padding: [50, 50] });
+                            
+                            // polyline.openPopup();
                         }
                     }
                 }
@@ -394,6 +494,7 @@
         // console.log(journeys, "output")
         journeyLocations = await getUniqueJourneyLocations();
         combined = await combineLists();
+        await sortJourneys();
         // console.log("combined", combined);  
         return journeys;
     }
@@ -447,7 +548,7 @@
     let combined = [];
 
     function combineLists() {
-        console.log(journeyLocations, logsToday, journeys);
+        // console.log(journeyLocations, logsToday, journeys);
         let temp = [];
         try {
             if(journeyLocations == null || journeyLocations.length == 0){
@@ -572,15 +673,16 @@
         return countries;
     }
     
+
     function getCountryEmoji(code) {
         if (countries.length === 0) {
             getFlags();
         }
         if(!isMobileDevice){
             const country = countries.find(country => country.code === code);
-            console.log(code)
+            // console.log(code)
             if (country) {
-                console.log("src", country.src);
+                // console.log("src", country.src);
                 return country.src;
             }
             return "";
@@ -591,6 +693,34 @@
             }
             return "";
         }
+    }
+
+    let sortedJourneys = []
+    async function sortJourneys() {
+        // Sort by start time
+        let uniqueJourneys = new Set();
+        for (var item of combined) {
+            for (var journey of item.journeys) {
+                uniqueJourneys.add(journey);
+            }
+        }
+        sortedJourneys = Array.from(uniqueJourneys);
+        console.log(sortedJourneys);
+    }
+
+    function calcDuration(sd, st, ed, et, dh, dm) {
+        // calculate time and return in h and m e.g 10h 30m
+        const start = new Date(`${st} ${sd}`);
+        const end = new Date(`${et} ${ed}`);
+        let diffTime = Math.abs(end - start);
+
+        // Add delay hours and minutes
+        const delayInMilliseconds = (parseInt(dh) * 60 * 60 * 1000) + (parseInt(dm) * 60 * 1000);
+        diffTime += delayInMilliseconds;
+
+        let hours = Math.floor(diffTime / (1000 * 60 * 60));
+        let minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+        return `${hours}h ${minutes}m`;
     }
 
 
@@ -605,6 +735,11 @@
 
     :global(.leaflet-popup-tip){
        @apply bg-white border border-gray-300 dark:bg-[#131313] dark:border-[#2c2c2c] !important;
+    }
+
+    .customScrollbar{
+        scrollbar-width: thin;
+        scrollbar-color: #575757 #202020;
     }
 </style>
 
