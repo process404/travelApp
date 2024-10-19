@@ -25,7 +25,7 @@
                             </div>
                         {/if}
                     </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 overflow-y-scroll customScrollbar">
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible customScrollbar">
                         <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
                         <div class="flex flex-col mt-4 gap-2">
                             {#each sortedJourneys as journey}
@@ -115,17 +115,18 @@
                                             </span>
                                             {/if}
                                         </div>
-                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
+                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
                                             <h3 class="text-left text-white text-sm">More Information</h3>
-                                            <hr class="mt-1 mb-1 border-neutral-700">
+                                            <hr class="mt-1 mb-2 border-neutral-700">
                                             <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                             <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
-                                            {#if checkForPictureToday(true,journey.numbers) != false}
+                                            {#if checkForPictureAllTime(true,journey.numbers) != false}
+                                            <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
                                                 <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
                                                 <div class="flex flex-col gap-2">
                                                     {#each journey.numbers as number}
-                                                        {#if checkForPictureToday(false, number.number) != false}
-                                                            <div class="flex gap-4 mt-1 rounded-md border-[1px] border-transparent hover:border-white duration-200">
+                                                        {#if checkForPictureAllTime(false, number.number) != false}
+                                                            <div class="flex gap-4 mt-1 rounded-md ">
                                                                 <div class="max-h-[150px] w-3/5 rounded-sm">
                                                                     <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
                                                                 </div>
@@ -153,6 +154,7 @@
                                                 <div class="flex">
 
                                                 </div>
+                                            </div>
                                             {:else}
                                                 <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
                                             {/if}
@@ -603,7 +605,6 @@
         // console.log(journeyLocations, logsToday, journeys);
         let temp = [];
         try {
-            console.log("BBBB", logsToday);
             if (journeyLocations == null || journeyLocations.length == 0) {
                 temp = logsToday.map(log => {
                     const { pictures, log_lat, log_long, log_location, numbers, ...rest } = log;
@@ -661,7 +662,6 @@
                 });
 
                 temp = temp.filter(item => item.logs.length > 0 || item.journeys.length > 0 || item.pictures.length > 0);
-                console.log("CCCC", combined);
             }
             return temp;
         } catch (error) {
@@ -781,7 +781,6 @@
             }
         }
         sortedJourneys = Array.from(uniqueJourneys);
-        console.log(sortedJourneys);
     }
 
     function calcDuration(sd, st, ed, et, dh, dm) {
@@ -800,14 +799,14 @@
     }
 
         function checkForPictureAllTime(multi, number) {
-            console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
+            // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
             let picture = null;
             if (multi) {
             for (let log of logs) {
                 // console.log("Checking log:", log);
                 if (log.numbers.some(num => number.some(n => n.number === num.number))) {
                 picture = log.pictures[0];
-                console.log("Picture found:", picture);
+                // console.log("Picture found:", picture);
                 return picture;
                 }
             }
@@ -821,19 +820,19 @@
                 }
             }
             }
-            console.log("No picture found");
+            // console.log("No picture found");
             return false;
         }
 
         function checkForPictureToday(multi, number) {
-            console.log("checkForPictureToday called with multi:", multi, "and number:", number);
+            // console.log("checkForPictureToday called with multi:", multi, "and number:", number);
             let picture = null;
             if (multi) {
                 for (let log of logsToday) {
                     // console.log("Checking log:", log);
                     if (log.numbers.some(num => number.some(n => n.number === num.number))) {
                         picture = log.pictures[0];
-                        console.log("Picture found:", picture);
+                        // console.log("Picture found:", picture);
                         return picture;
                     }
                 }
@@ -847,7 +846,7 @@
                     }
                 }
             }
-            console.log("No picture found");
+            // console.log("No picture found");
             return false;
         }
 
