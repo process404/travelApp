@@ -181,7 +181,7 @@
 	import { writable } from 'svelte/store';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
-    import { countryFlags } from '../../../countries.js'
+    import { countryFlags } from '../../../../db/countries.js';
     import  { tl_getAllData, tl_putData } from '../../../tl_stationsDB.js';
     var param = $page.params.trip;
     var tooltip = false;
