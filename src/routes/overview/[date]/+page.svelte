@@ -861,23 +861,39 @@
         // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
         let picture = null;
         if (multi) {
-        for (let log of logs) {
-            // console.log("Checking log:", log);
-            if (log.numbers.some(num => number.some(n => n.number === num.number))) {
-            picture = log.pictures[0];
-            // console.log("Picture found:", picture);
-            return picture;
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+                    picture = log.pictures[0];
+                    // console.log("Picture found:", picture);
+                    return picture;
+                }
             }
-        }
+            // If no picture found for the specific number, check for the same variant
+            for (let log of logs) {
+                if (log.numbers.some(num => number.some(n => n.variant === num.variant))) {
+                    picture = log.pictures[0];
+                    // console.log("Picture found for variant:", picture);
+                    return picture;
+                }
+            }
         } else {
-        for (let log of logs) {
-            // console.log("Checking log:", log);
-            if (log.numbers.some(num => num.number === number)) {
-            picture = log.pictures[0];
-            // console.log("Picture found:", picture);
-            return picture;
+            for (let log of logs) {
+                // console.log("Checking log:", log);
+                if (log.numbers.some(num => num.number === number)) {
+                    picture = log.pictures[0];
+                    // console.log("Picture found:", picture);
+                    return picture;
+                }
             }
-        }
+            // If no picture found for the specific number, check for the same variant
+            for (let log of logs) {
+                if (log.numbers.some(num => num.variant === number)) {
+                    picture = log.pictures[0];
+                    // console.log("Picture found for variant:", picture);
+                    return picture;
+                }
+            }
         }
         // console.log("No picture found");
         return false;
