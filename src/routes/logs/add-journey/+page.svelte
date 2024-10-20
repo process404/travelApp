@@ -204,6 +204,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="w-1/2">
+                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Miles</h3>
+                                        <input class="input reduced w-full" bind:value={miles}>
+                                    </div>
                                     <div class="w-full">
                                         <h3 class="text-neutral-300 italic mb-2 text-sm">Reason</h3>
                                         <select class="input reduced iconEdit w-full" bind:value={journeyReason}>
@@ -684,6 +688,8 @@
         });
     }
 
+    let miles = 0;
+
     async function confirmLog(){
 
 
@@ -745,6 +751,7 @@
                 journeyTags: journeyTags,
                 journeyNotes: journeyNotes,
                 serviceCode: serviceCode,
+                miles: miles,
                 numbers: numbers.map(({ dropdown, dropdown_2, id, ...train }) => ({
                     ...train
                 }))

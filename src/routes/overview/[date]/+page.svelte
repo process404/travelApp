@@ -416,8 +416,15 @@
                                        ${journey.journeySecondClass && !journey.journeySleeper ? '<span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>' : journey.journeyFirstClass ? '<span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>' : journey.journeyOvernight && !journey.journeySleeper ? `<span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight (${journey.journeyFirstClass ? '1st' : '2nd'})</span>` : journey.journeySleeper ? '<span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>' : ''}
                                     </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}</p>
+                                    <div class="flex gap-2 justify-between">
+                                        <div class="w-3/4">
+                                            <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}</p>
+                                            <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}</p>
+                                        </div>
+                                        <div class="h-auto w-1/4 flex items-center justify-center">
+                                            <p class="text-neutral-500 italic !mt-0 !mb-0">${journey.miles && journey.miles !== 0 ? `${journey.miles}mi` : ''}</p>
+                                        </div>
+                                    </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
@@ -460,8 +467,15 @@
                                         ${journey.journeySecondClass && !journey.journeySleeper ? '<span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>' : journey.journeyFirstClass ? '<span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>' : journey.journeyOvernight && !journey.journeySleeper ? `<span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight (${journey.journeyFirstClass ? '1st' : '2nd'})</span>` : journey.journeySleeper ? '<span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>' : ''}
                                     </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} <img class="w-5 h-5" src="${getCountryEmoji(journey.fromCountry)}" alt="${journey.fromCountry}"></p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} <img class="w-5 h-5" src="${getCountryEmoji(journey.toCountry)}" alt="${journey.toCountry} flag"></p>
+                                      <div class="flex gap-2 justify-between">
+                                        <div class="w-3/4">
+                                            <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} <img class="w-5 h-5" src="${getCountryEmoji(journey.fromCountry)}" alt="${journey.fromCountry}"></p>
+                                            <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} <img class="w-5 h-5" src="${getCountryEmoji(journey.toCountry)}" alt="${journey.toCountry} flag"></p>
+                                        </div>
+                                        <div class="h-auto w-1/4 flex items-center justify-center">
+                                            <p class="text-neutral-500 italic !mt-0 !mb-0">${journey.miles && journey.miles !== 0 ? `${journey.miles}mi` : ''}</p>
+                                        </div>
+                                    </div>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
@@ -850,8 +864,6 @@
 
         let hours = Math.floor(totalMinutes / 60);
         let minutes = totalMinutes % 60;
-
-        console.log("calcDuration returning:", `${hours}h ${minutes}m`);
 
         return `${hours}h ${minutes}m`;
     }
