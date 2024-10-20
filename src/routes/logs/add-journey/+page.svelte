@@ -712,8 +712,12 @@
             journeys = JSON.stringify([]);
         }
 
+        let id = null;
+        id = Math.random().toString(36).substring(2, 32);
+
         logNumbers.subscribe(async numbers => {
             const journey = {
+                id: id,
                 from: from,
                 fromCountry: fromC,
                 to: to,
