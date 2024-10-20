@@ -99,7 +99,7 @@
 <script>
     import Nav from '../../lib/components/Nav.svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { countryFlags } from '../countries.js'
+    import { countryFlags } from '../../db/countries.js';
     import { onMount } from 'svelte';
     import '../../global.css'
     var plansFromDB = [];
