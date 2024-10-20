@@ -32,11 +32,11 @@
                                 <button class="border-neutral-700 rounded-md border-[1px] p-2" on:click={() => {journey.dropdown = !journey.dropdown}}>
                                     <div class="length-diagram ">
                                         {#if journey.journeySecondClass && !journey.journeySleeper}
-                                            <div class="flex justify-center items-center w-full mb-1">
+                                            <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
-                                                        <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <span class="text-xs text-white italic pl-1 pr-1 bg-neutral-600 rounded-sm">2nd</span>
+                                                <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
                                                 {:else}
                                                     <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                         <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
@@ -45,16 +45,18 @@
                                             </div>
                                             <hr class="w-full  h-[2px] bg-neutral-500 border-none">
                                         {:else if journey.journeyFirstClass}
-                                            {#if !isMobileDevice}
-                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
-                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
-                                            {:else}
-                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
-                                                <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
-                                            {/if}
-                                            <hr class="w-full h-[2px] bg-yellow-500 border-none">
+                                            <div class="flex justify-between items-center w-full mb-1">
+                                                {#if !isMobileDevice}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                    <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                                {:else}
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
+                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                {/if}
+                                                <hr class="w-full h-[2px] bg-yellow-500 border-none">
+                                            </div>
                                         {:else if journey.journeyOvernight && !journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
@@ -86,7 +88,7 @@
                                         <div class="flex justify-between items-center">
                                             <p class="text-white text-sm">{journey.start_time}</p>
                                             {#if !journey.delayHours && !journey.delayMinutes}
-                                            <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                                <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
                                             {:else}
                                                 <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
                                             {/if}
@@ -96,15 +98,20 @@
                                             <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
                                                 <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
                                                 <span class="flex flex-col"> 
-                                                    <p class="text-neutral-600 line-through text-sm">{journey.end_time}
-                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
-                                                        {/if}
-                                                    </p>
                                                     {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
+                                                        <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                            {/if}
+                                                        </p>
                                                         <p class="text-green-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
-                                                    {:else}
-                                                        <p class="text-red-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                    {:else if getDiffMinutes(journey.delayHours, journey.delayMinutes) != 0}
+                                                        <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                            {/if}
+                                                        </p>
+                                                        <p class="text-red-500 text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                     {/if}
                                                     <p class="text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
                                                         {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
@@ -115,22 +122,26 @@
                                             </span>
                                             {/if}
                                         </div>
-                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
+                                        <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0 pointer-events-none" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
                                             <h3 class="text-left text-white text-sm">More Information</h3>
                                             <hr class="mt-1 mb-2 border-neutral-700">
                                             <div class="flex gap-2 justify-between">
                                                 <div class="w-full">
                                                     <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
-                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                                    {#if journey.operator}
+                                                        <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                                    {/if}
                                                 </div>
-                                                <div class="flex gap-2 items-baseline">
-                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
-                                                    <div class="flex gap-2 flex-wrap w-full mt-1">
-                                                        {#each journey.journeyTags as tag}
-                                                            <p class="text-left text-sm text-white bg-blue-900 p-1 rounded-sm">{tag}</p>
-                                                        {/each}
+                                                {#if journey.journeyTags.length > 0}
+                                                    <div class="lg:flex hidden gap-2 items-baseline w-auto">
+                                                        <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                        <div class="flex gap-2  w-full mt-1">
+                                                            {#each journey.journeyTags as tag}
+                                                                <p class="text-left text-sm text-white bg-green-900 p-1 rounded-sm">{tag}</p>
+                                                            {/each}
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                {/if}
                                             </div>
                                             {#if checkForPictureAllTime(true,journey.numbers) != false}
                                             <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
@@ -142,12 +153,12 @@
                                                                 <div class="max-h-[150px] w-3/5 rounded-sm">
                                                                     <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
                                                                 </div>
-                                                                <div class="flex items-center justify-center w-2/5">
+                                                                <div class="flex items-center justify-center w-2/5 flex-col gap-1">
                                                                     <p class="text-center text-lg text-white">{number.number}</p>
                                                                     {#if number.variant && number.type}
-                                                                        <p class="text-center text-sm text-white">{number.type} / {number.variant}</p>
+                                                                        <p class="text-center text-xs text-neutral-300 italic">{number.variant} / {number.type} </p>
                                                                     {:else if number.variant}
-                                                                        <p class="text-center text-sm text-white">{number.variant}</p>
+                                                                        <p class="text-center text-xs text-neutral-300 italic">{number.variant}</p>
                                                                     {/if}
                                                                 </div>
                                                             </div>
@@ -165,8 +176,22 @@
                                                 </div>
                                             </div>
                                             {:else}
-                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
+                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
                                             {/if}
+                                            {#if journey.journeyTags.length > 0}
+                                                <div class="block lg:hidden w-auto mt-2">
+                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                    <div class="flex gap-2  w-full mt-1">
+                                                        {#each journey.journeyTags as tag}
+                                                            <p class="text-left text-sm text-white bg-green-900 p-1 rounded-sm">{tag}</p>
+                                                        {/each}
+                                                    </div>
+                                                </div>
+                                            {/if}
+                                            <div class="flex gap-2 border-[1px] border-neutral-700 mt-8 p-2">
+                                                <button class="button w-3/4 blue2" class:pointer-events-auto={journey.dropdown} on:click={() => {window.location.href = '/logs/edit-journey/' + journey.id}}>Edit Journey</button>
+                                                <button class="button w-2/5 hover:before:bg-red-700 hover:before:bg-opacity-50 pointer-events-auto" class:pointer-events-auto={journey.dropdown} on:click={() => {deleteJourney(journey.id)}}>Delete</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </button>
@@ -192,6 +217,9 @@
     import '../../siteDB.js';
     import { getJourneysData, getLogsData } from '../../siteDB.js';
     import { countryFlags } from "../../../db/countries.js";
+    import "../../../global.css"
+    import '../../siteDB.js';
+    import { writeJourneysData } from '../../siteDB.js';
 
     let map;
 
@@ -797,72 +825,96 @@
         sortedJourneys = Array.from(uniqueJourneys);
     }
 
-    function calcDuration(sd, st, ed, et, dh, dm) {
-        // calculate time and return in h and m e.g 10h 30m
-        const start = new Date(`${st} ${sd}`);
-        const end = new Date(`${et} ${ed}`);
-        let diffTime = Math.abs(end - start);
 
-        // Add delay hours and minutes
-        const delayInMilliseconds = (parseInt(dh) * 60 * 60 * 1000) + (parseInt(dm) * 60 * 1000);
+
+    function calcDuration(st, sd, ed, et, dh, dm) {
+        
+        dh = dh ? dh.trim() : '00';
+        dm = dm ? dm.trim() : '00';
+
+        // Parse the start and end times
+        const start = new Date(`${sd}T${st}`);
+        const end = new Date(`${ed}T${et}`);
+        
+        let diffTime = end - start;
+
+        const delayInMilliseconds = (parseInt(dh, 10) * 60 * 60 * 1000) + (parseInt(dm, 10) * 60 * 1000);
         diffTime += delayInMilliseconds;
 
-        let hours = Math.floor(diffTime / (1000 * 60 * 60));
-        let minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+
+        if (diffTime < 0) {
+            diffTime += 24 * 60 * 60 * 1000; 
+        }
+
+        let totalMinutes = Math.floor(diffTime / (1000 * 60));
+
+        let hours = Math.floor(totalMinutes / 60);
+        let minutes = totalMinutes % 60;
+
+        console.log("calcDuration returning:", `${hours}h ${minutes}m`);
+
         return `${hours}h ${minutes}m`;
     }
+    
 
-        function checkForPictureAllTime(multi, number) {
-            // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
-            let picture = null;
-            if (multi) {
-            for (let log of logs) {
+    function checkForPictureAllTime(multi, number) {
+        // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
+        let picture = null;
+        if (multi) {
+        for (let log of logs) {
+            // console.log("Checking log:", log);
+            if (log.numbers.some(num => number.some(n => n.number === num.number))) {
+            picture = log.pictures[0];
+            // console.log("Picture found:", picture);
+            return picture;
+            }
+        }
+        } else {
+        for (let log of logs) {
+            // console.log("Checking log:", log);
+            if (log.numbers.some(num => num.number === number)) {
+            picture = log.pictures[0];
+            // console.log("Picture found:", picture);
+            return picture;
+            }
+        }
+        }
+        // console.log("No picture found");
+        return false;
+    }
+
+    function checkForPictureToday(multi, number) {
+        // console.log("checkForPictureToday called with multi:", multi, "and number:", number);
+        let picture = null;
+        if (multi) {
+            for (let log of logsToday) {
                 // console.log("Checking log:", log);
                 if (log.numbers.some(num => number.some(n => n.number === num.number))) {
-                picture = log.pictures[0];
-                // console.log("Picture found:", picture);
-                return picture;
+                    picture = log.pictures[0];
+                    // console.log("Picture found:", picture);
+                    return picture;
                 }
             }
-            } else {
-            for (let log of logs) {
+        } else {
+            for (let log of logsToday) {
                 // console.log("Checking log:", log);
                 if (log.numbers.some(num => num.number === number)) {
-                picture = log.pictures[0];
-                // console.log("Picture found:", picture);
-                return picture;
+                    picture = log.pictures[0];
+                    // console.log("Picture found:", picture);
+                    return picture;
                 }
             }
-            }
-            // console.log("No picture found");
-            return false;
         }
+        // console.log("No picture found");
+        return false;
+    }
 
-        function checkForPictureToday(multi, number) {
-            // console.log("checkForPictureToday called with multi:", multi, "and number:", number);
-            let picture = null;
-            if (multi) {
-                for (let log of logsToday) {
-                    // console.log("Checking log:", log);
-                    if (log.numbers.some(num => number.some(n => n.number === num.number))) {
-                        picture = log.pictures[0];
-                        // console.log("Picture found:", picture);
-                        return picture;
-                    }
-                }
-            } else {
-                for (let log of logsToday) {
-                    // console.log("Checking log:", log);
-                    if (log.numbers.some(num => num.number === number)) {
-                        picture = log.pictures[0];
-                        // console.log("Picture found:", picture);
-                        return picture;
-                    }
-                }
-            }
-            // console.log("No picture found");
-            return false;
+    function deleteJourney(id){
+        if (confirm('Are you sure you want to delete this journey? This action is permanent.')) {
+            writeJourneysData(journeys.filter(journey => journey.id !== id));
+            window.location.reload();
         }
+    }
 
 
 </script>
