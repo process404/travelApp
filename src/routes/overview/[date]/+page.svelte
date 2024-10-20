@@ -153,7 +153,7 @@
                                                                 <div class="max-h-[150px] w-3/5 rounded-sm">
                                                                     <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
                                                                 </div>
-                                                                <div class="flex items-center justify-center w-2/5 flex-col gap-1">
+                                                                <div class="flex items-center justify-center w-2/5 flex-col gap-1 pr-2">
                                                                     <p class="text-center text-lg text-white">{number.number}</p>
                                                                     {#if number.variant && number.type}
                                                                         <p class="text-center text-xs text-neutral-300 italic">{number.variant} / {number.type} </p>
