@@ -3,9 +3,9 @@
     <div class="h-auto w-full flex flex-col items-center pl-4 pr-4">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 min-h-screen h-auto sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
             {#if param != "unknown"}
-                <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
+                <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
             {:else}
-            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Overview for No Date</h2>
+            <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Overview for No Date</h2>
             {/if}
             {#if logsToday == null || logsToday == null}
                 <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
@@ -25,8 +25,8 @@
                             </div>
                         {/if}
                     </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible customScrollbar">
-                        <h2 class="text-white text-lg font-semibold">Your Journeys</h2>
+                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible dark:customScrollbar lightScrollbar">
+                        <h2 class="dark:text-white text-lg font-semibold">Your Journeys</h2>
                         <div class="flex flex-col mt-4 gap-2">
                             {#each sortedJourneys as journey}
                                 <button class="border-neutral-700 rounded-md border-[1px] p-2" on:click={() => {journey.dropdown = !journey.dropdown}}>
@@ -34,39 +34,39 @@
                                         {#if journey.journeySecondClass && !journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-neutral-600 rounded-sm">2nd</span>
-                                                <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                                <h2 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
                                                 {:else}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                         <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                             <hr class="w-full  h-[2px] bg-neutral-500 border-none">
                                         {:else if journey.journeyFirstClass}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                    <h2 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                                    <h2 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
                                                 {:else}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                                 <hr class="w-full h-[2px] bg-yellow-500 border-none">
                                             </div>
                                         {:else if journey.journeyOvernight && !journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                         <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
                                                 {:else}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                         <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                         
@@ -74,26 +74,26 @@
                                         {:else if journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
                                                 {:else}
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                     <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
-                                                    <h3 class="text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                             <hr class="w-full  h-[2px] bg-teal-800 border-none">
                                         {/if}
                                         <div class="flex justify-between items-center">
-                                            <p class="text-white text-sm">{journey.start_time}</p>
+                                            <p class="dark:text-white text-sm">{journey.start_time}</p>
                                             {#if !journey.delayHours && !journey.delayMinutes}
-                                                <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                                <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
                                             {:else}
-                                                <p class="text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
+                                                <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
                                             {/if}
                                             {#if !journey.delayHours && !journey.delayMinutes}
-                                                <p class="text-white text-sm">{journey.end_time}</p>
+                                                <p class="dark:text-white text-sm">{journey.end_time}</p>
                                             {:else}
                                             <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
                                                 <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
@@ -104,16 +104,16 @@
                                                                 <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
                                                             {/if}
                                                         </p>
-                                                        <p class="text-green-500 text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                        <p class="dark:text-green-500 text-green-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                     {:else if getDiffMinutes(journey.delayHours, journey.delayMinutes) != 0}
                                                         <p class="text-neutral-600 line-through text-sm">{journey.end_time}
                                                             {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
                                                                 <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
                                                             {/if}
                                                         </p>
-                                                        <p class="text-red-500 text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                        <p class="dark:text-red-500 text-red-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                     {/if}
-                                                    <p class="text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                    <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
                                                         {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
                                                             <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
                                                         {/if}
@@ -123,21 +123,21 @@
                                             {/if}
                                         </div>
                                         <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0 pointer-events-none" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
-                                            <h3 class="text-left text-white text-sm">More Information</h3>
+                                            <h3 class="text-left dark:text-white text-sm">More Information</h3>
                                             <hr class="mt-1 mb-2 border-neutral-700">
                                             <div class="flex gap-2 justify-between">
                                                 <div class="w-full">
-                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
+                                                    <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Departure Date:</span>{new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                                     {#if journey.operator}
-                                                        <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
+                                                        <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
                                                     {/if}
                                                 </div>
                                                 {#if journey.journeyTags.length > 0}
                                                     <div class="lg:flex hidden gap-2 items-baseline w-auto">
-                                                        <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                        <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
                                                         <div class="flex gap-2  w-full mt-1">
                                                             {#each journey.journeyTags as tag}
-                                                                <p class="text-left text-sm text-white bg-green-900 p-1 rounded-sm">{tag}</p>
+                                                                <p class="text-left text-sm dark:text-white bg-green-900 p-1 rounded-sm">{tag}</p>
                                                             {/each}
                                                         </div>
                                                     </div>
@@ -145,7 +145,7 @@
                                             </div>
                                             {#if checkForPictureAllTime(true,journey.numbers) != false}
                                             <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
-                                                <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
+                                                <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Vehicles:</span></p>
                                                 <div class="flex flex-col gap-2">
                                                     {#each journey.numbers as number}
                                                         {#if checkForPictureAllTime(false, number.number) != false}
@@ -154,7 +154,7 @@
                                                                     <img class="object-cover w-full h-full" src={checkForPictureToday(false, number.number).src} alt={checkForPictureToday(false, number.number).alt}>
                                                                 </div>
                                                                 <div class="flex items-center justify-center w-2/5 flex-col gap-1 pr-2">
-                                                                    <p class="text-center text-lg text-white">{number.number}</p>
+                                                                    <p class="text-center text-lg dark:text-white">{number.number}</p>
                                                                     {#if number.variant && number.type}
                                                                         <p class="text-center text-xs text-neutral-300 italic">{number.variant} / {number.type} </p>
                                                                     {:else if number.variant}
@@ -168,7 +168,7 @@
                                                                     <p class="text-neutral-800 font-semibold text-2xl">?</p>
                                                                 </div>
                                                                 <div class="flex items-center justify-center w-2/5">
-                                                                    <p class="text-left text-lg text-white">{number.number}</p>
+                                                                    <p class="text-left text-lg dark:text-white">{number.number}</p>
                                                                 </div>
                                                             </div>
                                                         {/if}
@@ -176,14 +176,14 @@
                                                 </div>
                                             </div>
                                             {:else}
-                                            <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
+                                            <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
                                             {/if}
                                             {#if journey.journeyTags.length > 0}
                                                 <div class="block lg:hidden w-auto mt-2">
-                                                    <p class="text-left text-sm text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                    <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
                                                     <div class="flex gap-2  w-full mt-1">
                                                         {#each journey.journeyTags as tag}
-                                                            <p class="text-left text-sm text-white bg-green-900 p-1 rounded-sm">{tag}</p>
+                                                            <p class="text-left text-sm dark:text-white bg-green-900 p-1 rounded-sm">{tag}</p>
                                                         {/each}
                                                     </div>
                                                 </div>
@@ -204,7 +204,7 @@
     </div>
     <div class="h-full w-full flex flex-col items-center pl-4 pr-4 mt-4">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen pl-4 pr-4 pb-4 pt-4 max-w-[1500px] w-full">
-            <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3 w-full text-left">Your Logs</h2>
+            <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3 w-full text-left">Your Logs</h2>
         </div>
     </div>
     <Footer/>
@@ -983,6 +983,11 @@
     .customScrollbar{
         scrollbar-width: thin;
         scrollbar-color: #575757 #202020;
+    }
+
+    .lightScrollbar{
+        scrollbar-width: thin;
+        scrollbar-color: #a0a0a0 #e0e0e0;
     }
 
     .leaflet-popup-content{

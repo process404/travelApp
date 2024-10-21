@@ -1,4 +1,4 @@
-<button on:click={() => switchPage()} class="clip w-full h-full relative border-[0px] hover:border-[1px] border-neutral-700 hover:border-white duration-100 group overflow-hidden rounded-md">
+<button on:click={() => switchPage()} class="clip w-full h-full relative border-[0px] hover:border-[1px] border-neutral-700 dark:hover:border-white hover:border-neutral-900 duration-100 group overflow-hidden rounded-md">
     <div class="absolute w-full h-full top-0 left-0 flex items-end justify-end flex-col">
         <div class="flex h-full items-center w-full justify-center sm:justify-end pr-0 sm:pr-8 lg:pr-0 lg:justify-center z-20 blurBox">
             <h2 class="right-4 lg:right-0 rounded-md text-white bg-black bg-opacity-30 backdrop-blur-md border-[1px] border-neutral-700 text-3xl z-30 p-4 sm:p-2 sm:pl-8 pl-12 pr-12 lg:pr-8 flex items-center top-16 clip">{buttonName} <span class="ml-2 sm:inline-block hidden lg:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short w-12 h-12 pt-1" viewBox="0 0 16 16">
