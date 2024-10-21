@@ -763,8 +763,8 @@
             $alrtMode = 'info_nc';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
-            // await sleep(3000)
-            // window.location.href = `../overview/` + inputDateStart; 
+            await sleep(1500)
+            window.location.href = `../overview/` + inputDateStart; 
         });
 
         // console.log($logNumbers)

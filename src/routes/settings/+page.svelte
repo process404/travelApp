@@ -66,7 +66,7 @@
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearJourneys()}}>Clear Journeys</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogPhotos()}}>Clear Photos</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearPlanning()}}>Clear Planning</button>
                                 </div>
@@ -216,9 +216,9 @@
                 log.pictures = [];
             });
             await writeLogsData(logs);
-            console.log('%c Log Photos cleared', 'color:lime;background:black;');
+            console.log('%c Photos cleared', 'color:lime;background:black;');
             alrtAct.set(true);
-            alrtTxt.set('Log Photos cleared');
+            alrtTxt.set('Photos cleared');
             alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');
