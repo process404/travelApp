@@ -443,7 +443,7 @@
 }
 
 .checkbox {
-    @apply appearance-none bg-transparent border-[2px] dark:border-neutral-700 border-neutral-300 w-5 h-5 rounded-sm relative duration-100 hover:cursor-pointer before:bg-neutral-700 before:bg-opacity-0 before:duration-100 checked:bg-neutral-600 checked:before:hover:bg-opacity-10
+    @apply appearance-none bg-transparent border-[2px] dark:border-neutral-700 border-neutral-500 w-5 h-5 rounded-sm relative duration-100 hover:cursor-pointer before:bg-neutral-700 before:bg-opacity-0 before:duration-100 checked:bg-neutral-600 checked:before:hover:bg-opacity-10
 }
 
 .checkbox:not(:checked):not(:focus)::before {

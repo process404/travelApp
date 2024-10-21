@@ -888,7 +888,7 @@
                 if (log.numbers.some(num => number.some(n => n.number === num.number))) {
                     if (log.pictures && log.pictures.length > 0) {
                         picture = log.pictures[0];
-                        console.log("Picture found:", picture);
+                        // console.log("Picture found:", picture);
                         return picture;
                     }
                 }
@@ -899,7 +899,7 @@
                     if (log.pictures && log.pictures.length > 0) {
                         picture = log.pictures[0];
                         if (picture) {
-                            console.log("Picture found for variant:", picture);
+                            // console.log("Picture found for variant:", picture);
                             return picture;
                         }
                     }
@@ -907,12 +907,13 @@
             }
         } else {
             for (let log of logs) {
-                // console.log("Checking log:", log);
-                if (log.numbers.some(num => number.some(n => n.number === num.number))) {
-                    if (log.pictures && log.pictures.length > 0) {
-                        picture = log.pictures[0];
-                        console.log("Picture found:", picture);
-                        return picture;
+                if(Array.isArray(log.numbers)){
+                    if (log.numbers.some(num => num.number === number)) {
+                        if (log.pictures && log.pictures.length > 0) {
+                            picture = log.pictures[0];
+                            // console.log("Picture found:", picture);
+                            return picture;
+                        }
                     }
                 }
             }
@@ -922,7 +923,7 @@
                     if (log.pictures && log.pictures.length > 0) {
                         picture = log.pictures[0];
                         if (picture) {
-                            console.log("Picture found for variant:", picture);
+                            // console.log("Picture found for variant:", picture);
                             return picture;
                         }
                     }
