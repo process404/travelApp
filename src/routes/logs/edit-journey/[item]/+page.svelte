@@ -585,6 +585,7 @@
                     journeyNotes = journey.journeyNotes;
                     serviceCode = journey.serviceCode;
                     logNumbers.set(journey.numbers);
+                    miles = journey.miles
                 }
             }
 

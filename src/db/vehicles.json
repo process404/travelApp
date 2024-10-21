@@ -98,7 +98,16 @@
                     {"name":"Class 60","short":"B_UK_60"},
                     {"name":"Class 47","short":"B_UK_47"},
                     {"name":"Class 57","short":"B_UK_47"}
-                ]}
+                ]},
+                {
+                    "name":"CAF / UK", "variants":[
+                        {"name":"Class 195","short":"CAF_195"},
+                        {"name":"Class 196","short":"CAF_196"},
+                        {"name":"Class 197","short":"CAF_197"},
+                        {"name":"Class 331","short":"CAF_331"},
+                        {"name":"Class 397","short":"CAF_397"}
+                    ]
+                }
             ],
             "busTypes": [
                 {

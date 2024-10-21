@@ -16,7 +16,7 @@
         {#if page == 'logs'}
             <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full pt-4 sm:pb-6 pl-4 pr-4 pb-4">
                 <div class="flex gap-6 justify-between items-center">
-                    <h2 class="text-white font-semibold text-2xl w-full text-left">Overviews by date</h2>
+                    <h2 class="dark:text-white font-semibold text-2xl w-full text-left">Overviews by date</h2>
                     <div class="flex gap-2 w-full justify-end">
                         <select class="input blue reduced"   bind:value={sortBy}>
                             <option>All Time</option>
@@ -43,16 +43,16 @@
                             <ul class="flex-wrap w-full">
                             {#each Object.keys(logsByYear[year]) as month}
                                 {#if month != 'Unknown'}
-                                    <h3 class="text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
+                                    <h3 class="dark:text-neutral-400 italic text-lg">{year} <span class="text-xs">- {month}</span></h3>
                                 {:else}
-                                    <h3 class="text-neutral-400 italic text-lg">No Date</h3>
+                                    <h3 class="dark:text-neutral-400 italic text-lg">No Date</h3>
                                 {/if}
                                 {#each Object.keys(logsByYear[year][month]) as date}
                                     <div class="flex flex-col mb-4 mt-2">
                                         <ul class="flex flex-wrap gap-2">
                                             {#if getPicture(logsByYear[year][month][date]) == null}
                                                 <button class="w-1/2 h-[100px] overflow-hidden relative rounded-md max-w-[300px] border-neutral-700 border-[1px] hover:border-neutral-400 duration-100" on:click={() => {window.location.href = '/overview/' + date}}>
-                                                    <span class="bg-neutral-800 block absolute w-full h-full bg-opacity-100 p-2 top-0">
+                                                    <span class="dark:bg-neutral-800 bg-neutral-600 block absolute w-full h-full bg-opacity-100 p-2 top-0">
                                                         {#if date != 'Unknown'}
                                                             <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">{formatDate(date)}</h4>
                                                         {:else}

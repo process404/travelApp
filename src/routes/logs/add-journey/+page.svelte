@@ -4,12 +4,12 @@
         <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col">
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
-                    <h2 class="text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
+                    <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex items-center justify-center gap-3 mr-1 flex-col mb-3 sm:mb-1">
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
-                                <h3 class="text-neutral-300 italic mb-2">From</h3>
+                                <h3 class="dark:text-neutral-300 italic mb-2">From</h3>
                                 {#if loadStns}
                                     <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
                                         <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
@@ -19,7 +19,7 @@
                                 {/if}
                             </div>
                             <div class="w-full">
-                                <h3 class="text-neutral-300 italic mb-2">To</h3>
+                                <h3 class="dark:text-neutral-300 italic mb-2">To</h3>
                                 {#if loadStns}
                                     <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm">
                                         <span class="loader" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
@@ -29,15 +29,15 @@
                                 {/if}
                 
                             </div>
-                            <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
+                            <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 dark:bg-neutral-800 bg-neutral-300 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
                                 <button class="flex justify-between w-full items-center" on:click={() => viaPointsDropdown = !viaPointsDropdown}>
                                     <h2 class="dark:text-neutral-300">Via</h2>
                                     {#if viaPointsDropdown}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short dark:fill-white w-7 h-7" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                                         </svg>
                                     {:else}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short dark:fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                                         </svg>
                                     {/if}
@@ -47,19 +47,19 @@
                                     <div class="flex gap-4 flex-col mt-4 items-center justify-center mb-2">
                                         <div class="flex flex-col items-center gap-2">
                                             {#if !from}
-                                                <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
+                                                <h3 class="dark:text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
                                                 {#if fromC}
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center">{from} ({getFlag(fromC)})</h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center">{from} ({getFlag(fromC)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{from} <span><img class="w-4 h-4" alt={fromC} src={`https://flagsapi.com/${fromC}/flat/64.png`}></span></h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center flex gap-2 items-center">{from} <span><img class="w-4 h-4" alt={fromC} src={`https://flagsapi.com/${fromC}/flat/64.png`}></span></h3>
                                                     {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 w-full text-center">{from} (None selected)</h3>
+                                                    <h3 class="dark:text-neutral-300 w-full text-center">{from} (None selected)</h3>
                                                 {/if}
                                             {/if}        
-                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                            <span class="block w-[1px] h-[8px] dark:bg-neutral-300 bg-neutral-800"></span>
                                         </div>
                                         {#if viaPoints.length == 0 && !viaPointsAdd}
                                             <button class="button" on:click={() => viaPointsAdd = true}>Add via point</button>
@@ -69,11 +69,11 @@
                                             </div>
                                         {:else if viaPointsAdd && viaPoints.length > 0}
                                             {#each viaPoints as point}
-                                                <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider" on:click={removeVia(point)}>
+                                                <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider    " on:click={removeVia(point)}>
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center">{point.name} ({getFlag(point.country)})</h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center">{point.name} ({getFlag(point.country)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center flex gap-2 items-center">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
                                                     {/if}
             
                                                     <!-- <button class="button red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -90,9 +90,9 @@
                                             {#each viaPoints as point}
                                                 <button class="flex gap-2 p-2 border-[1px] border-neutral-700 rounded-md hover:border-red-800 duration-200 button text wider" on:click={removeVia(point)}>
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center italic">{point.name} ({getFlag(point.country)})</h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center italic">{point.name} ({getFlag(point.country)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center italic">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center flex gap-2 items-center italic">{point.name} <span><img class="w-4 h-4" alt={point.country} src={`https://flagsapi.com/${point.country}/flat/64.png`}></span></h3>
                                                     {/if}
             
                                                     <!-- <button class="button red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -101,22 +101,22 @@
                                                       </svg></button> -->
                                                 </button>
                                             {/each}
-                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                            <span class="block w-[1px] h-[8px] dark:bg-neutral-300 bg-neutral-800"></span>
                                             <button class="button" on:click={() => {viaPointsAdd = true; via = ''}}>Add via point</button>
                                         {/if}
                                         <div class="flex flex-col items-center gap-2">
-                                            <span class="block w-[1px] h-[8px] bg-neutral-300"></span>
+                                            <span class="block w-[1px] h-[8px] dark:bg-neutral-300 bg-neutral-800"></span>
                                             {#if !to}
-                                                <h3 class="text-neutral-300 italic w-full text-center">None selected</h3>
+                                                <h3 class="dark:text-neutral-300 italic w-full text-center">None selected</h3>
                                             {:else}
                                                 {#if toC}
                                                     {#if isMobileDevice}
-                                                        <h3 class="text-neutral-300 w-full text-center italic">{to} ({getFlag(toC)})</h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center italic">{to} ({getFlag(toC)})</h3>
                                                     {:else}
-                                                        <h3 class="text-neutral-300 w-full text-center flex gap-2 items-center italic">{to} <span><img class="w-4 h-4" alt={toC} src={`https://flagsapi.com/${toC}/flat/64.png`}></span></h3>
+                                                        <h3 class="dark:text-neutral-300 w-full text-center flex gap-2 items-center italic">{to} <span><img class="w-4 h-4" alt={toC} src={`https://flagsapi.com/${toC}/flat/64.png`}></span></h3>
                                                     {/if}
                                                 {:else}
-                                                    <h3 class="text-neutral-300 w-full text-center">{to} (None selected)</h3>
+                                                    <h3 class="dark:text-neutral-300 w-full text-center">{to} (None selected)</h3>
                                                 {/if}
                                             {/if}                            
                                         </div>
@@ -128,29 +128,29 @@
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex gap-4">
                             <div class="w-full">
-                                <h3 class="text-neutral-300 italic">Departure</h3>
+                                <h3 class="dark:text-neutral-300 italic">Departure</h3>
                                 <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                                    <input type="date" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateStart}>
-                                    <input type="time" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeStart}>
+                                    <input type="date" class="input blue mt-2 dark:iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateStart}>
+                                    <input type="time" class="input blue mt-2 dark:iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeStart}>
                                 </div>
                             </div>
                             <div class="w-full">
-                                <h3 class="text-neutral-300 italic">Arrival</h3>
+                                <h3 class="dark:text-neutral-300 italic">Arrival</h3>
                                 <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row">
-                                    <input type="date" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateEnd}>
-                                    <input type="time" class="input blue mt-2 iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeEnd}>
+                                    <input type="date" class="input blue mt-2 dark:iconEdit w-full" style="font-size: 0.75rem" bind:value={inputDateEnd}>
+                                    <input type="time" class="input blue mt-2 dark:iconEdit w-full" style="font-size: 0.75rem" bind:value={inputTimeEnd}>
                                 </div>
                             </div>
                         </div>
-                        <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50">
+                        <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 dark:bg-neutral-800 bg-neutral-300 bg-opacity-30 hover:border-neutral-400 duration-50">
                             <button class="flex justify-between w-full items-center" on:click={() => extraJourneyDropdown = !extraJourneyDropdown}>
                                 <h2 class="dark:text-neutral-300">Extra Details</h2>
                                 {#if extraJourneyDropdown}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short dark:fill-white w-7 h-7" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                                     </svg>
                                 {:else}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short dark:fill-white w-7 h-7 rotate-180" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
                                     </svg>
                                 {/if}
@@ -159,16 +159,16 @@
                                 <hr class="w-full mt-2 mb-2 border-neutral-700">
                                 <div class="flex gap-4 sm:flex-row flex-col mt-3">
                                     <div class="w-full">
-                                        <h3 class="text-neutral-300 italic mb-2  text-sm">Operator</h3>
+                                        <h3 class="dark:text-neutral-300 italic mb-2  text-sm">Operator</h3>
                                         <PromptField red="true" ds={operators} bind:value={operator} on:select={selectOperator}/>
                                     </div>
                                     <div class="flex gap-4">
                                         <div class="w-full">
-                                            <h3 class="text-neutral-300 italic mb-2  text-sm ">Service Code</h3>
+                                            <h3 class="dark:text-neutral-300 italic mb-2  text-sm ">Service Code</h3>
                                             <input class="input blue w-full reduced h-auto" bind:value={serviceCode}/>
                                         </div>
                                         <div class="w-full sm:hidden">
-                                            <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
+                                            <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
                                             <div class="flex gap-1">
                                                 <select class="input reduced iconEdit w-full" bind:value={delayHours}>
                                                     {#each Array.from({ length: 13 }, (_, i) => i) as hour}
@@ -187,7 +187,7 @@
                                 <div class="flex gap-4 mt-4 mb-3">
                                     <div class="hidden sm:block w-full">
                                         <div class="w-full">
-                                            <h3 class="text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
+                                            <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Delay (<b>HH:MM</b>)</h3>
                                             <div class="flex gap-1">
                                                 <select class="input reduced iconEdit w-full" bind:value={delayHours}>
                                                     {#each Array.from({ length: 13 }, (_, i) => i - 2) as hour}
@@ -205,11 +205,11 @@
                                         </div>
                                     </div>
                                     <div class="w-1/2">
-                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Miles</h3>
+                                        <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Miles</h3>
                                         <input class="input reduced w-full" bind:value={miles}>
                                     </div>
                                     <div class="w-full">
-                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Reason</h3>
+                                        <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Reason</h3>
                                         <select class="input reduced iconEdit w-full" bind:value={journeyReason}>
                                             <option></option>
                                             <option>Leisure</option>
@@ -220,7 +220,7 @@
                                 </div>
                                 <div class="w-full mt-4 mb-3 flex gap-4">
                                     <div class="w-full">
-                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Facilities</h3>
+                                        <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Facilities</h3>
                                         <div class="flex">
         
                                             <button class="button text pureSVG" class:blue={journeyWifi} on:click={() => journeyWifi = !journeyWifi}><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-wifi-off" class:opacity-50={!journeyWifi} class:opacity-100={journeyWifi} viewBox="0 0 16 16">
@@ -243,7 +243,7 @@
                                         </div>
                                     </div>
                                     <div class="w-full">
-                                        <h3 class="text-neutral-300 italic mb-2 text-sm">Travel Class</h3>
+                                        <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Travel Class</h3>
                                         <div class="flex">
                                             <button class="button text pureSVG" class:blue={journeyFirstClass} on:click={() => journeyFirstClass = !journeyFirstClass}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class:opacity-50={!journeyFirstClass} class:opacity-100={journeyFirstClass} class="bi bi-1-square" viewBox="0 0 16 16">
@@ -275,7 +275,7 @@
                                 </div>
 
                                 <div class="w-full mt-4 mb-3">
-                                    <h3 class="text-neutral-300 italic mb-2 text-sm">Tags</h3>
+                                    <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Tags</h3>
                                     <div class="input blue min-h-[70px] flex gap-2 flex-wrap items-start justify-start" on:click={() => document.getElementById("focusJourneyTagInput").focus()} role="presentation">
                                         {#each journeyTags as tag}
                                             <button class="button blue2 hover-red" on:click={removeTag(tag)}>
@@ -287,7 +287,7 @@
                                 </div>
 
                                 <div class="w-full mt-4 mb-3">
-                                    <h3 class="text-neutral-300 italic mb-2 text-sm">Notes</h3>
+                                    <h3 class="dark:text-neutral-300 italic mb-2 text-sm">Notes</h3>
                                     <textarea class="input blue resize-none w-full min-h-[120px]"></textarea>
                                 </div>
                             {/if}
@@ -304,7 +304,7 @@
 
 
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
-                        <h3 class="text-neutral-300 italic">Numbers</h3>
+                        <h3 class="dark:text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex mb-2 rounded-md border-neutral-800 gap-1 w-full items-start">
                                 <ul class="gap-1 input w-full min-h-[150px] flex-wrap" role="presentation" on:click|self={() => {document.getElementById('numberEntryInput').focus()}}>
@@ -531,7 +531,7 @@
                     allStns = cachedStations[0].data;
                     loadStns = false;
                 } else {
-                    const worker = new Worker(new URL('../../../stationWorker.js', import.meta.url), { type: 'module' });
+                    const worker = new Worker(new URL('../../stationWorker.js', import.meta.url), { type: 'module' });
                     worker.onmessage = async (event) => {
                         allStns = event.data;
                         await tl_putData(allStns);
@@ -758,12 +758,12 @@
             };
 
             const addNew = journeys.concat(journey);
-            // console.log(addNew);
-            let test = await writeJourneysData(addNew);
+            console.log(addNew);
+            await writeJourneysData(addNew);
             $alrtMode = 'info_nc';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
-            await sleep(3000)
+            await sleep(1500)
             window.location.href = `../overview/` + inputDateStart; 
         });
 
@@ -902,6 +902,6 @@
 
 <style>
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
+    
 </style>
 

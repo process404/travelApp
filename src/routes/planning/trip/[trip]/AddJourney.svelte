@@ -1,9 +1,9 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div role="button" tabindex="0" class="fixed w-full h-screen bg-black z-30 bg-opacity-80 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="bg-neutral-900 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
+<div role="button" tabindex="0" class="fixed w-full h-screen dark:bg-black bg-neutral-500 z-30 bg-opacity-80 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
+    <div class="dark:bg-neutral-900 bg-neutral-200 w-[90%] max-w-[800px] h-[90%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col" in:fade={{duration:100}} out:fade={{duration:100}}>
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
+                <h2 class="dark:text-white text-2xl font-semibold text-left">Add Journey <h4 class="text-neutral-500 italic text-xs sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
                 <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
             </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
@@ -11,7 +11,7 @@
         <hr class="mt-4 mb-2 border-neutral-700">
         <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
-                <h3 class="text-neutral-300 italic text-left mb-1">From</h3>
+                <h3 class="dark:text-neutral-300 italic text-left mb-1">From</h3>
                 {#if !loading}
                     <PromptField ds="{locations}" on:select={selectFrom} bind:value={from} ver="loc" bind:presetC={fromCountry} adDs={allStns}/>
                 {:else}
@@ -19,7 +19,7 @@
                 {/if}
                 </div>
             <div class="w-full">
-                <h3 class="text-neutral-300 italic text-left mb-1">To</h3>
+                <h3 class="dark:text-neutral-300 italic text-left mb-1">To</h3>
                 {#if !loading}
                     <PromptField ds="{locations}" on:select={selectTo} bind:value={to} ver="loc" bind:presetC={toCountry} adDs={allStns}/>
                 {:else}
@@ -30,30 +30,30 @@
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full flex gap-3">
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
-                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateStart}/>
-                    <h3 class="text-neutral-300 italic text-left mb-2  mt-2 text-sm">Departure Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={departureTime}/>
+                    <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
+                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={tripDateStart}/>
+                    <h3 class="dark:text-neutral-300 italic text-left mb-2  mt-2 text-sm">Departure Time</h3>
+                    <input class="input blue dark:iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
-                    <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Arrival Date</h3>
-                    <input class="input blue iconEdit w-full" type="date" bind:value={tripDateEnd}/>
-                    <h3 class="text-neutral-300 italic text-left mb-2 mt-2 text-sm">Arrival Time</h3>
-                    <input class="input blue iconEdit w-full" type="time" bind:value={arrivalTime}/>                
+                    <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Arrival Date</h3>
+                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={tripDateEnd}/>
+                    <h3 class="dark:text-neutral-300 italic text-left mb-2 mt-2 text-sm">Arrival Time</h3>
+                    <input class="input blue dark:iconEdit w-full" type="time" bind:value={arrivalTime}/>                
                 </div>
             </div>
             <div class="md:w-1/2 w-full">
-                <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Service</h3>
+                <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Service</h3>
                 <input class="input blue w-full"  bind:value={service}/>
             </div>
             <div class="w-full">
-                <h3 class="text-neutral-300 italic text-left mb-1 text-sm">Operator</h3>
+                <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Operator</h3>
                 <input class="input blue w-full"  bind:value={operator}/>
             </div>
         </div>
         <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full">
-                <h3 class="text-neutral-300 italic text-left mb-1 w-full">Description</h3>
+                <h3 class="dark:text-neutral-300 italic text-left mb-1 w-full">Description</h3>
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </div>

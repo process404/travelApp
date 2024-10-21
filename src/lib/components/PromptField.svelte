@@ -6,18 +6,18 @@
         <!--TO-DO add precise location info and country selector-->
         <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled} class:reduced={red}>
         {#if suggestions.length != 0}
-        <div class="absolute bottom-100 bg-neutral-800 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
+        <div class="absolute bottom-100 dark:bg-neutral-800 bg-neutral-200 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
             {#if !loading}
                 {#each suggestions.slice(0,5) as suggestion}
                     <!-- {#if name.name != value && value.length < name.name.length && value.length > 0} -->
                     {#if !isMobileDevice}
-                        <button on:click={() => selectItem(suggestion)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
-                            <span>{@html highlightMatch(suggestion, value)}</span>
+                        <button on:click={() => selectItem(suggestion)} class="dark:text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
+                            <span class="text-black">{@html highlightMatch(suggestion, value)}</span>
                             <span><img src={`https://flagsapi.com/${suggestion.country}/flat/64.png`} class="w-4 h-4" alt={suggestion.country}></span>
                         </button>
                     {:else}
-                        <button on:click={() => selectItem(suggestion)} class="text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
-                            <span>{@html highlightMatch(suggestion, value)}</span>
+                        <button on:click={() => selectItem(suggestion)} class="dark:text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
+                            <span class="text-black">{@html highlightMatch(suggestion, value)}</span>
                             <span class="w-4 h-4">{getFlag(suggestion.country)}</span>
                         </button>
                     {/if}
@@ -243,7 +243,7 @@
         const beforeMatch = text.slice(0, index);
         const match = text.slice(index, index + query.length);
         const afterMatch = text.slice(index + query.length);
-        return `${beforeMatch}<b class="font-bold text-white">${match}</b>${afterMatch}`;
+        return `${beforeMatch}<b class="font-bold dark:text-white">${match}</b>${afterMatch}`;
     }
 
     
@@ -274,7 +274,7 @@
 </script>
 
 <style>
-    select{background-color: rgb(31, 31, 31) !important; color: #ddd !important;}
+
     .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     select.selectReduced{
         @apply p-0 w-[50px]

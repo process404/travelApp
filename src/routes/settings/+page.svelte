@@ -1,10 +1,10 @@
 <Alert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 
-<div style="width: 100vw; height: 100vh; display: flex; flex-direction: column" id="app">
+<div style="width: 100vw; height: 100vh; display: flex; flex-direction: column; overflow-x:hidden" id="app">
     <Nav ver="back"/>
     <div class="h-auto w-full flex flex-col items-center">
         <div class="max-w-[1000px] h-auto flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 sm:pt-6 sm:pb-6 pl-2 pr-2 sm:pl-12 sm:pr-12 pb-2">
-            <h2 class="text-white text-2xl font-semibold sm:mt-1 mt-4 mb-4">Settings</h2>
+            <h2 class="dark:text-white text-2xl font-semibold sm:mt-1 mt-4 mb-4">Settings</h2>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
                 <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3">
                     <div class="w-[125px] flex items-center justify-center">
@@ -27,8 +27,8 @@
             </div>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
                 <button class="w-full flex justify-between p-4 items-center group" on:click={() => {advancedDropdown = !advancedDropdown; if(advancedDropdown == false){understood = false; understood2 = false}}}>
-                    <h2 class="text-white text-xl font-semibold">Advanced</h2>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill w-5 h-5 opacity-50 group-hover:opacity-100 duration-100 fill-neutral-200" viewBox="0 0 16 16" class:rotate={advancedDropdown}>
+                    <h2 class="dark:text-white text-xl font-semibold">Advanced</h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill w-5 h-5 opacity-50 group-hover:opacity-100 duration-100 dark:fill-neutral-200" viewBox="0 0 16 16" class:rotate={advancedDropdown}>
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </svg>
                 </button>
@@ -52,13 +52,13 @@
                             <p class="dark:text-neutral-400 text-sm italic">Export all database data as a CSV file, this may take a considerable time duration to generate.</p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
-                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {exportCSV()}}>Export as CSV</button>
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px] opacity-50 cursor-not-allowed" on:click={() => {exportCSV()}}>Export as CSV</button>
                         </div>
                     </div>
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
                             <h2 class="dark:text-neutral-300 mb-2">Manage Data</h2>
-                            <p class="dark:text-neutral-400 text-sm italic">Clear parts of or all of the data stored. Either to free up storage, clear old plans or because of a technical issue. <br><br><span class="text-yellow-300">Warning! These actions are permanent and cannot be reversed (except getting stations from the database).</span></p>
+                            <p class="dark:text-neutral-400 text-sm italic">Clear parts of or all of the data stored. Either to free up storage, clear old plans or because of a technical issue. <br><br><span class="dark:text-yellow-300 text-yellow-800 font-semibold dark:font-normal">Warning! These actions are permanent and cannot be reversed (except getting stations from the database).</span></p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood}
@@ -66,7 +66,7 @@
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearJourneys()}}>Clear Journeys</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearUserLocations()}}>Clear User Locations</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearDBLocations()}}>Clear Database Locations</button>
-                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogPhotos()}}>Clear Log Photos</button>
+                                    <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogPhotos()}}>Clear Photos</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearLogsGeneral()}}>Clear Logs</button>
                                     <button class="button red md:max-w-[170px] darkbefore w-full text-sm" on:click={() => {clearPlanning()}}>Clear Planning</button>
                                 </div>
@@ -78,7 +78,7 @@
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
                             <h2 class="dark:text-neutral-300 mb-2">Clear logs, journeys and photographs over 1, 3, 6 or 12 months old or those with no date</h2>
-                            <p class="dark:text-neutral-400 text-sm italic">Clears all logs, journeys and associated photographs which are older than a certain time ago such as 1, 3, 6 or 12 months. <br><br><span class="text-yellow-300">Warning! This action is permenant and cannot be reversed.</span></p>
+                            <p class="dark:text-neutral-400 text-sm italic">Clears all logs, journeys and associated photographs which are older than a certain time ago such as 1, 3, 6 or 12 months. <br><br><span class="dark:text-yellow-300 text-yellow-800 font-semibold dark:font-normal">Warning! This action is permenant and cannot be reversed.</span></p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             {#if understood2}
@@ -216,9 +216,9 @@
                 log.pictures = [];
             });
             await writeLogsData(logs);
-            console.log('%c Log Photos cleared', 'color:lime;background:black;');
+            console.log('%c Photos cleared', 'color:lime;background:black;');
             alrtAct.set(true);
-            alrtTxt.set('Log Photos cleared');
+            alrtTxt.set('Photos cleared');
             alrtMode.set('success');
         } else {
             console.log('%c Action cancelled', 'color:red;background:black;');

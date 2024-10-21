@@ -14,14 +14,14 @@
             <div class="max-w-[1000px] w-full flex flex-col h-full">
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-3 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
                     {#if tripName == ''}
-                        <h1 class="text-2xl text-white">Loading...</h1>
+                        <h1 class="text-2xl dark:text-white">Loading...</h1>
                         <span class="loader"></span>
                     {/if}
                     <div class="flex  items-center mt-5 sm:mt-0 mb-5 relative flex-col">
                         {#if $tripName.length != 0}
-                            <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>{$tripName}</button>
+                            <button class="dark:text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>{$tripName}</button>
                         {:else}
-                        <button class="text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>[No Trip Name]</button>
+                        <button class="dark:text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>[No Trip Name]</button>
                         {/if}
                         {#if tooltip}
                             <div in:fade={{duration:50}} class="absolute top-[75%] translate-x-[-50%] left-[50%] bg-black p-2 rounded-md z-30 min-w-[150px]">
@@ -32,9 +32,9 @@
                         {/if}
                         <div class="relative">
                             {#if $tripDescription == ''}
-                                <button class="text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>[No Description]</button>
+                                <button class="dark:text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>[No Description]</button>
                             {:else}
-                                <button class="text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>{$tripDescription}</button>
+                                <button class="dark:text-neutral-500 italic text-xs hover:border-white border-[1px] border-transparent" on:click={() => {tooltip2 = !tooltip2}}>{$tripDescription}</button>
                             {/if}
                             {#if tooltip2}
                                 <div in:fade={{duration:50}} class="absolute top-[160%] translate-x-[-50%] left-[50%]  bg-black p-2 rounded-md z-30 min-w-[150px] ">
@@ -54,7 +54,7 @@
                             {#each thisTrip.days as day}
                                 <div class="border-[1px] border-neutral-700 rounded-md w-full p-2 h-auto min-h-[150px] first:mt-0 mt-4">
                                     <div class="flex justify-between w-full items-center flex-wrap">
-                                        <h2 class="text-white italic">Day {day.day}</h2>
+                                        <h2 class="dark:text-white italic">Day {day.day}</h2>
                                         {#if !loadStns}
                                             <button class="button blue p-1 text-sm pl-3 pr-3 wider2" on:click={addJourneyFn(day, thisTrip.start, thisTrip.end)}>Add</button>
                                         {:else}
@@ -64,12 +64,12 @@
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
                                         {#each sortJourneys(day.journeys) as journey}
-                                            <div class="border-[1px] bg-black bg-opacity-30 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
+                                            <div class="border-[1px] dark:bg-black dark:bg-opacity-30 bg-opacity-100 bg-neutral-200 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center sm:flex-row flex-col">
                                                     <div class="flex flex-col gap-1 items-start w-full">
-                                                        <h3 class="text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col">
+                                                        <h3 class="dark:text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col">
                                                             {#if isMobileDevice}
-                                                                <span class="flex gap-2 items-center">
+                                                                <span class="flex gap-2 items-center ">
                                                                     {journey.from}
                                                                    <span>{getCountryEmoji(journey.fromCountry)}</span>
                                                                 </span>
@@ -95,47 +95,47 @@
                                                             {/if}
                                                         </h3>
                                                         <div class="flex gap-2 flex-wrap mt-1 max-w-[400px]">
-                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle fill-white opacity-30" viewBox="0 0 16 16">
+                                                            <div class="flex gap-2 items-center dark:bg-neutral-800 bg-neutral-400 bg-opacity-30 dark:bg-opacityy-100 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle dark:fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                                                                   </svg>
                                                                   {#if journey.operator != '' && journey.service != ''}
-                                                                        <h4 class="text-white text-sm">{journey.service}<span class="ml-1 mr-1 opacity-30">/</span>{journey.operator}</h4>
+                                                                        <h4 class="dark:text-white text-sm">{journey.service}<span class="ml-1 mr-1 opacity-30">/</span>{journey.operator}</h4>
                                                                   {:else if journey.operator != ''}
-                                                                        <h4 class="text-white text-sm">{journey.operator}</h4>
+                                                                        <h4 class="dark:text-white text-sm">{journey.operator}</h4>
                                                                   {:else if journey.service != ''}
-                                                                        <h4 class="text-white text-sm">{journey.service}</h4>
+                                                                        <h4 class="dark:text-white text-sm">{journey.service}</h4>
                                                                   {/if}
                                                                 </div>
-                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
+                                                            <div class="flex gap-2 items-center dark:bg-neutral-800 bg-neutral-400 bg-opacity-30 dark:bg-opacity-100 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock dark:fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
-                                                                  <h4 class="text-white text-sm">{journey.departureTime} <span class="opacity-50 italic ml-1 mr-1">to</span> {journey.arrivalTime}</h4>
+                                                                  <h4 class="dark:text-white text-sm">{journey.departureTime} <span class="opacity-30 italic ml-1 mr-1">to</span> {journey.arrivalTime}</h4>
                                                             </div>
-                                                            <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock fill-white opacity-30" viewBox="0 0 16 16">
+                                                            <div class="flex gap-2 items-center dark:bg-neutral-800 bg-neutral-400 bg-opacity-30 dark:bg-opacity-100 rounded-md p-1 pl-2 pr-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock dark:fill-white opacity-30" viewBox="0 0 16 16">
                                                                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                                                                   </svg>
                                                                   {#if journey.departureDate != journey.arrivalDate}
                                                                     {#if calcDays(journey.departureDate, journey.arrivalDate) > 1}
-                                                                        <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} days</span></h4>
+                                                                        <h4 class="dark:text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} days</span></h4>
                                                                     {:else}
-                                                                        <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} day</span></h4>
+                                                                        <h4 class="dark:text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)} <span class="text-xs text-neutral-400">+ {calcDays(journey.departureDate, journey.arrivalDate)} day</span></h4>
                                                                     {/if}
                                                                   {:else}
-                                                                    <h4 class="text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)}</h4>
+                                                                    <h4 class="dark:text-white text-sm">{calcTime(journey.departureTime, journey.arrivalTime, journey.departureDate, journey.arrivalDate)}</h4>
                                                                   {/if}
                                                                 </div>
                                                             {#if journey.description != '' && journey.description != null}
-                                                                <div class="flex gap-2 items-center bg-neutral-800 rounded-md p-1 pl-2 pr-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky fill-white opacity-30 min-w-3" viewBox="0 0 16 16">
+                                                                <div class="flex gap-2 items-center dark:bg-neutral-800 bg-neutral-400 bg-opacity-30 dark:bg-opacity-100 rounded-md p-1 pl-2 pr-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky dark:fill-white opacity-30 min-w-3" viewBox="0 0 16 16">
                                                                         <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293z"/>
                                                                     </svg>
-                                                                    <h4 class="text-white text-sm">{journey.description}</h4>
+                                                                    <h4 class="dark:text-white text-sm">{journey.description}</h4>
                                                                 </div>
                                                             {/if}
                                                         </div>
@@ -181,7 +181,7 @@
 	import { writable } from 'svelte/store';
     import '../../../siteDB.js';
     import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
-    import { countryFlags } from '../../../countries.js'
+    import { countryFlags } from '../../../../db/countries.js';
     import  { tl_getAllData, tl_putData } from '../../../tl_stationsDB.js';
     var param = $page.params.trip;
     var tooltip = false;

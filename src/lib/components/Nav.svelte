@@ -1,5 +1,5 @@
 
-<nav class="bg-black w-full min-h-16 p-2 flex mb-4 pl-4 pr-4 items-center justify-center">
+<nav class="bg-black  w-full min-h-16 p-2 flex mb-4 pl-4 pr-4 items-center justify-center">
     {#if ver == 'main'}
     <div class="max-w-[1000px] flex items-center justify-between w-full gap-4">
         <div class="flex gap-4 items-center">
