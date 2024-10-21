@@ -238,6 +238,7 @@
         param = param.replace(/-/g, '/');
         document.title = 'Overview for ' + formatParam;
         logs = await getLogsData();
+        console.log(logs);
         logsSorted = logs.reduce((acc, log) => {
             const logDate = new Date(log.log_date);
             const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
@@ -593,20 +594,24 @@
     async function getJourneysLogs() {
         journeys = await getJourneysData();
         // console.log(journeys, "journeys")
-        journeys = journeys.filter(journey => {
-            const journeyDate = new Date(journey.start_date);
-            const [year, month, day] = param.split('/');
-            return journeyDate.getFullYear() === parseInt(year) &&
-               journeyDate.getMonth() + 1 === parseInt(month) &&
-               journeyDate.getDate() === parseInt(day);
-        });
-
-        // console.log(journeys, "output")
-        journeyLocations = await getUniqueJourneyLocations();
-        combined = await combineLists();
-        await sortJourneys();
-        // console.log("combined", combined);  
-        return journeys;
+        if (Array.isArray(journeys) && journeys.length > 0) {
+            journeys = journeys.filter(journey => {
+                const journeyDate = new Date(journey.start_date);
+                const [year, month, day] = param.split('/');
+                return journeyDate.getFullYear() === parseInt(year) &&
+                   journeyDate.getMonth() + 1 === parseInt(month) &&
+                   journeyDate.getDate() === parseInt(day);
+            });
+    
+            // console.log(journeys, "output")
+            journeyLocations = await getUniqueJourneyLocations();
+            combined = await combineLists();
+            await sortJourneys();
+            // console.log("combined", combined);  
+            return journeys;
+        }else{
+            combined = await combineLists();
+        }
     }
 
     function workOutDays(sd, ed, dh, dm){
@@ -627,32 +632,35 @@
     async function getUniqueJourneyLocations() {
         let uniqueLocations = [];
         let locationSet = new Set();
-        for (let journey of journeys) {
-            const fromKey = `${journey.from}-${journey.fromCountry}-${journey.fromLong}-${journey.fromLat}`;
-            const toKey = `${journey.to}-${journey.toCountry}-${journey.toLong}-${journey.toLat}`;
+        if(Array.isArray(journeys) && journeys.length === 0){
             
-            if (!locationSet.has(fromKey)) {
-                locationSet.add(fromKey);
-                uniqueLocations.push({
-                    location: journey.from,
-                    country: journey.fromCountry,
-                    lat: journey.fromLat,
-                    long: journey.fromLong
-                });
+            for (let journey of journeys) {
+                const fromKey = `${journey.from}-${journey.fromCountry}-${journey.fromLong}-${journey.fromLat}`;
+                const toKey = `${journey.to}-${journey.toCountry}-${journey.toLong}-${journey.toLat}`;
+                
+                if (!locationSet.has(fromKey)) {
+                    locationSet.add(fromKey);
+                    uniqueLocations.push({
+                        location: journey.from,
+                        country: journey.fromCountry,
+                        lat: journey.fromLat,
+                        long: journey.fromLong
+                    });
+                }
+                
+                if (!locationSet.has(toKey)) {
+                    locationSet.add(toKey);
+                    uniqueLocations.push({
+                        location: journey.to,
+                        country: journey.toCountry,
+                        lat: journey.toLat,
+                        long: journey.toLong
+                    });
+                }
             }
-            
-            if (!locationSet.has(toKey)) {
-                locationSet.add(toKey);
-                uniqueLocations.push({
-                    location: journey.to,
-                    country: journey.toCountry,
-                    lat: journey.toLat,
-                    long: journey.toLong
-                });
-            }
+            // console.log("unique", uniqueLocations);
+            return uniqueLocations;
         }
-        // console.log("unique", uniqueLocations);
-        return uniqueLocations;
     }
 
     let combined = [];
@@ -764,44 +772,47 @@
     let countries = []
 
     function getFlags() {
-        for (const journey of journeys) {
-            if (journey.fromCountry && typeof journey.fromCountry === 'string') {
-                if(!isMobileDevice){
-                    const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
-                    if (fromCountryIndex === -1) {
-                        countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+        if(Array.isArray(journeys) && journeys.length > 0){
+            
+            for (const journey of journeys) {
+                if (journey.fromCountry && typeof journey.fromCountry === 'string') {
+                    if(!isMobileDevice){
+                        const fromCountryIndex = countries.findIndex(country => country.code === journey.fromCountry);
+                        if (fromCountryIndex === -1) {
+                            countries.push({ "code": journey.fromCountry, "src": `https://flagsapi.com/${journey.fromCountry}/flat/64.png` });
+                        }
+                    } else {
+                        const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
+                        if (fromCountryIndex !== -1 && !countries.some(country => country.code === journey.fromCountry)) {
+                            countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
+                        }
                     }
                 } else {
-                    const fromCountryIndex = countryFlags.findIndex(country => country.code === journey.fromCountry);
-                    if (fromCountryIndex !== -1 && !countries.some(country => country.code === journey.fromCountry)) {
-                        countries.push({ "code": journey.fromCountry, "emoji": countryFlags[fromCountryIndex].emoji });
-                    }
+                    // console.log(journey)
+                    // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
                 }
-            } else {
-                // console.log(journey)
-                // console.log(`Invalid fromCountry code: ${journey.fromCountry}`);
-            }
-
-            if (journey.toCountry && typeof journey.toCountry === 'string') {
-                if(!isMobileDevice){
-                    const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
-                    if (toCountryIndex === -1) {
-                        countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+    
+                if (journey.toCountry && typeof journey.toCountry === 'string') {
+                    if(!isMobileDevice){
+                        const toCountryIndex = countries.findIndex(country => country.code === journey.toCountry);
+                        if (toCountryIndex === -1) {
+                            countries.push({ "code": journey.toCountry, "src": `https://flagsapi.com/${journey.toCountry}/flat/64.png` });
+                        }
+                    } else {
+                        const toCountryIndex = countryFlags.findIndex(country => country.code === journey.toCountry);
+                        if (toCountryIndex !== -1 && !countries.some(country => country.code === journey.toCountry)) {
+                            countries.push({ "code": journey.toCountry, "emoji": countryFlags[toCountryIndex].emoji });
+                        }
                     }
                 } else {
-                    const toCountryIndex = countryFlags.findIndex(country => country.code === journey.toCountry);
-                    if (toCountryIndex !== -1 && !countries.some(country => country.code === journey.toCountry)) {
-                        countries.push({ "code": journey.toCountry, "emoji": countryFlags[toCountryIndex].emoji });
-                    }
+                    // console.log(journey)
+                    // console.log(`Invalid toCountry code: ${journey.toCountry}`);
                 }
-            } else {
-                // console.log(journey)
-                // console.log(`Invalid toCountry code: ${journey.toCountry}`);
+    
             }
-
+            // console.log(countries);
+            return countries;
         }
-        // console.log(countries);
-        return countries;
     }
     
 
