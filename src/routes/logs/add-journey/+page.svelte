@@ -758,13 +758,13 @@
             };
 
             const addNew = journeys.concat(journey);
-            // console.log(addNew);
-            let test = await writeJourneysData(addNew);
+            console.log(addNew);
+            await writeJourneysData(addNew);
             $alrtMode = 'info_nc';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
-            await sleep(3000)
-            window.location.href = `../overview/` + inputDateStart; 
+            // await sleep(3000)
+            // window.location.href = `../overview/` + inputDateStart; 
         });
 
         // console.log($logNumbers)

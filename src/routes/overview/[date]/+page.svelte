@@ -593,8 +593,7 @@
     
     async function getJourneysLogs() {
         journeys = await getJourneysData();
-        // console.log(journeys, "journeys")
-        if (Array.isArray(journeys) && journeys.length > 0) {
+        if (Array.isArray(journeys)) {
             journeys = journeys.filter(journey => {
                 const journeyDate = new Date(journey.start_date);
                 const [year, month, day] = param.split('/');
@@ -632,7 +631,7 @@
     async function getUniqueJourneyLocations() {
         let uniqueLocations = [];
         let locationSet = new Set();
-        if(Array.isArray(journeys) && journeys.length === 0){
+        if(Array.isArray(journeys)){
             
             for (let journey of journeys) {
                 const fromKey = `${journey.from}-${journey.fromCountry}-${journey.fromLong}-${journey.fromLat}`;
