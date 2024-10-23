@@ -31,13 +31,13 @@
             <div class="w-full flex gap-4">
                 <div class="md:w-2/4 w-full">
                     <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
-                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={tripDateStart}/>
+                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={departureDate}/>
                     <h3 class="dark:text-neutral-300 italic text-left mb-2  mt-2 text-sm">Departure Time</h3>
                     <input class="input blue dark:iconEdit w-full" type="time" bind:value={departureTime}/>
                 </div>
                 <div class="md:w-2/4 w-full">
                     <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Arrival Date</h3>
-                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={tripDateEnd}/>
+                    <input class="input blue dark:iconEdit w-full" type="date" bind:value={arrivalDate}/>
                     <h3 class="dark:text-neutral-300 italic text-left mb-2 mt-2 text-sm">Arrival Time</h3>
                     <input class="input blue dark:iconEdit w-full" type="time" bind:value={arrivalTime}/>                
                 </div>
@@ -73,8 +73,6 @@ const dispatch = createEventDispatcher();
 export let day;
 export let journey;
 export let allStns;
-export let tripDateStart;
-export let tripDateEnd;
 
 let loading = true;
 
@@ -101,6 +99,11 @@ fromCountry = journey.fromCountry,
     alrtMode = writable("err"),
     alrtTxt = writable(""),
     alrtAct = writable(false);
+
+    onMount(() => {
+        arrivalDate = arrivalDate.split("T")[0];
+        departureDate = departureDate.split("T")[0];
+    });
 
 function close(o) {
     dispatch("message", { text: "close" });
@@ -131,17 +134,17 @@ onMount(() => {
 function selectFrom(o) {
     from = o.detail.text.name;
     fromId = o.detail.id;
-    console.log(from, to);
+    // console.log(from, to);
 }
 
 function selectTo(o) {
     to = o.detail.text.name;
     toId = o.detail.id;
-    console.log(from, to);
+    // console.log(from, to);
 }
 
 async function addLocation(location, country) {
-    console.log(locations);
+    // console.log(locations);
     await getLocations();
     if(locations == null){
         locations = [];
@@ -163,11 +166,10 @@ async function addLocation(location, country) {
 }
 
 async function addJourneyConfirm() {
+    // console.log(from, to, fromId, toId, arrivalTime, departureTime, arrivalDate, departureDate);
     if (
         null == from ||
         null == to ||
-        null == fromId ||
-        null == toId ||
         null == arrivalTime ||
         null == departureTime ||
         null == arrivalDate ||

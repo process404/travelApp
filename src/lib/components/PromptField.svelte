@@ -12,12 +12,12 @@
                     <!-- {#if name.name != value && value.length < name.name.length && value.length > 0} -->
                     {#if !isMobileDevice}
                         <button on:click={() => selectItem(suggestion)} class="dark:text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
-                            <span class="text-black">{@html highlightMatch(suggestion, value)}</span>
+                            <span class="dark:text-white">{@html highlightMatch(suggestion, value)}</span>
                             <span><img src={`https://flagsapi.com/${suggestion.country}/flat/64.png`} class="w-4 h-4" alt={suggestion.country}></span>
                         </button>
                     {:else}
                         <button on:click={() => selectItem(suggestion)} class="dark:text-neutral-300 w-full text-sm text-left after:absolute after:bottom-[-0.3rem] after:hover:w-[97%] after:h-[1px] after:bg-white after:left-0 after:duration-100 after:w-0 before:absolute before:w-[97%] before:left-0 before:h-[1px] before:bg-neutral-600 before:top-[-0.33rem] first:before:hidden mt-2 relative flex items-center gap-2 font-light">
-                            <span class="text-black">{@html highlightMatch(suggestion, value)}</span>
+                            <span class="dark:text-white">{@html highlightMatch(suggestion, value)}</span>
                             <span class="w-4 h-4">{getFlag(suggestion.country)}</span>
                         </button>
                     {/if}
@@ -72,9 +72,11 @@
         if (value.length > 1) {
             const lowerCaseValue = value.toLowerCase();
             if (ver == "loc") {
-                const filteredStations = ds.filter(set => {
+                const filteredStations = ds.filter((set, index, self) => {
                     const lowerCaseName = set.name.toLowerCase();
-                    return lowerCaseName.startsWith(lowerCaseValue) && !suggestions.some(suggestion => suggestion.name === set.name);
+                    return lowerCaseName.startsWith(lowerCaseValue) && 
+                           !suggestions.some(suggestion => suggestion.name === set.name) &&
+                           index === self.findIndex(s => s.name === set.name);
                 });
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));
@@ -108,10 +110,11 @@
                     console.log(e)
                 }
             } else {
-                const filteredStations = ds.filter(set => {
+                const filteredStations = ds.filter((set, index, self) => {
                     const lowerCaseName = set.name.toLowerCase();
-                    const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
-                    return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) && !suggestions.some(suggestion => suggestion.name === set.name);
+                    return lowerCaseName.startsWith(lowerCaseValue) && 
+                           !suggestions.some(suggestion => suggestion.name === set.name) &&
+                           index === self.findIndex(s => s.name === set.name);
                 });
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));

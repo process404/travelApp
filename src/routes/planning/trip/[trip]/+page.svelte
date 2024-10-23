@@ -39,7 +39,7 @@
                             {#if tooltip2}
                                 <div in:fade={{duration:50}} class="absolute top-[160%] translate-x-[-50%] left-[50%]  bg-black p-2 rounded-md z-30 min-w-[150px] ">
                                     <div class="triangle w-4 h-2 bg-black absolute bottom-[99%] translate-x-[-50%] left-[50%]"></div>
-                                    <input class="input darker non-empty" bind:value={editDescription} placeholder="Edit description" on:keyup={callEditDesc} on:input={submitChangesDesc} maxlength="20" minlength="3">
+                                    <input class="input darker non-empty" bind:value={editDescription} placeholder="Edit description" on:keyup={callEditDesc} on:input={submitChangesDesc} maxlength="100" minlength="3">
                                 </div>
                             {/if}
                         </div>
@@ -275,9 +275,10 @@
     }
     
     async function submitChangesDesc(){
+        var storage = await getPlanningData();
         for(const plan in storage){
             if(storage[plan].tripID == param){
-                storage[plan].name = editDescription;
+                storage[plan].description = editDescription;
                 await writePlanningData(storage);
             }
         }
