@@ -134,17 +134,17 @@ onMount(() => {
 function selectFrom(o) {
     from = o.detail.text.name;
     fromId = o.detail.id;
-    console.log(from, to);
+    // console.log(from, to);
 }
 
 function selectTo(o) {
     to = o.detail.text.name;
     toId = o.detail.id;
-    console.log(from, to);
+    // console.log(from, to);
 }
 
 async function addLocation(location, country) {
-    console.log(locations);
+    // console.log(locations);
     await getLocations();
     if(locations == null){
         locations = [];
@@ -166,7 +166,7 @@ async function addLocation(location, country) {
 }
 
 async function addJourneyConfirm() {
-    console.log(from, to, fromId, toId, arrivalTime, departureTime, arrivalDate, departureDate);
+    // console.log(from, to, fromId, toId, arrivalTime, departureTime, arrivalDate, departureDate);
     if (
         null == from ||
         null == to ||
