@@ -410,6 +410,11 @@
             locations.forEach(location => {
             csvContent += `"${location.name}","${location.type}","${location.lat}","${location.long}","${location.notes}"\n`;
             });
+        } else if (mode == "locations") {
+            console.error('No locations data available');
+            alrtAct.set(true);
+            alrtTxt.set('No locations data available');
+            alrtMode.set('error');
         }
 
         csvContent += "\nLogs\n";
@@ -419,6 +424,11 @@
             let numbers = log.numbers.map(num => `"${num.number} (${num.type} - ${num.variant})"`).join(", ");
             csvContent += `"${log.log_date}","${log.log_location}","${log.log_lat}","${log.log_long}","${log.log_time}","${log.country}","${log.logNotes}","${numbers}"\n`;
             });
+        }else if (mode == "logs") {
+            console.error('No logs data available');
+            alrtAct.set(true);
+            alrtTxt.set('No logs data available');
+            alrtMode.set('error');
         }
 
         csvContent += "\nPlanning\n";
@@ -427,7 +437,13 @@
             planning.forEach(plan => {
             csvContent += `"${plan.date}","${plan.from}","${plan.to}","${plan.mode}","${plan.distance}","${plan.duration}","${plan.notes}"\n`;
             });
+        }else if (mode == "planning") {
+            console.error('No planning data available');
+            alrtAct.set(true);
+            alrtTxt.set('No planning data available');
+            alrtMode.set('error');
         }
+
         if(mode == "all"){
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
@@ -445,28 +461,43 @@
             csvContentJourneys += "Journeys\n";
             csvContentJourneys += "Start Date,Start Time,End Date,End Time,From,From Country,From Lat,From Long,To,To Country,To Lat,To Long,Operator,Service Code,Delay Hours,Delay Minutes,Miles,Reason,Notes,First Class,Second Class,Sleeper,Wifi,Restauraunt,Cycles,Overnight,Tags,Via Points\n";
             if (journeys) {
-            journeys.forEach(journey => {
-            let viaPoints = journey.viaPoints.map(point => `"${point.name} (${point.country})"`).join(" -> ");
-            csvContentJourneys += `"${journey.start_date}","${journey.start_time}","${journey.end_date}","${journey.end_time}","${journey.from}","${journey.fromCountry}","${journey.fromLat}","${journey.fromLong}","${journey.to}","${journey.toCountry}","${journey.toLat}","${journey.toLong}","${journey.operator}","${journey.serviceCode}","${journey.delayHours}","${journey.delayMinutes}","${journey.miles}","${journey.journeyReason}","${journey.journeyNotes}","${journey.journeyFirstClass}","${journey.journeySecondClass}","${journey.journeySleeper}","${journey.journeyWifi}","${journey.journeyRestauraunt}","${journey.journeyCycles}","${journey.journeyOvernight}","${journey.journeyTags.join(",")}","${viaPoints}"\n`;
-            });
+                journeys.forEach(journey => {
+                let viaPoints = journey.viaPoints.map(point => `"${point.name} (${point.country})"`).join(" -> ");
+                csvContentJourneys += `"${journey.start_date}","${journey.start_time}","${journey.end_date}","${journey.end_time}","${journey.from}","${journey.fromCountry}","${journey.fromLat}","${journey.fromLong}","${journey.to}","${journey.toCountry}","${journey.toLat}","${journey.toLong}","${journey.operator}","${journey.serviceCode}","${journey.delayHours}","${journey.delayMinutes}","${journey.miles}","${journey.journeyReason}","${journey.journeyNotes}","${journey.journeyFirstClass}","${journey.journeySecondClass}","${journey.journeySleeper}","${journey.journeyWifi}","${journey.journeyRestauraunt}","${journey.journeyCycles}","${journey.journeyOvernight}","${journey.journeyTags.join(",")}","${viaPoints}"\n`;
+                });
+            }else if (mode == "journeys") {
+                console.error('No journeys data available');
+                alrtAct.set(true);
+                alrtTxt.set('No journeys data available');
+                alrtMode.set('error');
             }
         }
 
         csvContentLocations += "Locations\n";
         csvContentLocations += "Name,Type,Lat,Long,Notes\n";
         if (locations) {
-        locations.forEach(location => {
-        csvContentLocations += `"${location.name}","${location.type}","${location.lat}","${location.long}","${location.notes}"\n`;
-        });
+            locations.forEach(location => {
+            csvContentLocations += `"${location.name}","${location.type}","${location.lat}","${location.long}","${location.notes}"\n`;
+            });
+        }else if (mode == "locations") {
+            console.error('No locations data available');
+            alrtAct.set(true);
+            alrtTxt.set('No locations data available');
+            alrtMode.set('error');
         }
 
         csvContentLogs += "Logs\n";
         csvContentLogs += "Date,Location,Lat,Long,Time,Country,Notes,Numbers\n";
         if (logs) {
-        logs.forEach(log => {
-        let numbers = log.numbers.map(num => `"${num.number} (${num.type} - ${num.variant})"`).join(", ");
-        csvContentLogs += `"${log.log_date}","${log.log_location}","${log.log_lat}","${log.log_long}","${log.log_time}","${log.country}","${log.logNotes}","${numbers}"\n`;
-        });
+            logs.forEach(log => {
+            let numbers = log.numbers.map(num => `"${num.number} (${num.type} - ${num.variant})"`).join(", ");
+            csvContentLogs += `"${log.log_date}","${log.log_location}","${log.log_lat}","${log.log_long}","${log.log_time}","${log.country}","${log.logNotes}","${numbers}"\n`;
+            });
+        }else if (mode == "logs") {
+            console.error('No logs data available');
+            alrtAct.set(true);
+            alrtTxt.set('No logs data available');
+            alrtMode.set('error');
         }
 
         csvContentPlanning += "Planning\n";
@@ -475,6 +506,11 @@
             planning.forEach(plan => {
             csvContentPlanning += `"${plan.date}","${plan.from}","${plan.to}","${plan.mode}","${plan.distance}","${plan.duration}","${plan.notes}"\n`;
             });
+        }else if (mode == "planning") {
+            console.error('No planning data available');
+            alrtAct.set(true);
+            alrtTxt.set('No planning data available');
+            alrtMode.set('error');
         }
 
         var encodedUriJourneys = encodeURI(csvContentJourneys);
