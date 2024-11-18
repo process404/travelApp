@@ -1,15 +1,18 @@
 <div style="width: 100vw; display: flex; flex-direction: column; justify-items: center; align-items: center" id="app">
     <Nav ver="back"/>
-    <div class="h-auto max-w-[1400px] w-full flex flex-col gap-4 h-full">
+    <div class="max-w-[1400px] w-full flex flex-col gap-4 h-full">
         <!-- nav menu goes here to navigate between the different sections-->
         <!-- see this: https://assets.justinmind.com/wp-content/uploads/2021/02/top-navigation-bar-mobile-apps.png-->
         <!-- have a line that moves when you click on any one-->
-
+        <div class=" h-auto border-[1px] border-neutral-600 sm:ml-8 ml-4 mr-4 sm:mr-8 p-2 flex gap-2">
+            <button class="button w-full" class:blue3={page == 'stats'} on:click={() => {page = 'stats'}}>Statistics</button>
+            <button class="button w-full" class:blue3={page == 'logs'} on:click={() => {page = 'logs'}}>Overview by date</button>
+        </div>
         {#if page == 'stats'}
-            <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pt-4 pb-4">
+            <div in:fade={{duration:200}} out:fade={{duration:100}} class="flex flex-col border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-full pt-4 sm:pb-6 pl-4 pr-4 pb-4">
                 <div class="flex gap-6 justify-between items-center">
                     <h2 class="text-white font-semibold text-2xl w-full text-left">Statistics</h2>
-
+                    
                 </div>
             </div>
         {/if}
