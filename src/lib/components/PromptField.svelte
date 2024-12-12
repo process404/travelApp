@@ -66,7 +66,6 @@
     let loading = false;
     
 
-    // console.log(ds)
     function promptSuggestions() {
         suggestions = [];
         if (value.length > 1) {
@@ -74,45 +73,48 @@
             if (ver == "loc") {
                 const filteredStations = ds.filter((set, index, self) => {
                     const lowerCaseName = set.name.toLowerCase();
-                    return lowerCaseName.startsWith(lowerCaseValue) && 
+                    const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
+                    return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
                            !suggestions.some(suggestion => suggestion.name === set.name) &&
                            index === self.findIndex(s => s.name === set.name);
                 });
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));
 
-
                 let filteredStations2 = null;
-                try{
+                try {
                     filteredStations2 = adDs.filter(set => {
                         const lowerCaseName = set.name.toLowerCase();
-                        return lowerCaseName.startsWith(lowerCaseValue) && !suggestions.some(suggestion => suggestion.name === set.name) && !filteredStations.some(suggestion => suggestion.name === set.name);
+                        const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
+                        return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
+                               !suggestions.some(suggestion => suggestion.name === set.name) &&
+                               !filteredStations.some(suggestion => suggestion.name === set.name);
                     });
-
-                }catch(e){
-                    console.log(e)
+                } catch (e) {
+                    console.log(e);
                 }
 
                 let uniqueStations = null;
-                try{
+                try {
                     uniqueStations = filteredStations2.filter(set => !suggestions.some(suggestion => suggestion.name === set.name));
-                }catch(e){
-                    console.log(e)
+                } catch (e) {
+                    console.log(e);
                 }
-                
-                try{
+
+                try {
                     uniqueStations.forEach(set => {
                         if (!suggestions.some(suggestion => suggestion.name === set.name)) {
                             suggestions.push({ name: set.name, country: set.country, short: set.short });
                         }
                     });
-                }catch(e){
-                    console.log(e)
+                } catch (e) {
+                    console.log(e);
                 }
             } else {
                 const filteredStations = ds.filter((set, index, self) => {
                     const lowerCaseName = set.name.toLowerCase();
-                    return lowerCaseName.startsWith(lowerCaseValue) && 
+                    const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
+                    return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
                            !suggestions.some(suggestion => suggestion.name === set.name) &&
                            index === self.findIndex(s => s.name === set.name);
                 });
