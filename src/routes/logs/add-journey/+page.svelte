@@ -715,7 +715,7 @@
 
         let journeys = await getJourneysData();
         if (!journeys) {
-            journeys = JSON.stringify([]);
+            journeys = [];
         }
 
         let id = null;
@@ -764,7 +764,7 @@
             $alrtTxt = 'Processing...';
             $alrtAct = true;
             await sleep(1500)
-            window.location.href = `../overview/` + inputDateStart; 
+            // window.location.href = `../overview/` + inputDateStart; 
         });
 
         // console.log($logNumbers)

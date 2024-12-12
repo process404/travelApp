@@ -88,9 +88,13 @@
                                         <div class="flex justify-between items-center">
                                             <p class="dark:text-white text-sm">{journey.start_time}</p>
                                             {#if !journey.delayHours && !journey.delayMinutes}
-                                                <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                                {#if journey.start_time != "" && journey.end_time != ""}
+                                                    <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, 0,0)}</p>
+                                                {/if}
                                             {:else}
-                                                <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
+                                                {#if journey.start_time != "" && journey.end_time != ""}
+                                                    <p class="dark:text-white text-sm">{calcDuration(journey.start_time, journey.start_date, journey.end_date, journey.end_time, journey.delayHours, journey.delayMinutes)}</p>
+                                                {/if}
                                             {/if}
                                             {#if !journey.delayHours && !journey.delayMinutes}
                                                 <p class="dark:text-white text-sm">{journey.end_time}</p>
@@ -113,11 +117,13 @@
                                                         </p>
                                                         <p class="dark:text-red-500 text-red-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                     {/if}
-                                                    <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
-                                                        {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                            <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                        {#if getNewArrivalTime(journey.end_time. journey.delayHours, journey.delayMinutes) != null}
+                                                            <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                                {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                    <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                                {/if}
+                                                            </p>
                                                         {/if}
-                                                    </p>
                                                 </span>
                                             </span>
                                             {/if}
@@ -239,27 +245,30 @@
         document.title = 'Overview for ' + formatParam;
         logs = await getLogsData();
         console.log(logs);
-        logsSorted = logs.reduce((acc, log) => {
-            const logDate = new Date(log.log_date);
-            const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
-            const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
-            const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
-            if (!acc[year]) {
-                acc[year] = {};
-            }
-            if (!acc[year][month]) {
-                acc[year][month] = {};
-            }
-            if (!acc[year][month][date]) {
-                acc[year][month][date] = [];
-            }
-            acc[year][month][date].push(log);
-            return acc;
-        }, {});
+        if(logs != null){
+            logsSorted = logs.reduce((acc, log) => {
+                const logDate = new Date(log.log_date);
+                const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
+                const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
+                const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
+                if (!acc[year]) {
+                    acc[year] = {};
+                }
+                if (!acc[year][month]) {
+                    acc[year][month] = {};
+                }
+                if (!acc[year][month][date]) {
+                    acc[year][month][date] = [];
+                }
+                acc[year][month][date].push(log);
+                return acc;
+            }, {});
+            logsToday = logsSorted
+            getDaysLogs(logsSorted);
+        }else{
+            logsToday = []
+        }
 
-
-        logsToday = logsSorted
-        getDaysLogs(logsSorted);
 
         journeys = await getJourneysLogs();
         journeyLocations = await getUniqueJourneyLocations();
@@ -593,6 +602,7 @@
     
     async function getJourneysLogs() {
         journeys = await getJourneysData();
+        console.log("ret", journeys);
         if (Array.isArray(journeys)) {
             journeys = journeys.filter(journey => {
                 const journeyDate = new Date(journey.start_date);
@@ -882,33 +892,11 @@
     function checkForPictureAllTime(multi, number) {
         // console.log("checkForPictureAllTime called with multi:", multi, "and number:", number);
         let picture = null;
-        if (multi) {
-            for (let log of logs) {
-                // console.log("Checking log:", log);
-                if (log.numbers.some(num => number.some(n => n.number === num.number))) {
-                    if (log.pictures && log.pictures.length > 0) {
-                        picture = log.pictures[0];
-                        // console.log("Picture found:", picture);
-                        return picture;
-                    }
-                }
-            }
-            // If no picture found for the specific number, check for the same variant
-            for (let log of logs) {
-                if (log.numbers.some(num => num.variant === number)) {
-                    if (log.pictures && log.pictures.length > 0) {
-                        picture = log.pictures[0];
-                        if (picture) {
-                            // console.log("Picture found for variant:", picture);
-                            return picture;
-                        }
-                    }
-                }
-            }
-        } else {
-            for (let log of logs) {
-                if(Array.isArray(log.numbers)){
-                    if (log.numbers.some(num => num.number === number)) {
+        if (logs && Array.isArray(logs)) {
+            if (multi) {
+                for (let log of logs) {
+                    // console.log("Checking log:", log);
+                    if (log.numbers.some(num => number.some(n => n.number === num.number))) {
                         if (log.pictures && log.pictures.length > 0) {
                             picture = log.pictures[0];
                             // console.log("Picture found:", picture);
@@ -916,15 +904,39 @@
                         }
                     }
                 }
-            }
-            // If no picture found for the specific number, check for the same variant
-            for (let log of logs) {
-                if (log.numbers.some(num => num.variant === number)) {
-                    if (log.pictures && log.pictures.length > 0) {
-                        picture = log.pictures[0];
-                        if (picture) {
-                            // console.log("Picture found for variant:", picture);
-                            return picture;
+                // If no picture found for the specific number, check for the same variant
+                for (let log of logs) {
+                    if (log.numbers.some(num => num.variant === number)) {
+                        if (log.pictures && log.pictures.length > 0) {
+                            picture = log.pictures[0];
+                            if (picture) {
+                                // console.log("Picture found for variant:", picture);
+                                return picture;
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (let log of logs) {
+                    if (Array.isArray(log.numbers)) {
+                        if (log.numbers.some(num => num.number === number)) {
+                            if (log.pictures && log.pictures.length > 0) {
+                                picture = log.pictures[0];
+                                // console.log("Picture found:", picture);
+                                return picture;
+                            }
+                        }
+                    }
+                }
+                // If no picture found for the specific number, check for the same variant
+                for (let log of logs) {
+                    if (log.numbers.some(num => num.variant === number)) {
+                        if (log.pictures && log.pictures.length > 0) {
+                            picture = log.pictures[0];
+                            if (picture) {
+                                // console.log("Picture found for variant:", picture);
+                                return picture;
+                            }
                         }
                     }
                 }

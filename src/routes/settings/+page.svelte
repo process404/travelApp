@@ -112,7 +112,8 @@
     import Footer from '../../lib/components/Footer.svelte';
     import '../../global.css';
     import '../siteDB.js';
-    import { getJourneysData, getLocationsData, getLogsData, getPlanningData, writeJourneysData, writeLocationsData, writeLogsData, writePlanningData } from '../siteDB';
+    import { getJourneysData, getLocationsData, getLogsData, getPlanningData, writeJourneysData, writeLocationsData, writeLogsData, writePlanningData  } from '../siteDB';
+    import { clearJourneysData, clearLocationsData, clearLogsData, clearPlanningData } from '../siteDB';
     import '../tl_stationsDB.js';
     import { tl_wipeAllData } from '../tl_stationsDB.js'
     import Alert from '../../lib/components/Alert.svelte';
@@ -154,9 +155,7 @@
     
     async function clearJourneys(){
         if (confirm('Are you sure you want to clear all journeys? This action cannot be undone.')) {
-            var journeys = await getJourneysData();
-            journeys = [];
-            await writeJourneysData(journeys);
+            await clearJourneysData();
             console.log('%c Journeys cleared', 'color:lime;background:black;');
             alrtAct.set(true);
             alrtTxt.set('Journeys cleared');
@@ -174,9 +173,7 @@
 
     async function clearUserLocations(){
         if (confirm('Are you sure you want to clear all user locations? This action cannot be undone.')) {
-            var locations = await getLocationsData();
-            locations = [];
-            await writeLocationsData(locations);
+            await clearLocationsData();
             console.log('%c User Locations cleared', 'color:lime;background:black;');
             alrtAct.set(true);
             alrtTxt.set('User Locations cleared');
@@ -233,9 +230,7 @@
 
     async function clearLogsGeneral(){
         if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
-            var logs = await getLogsData();
-            logs = [];
-            await writeLogsData(logs);
+            await clearLogsData();
             console.log('%c Logs cleared', 'color:lime;background:black;');
             alrtAct.set(true);
             alrtTxt.set('Logs cleared');
@@ -254,9 +249,7 @@
 
     async function clearPlanning(){
         if (confirm('Are you sure you want to clear all plans? This action cannot be undone.')) {
-            var planning = await getPlanningData();
-            planning = [];
-            await writePlanningData(planning);
+            await clearPlanningData();
             console.log('%c Planning cleared', 'color:lime;background:black;');
             alrtAct.set(true);
             alrtTxt.set('Planning cleared');
