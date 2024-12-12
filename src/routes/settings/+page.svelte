@@ -52,7 +52,7 @@
                             <p class="dark:text-neutral-400 text-sm italic">Export all database data as a CSV file, this may take a considerable time duration to generate.</p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
-                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px] opacity-50 cursor-not-allowed" on:click={() => {exportCSV("all")}}>Export as CSV</button>
+                            <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {exportCSV("all")}}>Export as CSV</button>
                         </div>
                     </div>
                     <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
