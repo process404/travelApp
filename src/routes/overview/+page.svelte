@@ -61,8 +61,10 @@
                                                         {:else}
                                                             <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">No Date</h4>
                                                         {/if}
-                                                        {#each getFirstLogs(logsByYear[year][month][date]) as log}
-                                                            <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
+                                                        {#each getFirstItems(logsByYear[year][month][date]) as log}
+                                                            {#if log.log_location}
+                                                                <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
+                                                            {/if}
                                                         {/each}
                                                     </span>
                                                 </button>
@@ -74,8 +76,10 @@
                                                     {:else}
                                                         <h4 class="text-white drop-shadow-sm text-xl font-semibold text-left mb-1">All Items</h4>
                                                     {/if}
-                                                    {#each getFirstLogs(logsByYear[year][month][date]) as log}
-                                                        <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
+                                                    {#each getFirstItems(logsByYear[year][month][date]) as log}
+                                                        {#if log.log_location}
+                                                            <p class="text-neutral-300 text-sm text-left italic">{log.log_location}</p>
+                                                        {/if}
                                                     {/each}
         
                                                 </span>
@@ -110,6 +114,7 @@
     var sortBy = 'All Time';
     let logsBeforeUpd = []
     let logsByYear = [];
+    let journeys = [];
     var logs = null;
     let groups = null;
     var page = 'logs'
@@ -117,17 +122,33 @@
 
     onMount(async () => {
         document.title = 'Overview';
-        await generateLogs();
+        await generateLogsAndJourneys();
     });
 
-    async function generateLogs() {
-        logs = await getLogsData();
-        groups = await getGroupsData();
-        logsByYear = logs.reduce((acc, log) => {
-            const logDate = new Date(log.log_date);
-            const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
-            const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
-            const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
+    async function generateLogsAndJourneys() {
+        logs = await getLogsData() || [];
+        groups = await getGroupsData() || [];
+        journeys = await getJourneysData() || [];
+        console.log("Fetched logs:", logs);
+        console.log("Fetched journeys:", journeys);
+
+        if (!Array.isArray(logs)) {
+            console.error("Logs is not an array:", logs);
+            logs = [];
+        }
+        if (!Array.isArray(journeys)) {
+            console.error("Journeys is not an array:", journeys);
+            journeys = [];
+        }
+        if (logs.length === 0 && journeys.length === 0) {
+            logsByYear = {};
+            return;
+        }
+        logsByYear = [...logs, ...journeys].reduce((acc, item) => {
+            const itemDate = new Date(item.log_date || item.start_date);
+            const year = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.getFullYear();
+            const month = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toLocaleString('default', { month: 'long' });
+            const date = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toISOString().split('T')[0];
             if (!acc[year]) {
                 acc[year] = {};
             }
@@ -137,12 +158,12 @@
             if (!acc[year][month][date]) {
                 acc[year][month][date] = [];
             }
-            acc[year][month][date].push(log);
+            acc[year][month][date].push(item);
             return acc;
         }, {});
 
         // Combine months if groups contain 'startDate' and 'endDate' that span multiple months
-        if(groups != null && groups.length != 0){
+        if (groups.length > 0) {
             groups.forEach(group => {
                 if (group.startDate && group.endDate) {
                     const startDate = new Date(group.startDate);
@@ -168,54 +189,52 @@
 
         logsBeforeUpd = logsByYear;
 
-        console.log(logsByYear);
+        console.log("Processed logsByYear:", logsByYear);
     }
 
-    function getPicture(logs){
-        for (let log of logs) {
-            if (log.pictures && log.pictures.length > 0) {
-            const priorityPicture = log.pictures.find(picture => picture.picturePriority === true);
-            if (priorityPicture) {
-                return priorityPicture;
-            }
-            return log.pictures[0];
+    function getPicture(items) {
+        for (let item of items) {
+            if (item.pictures && item.pictures.length > 0) {
+                const priorityPicture = item.pictures.find(picture => picture.picturePriority === true);
+                if (priorityPicture) {
+                    return priorityPicture;
+                }
+                return item.pictures[0];
             }
         }
         return null;
     }
 
-    function getFirstLogs(logs) {
-        const uniqueLogs = [];
+    function getFirstItems(items) {
+        const uniqueItems = [];
         const seenLocations = new Set();
 
-        for (const log of logs) {
-            if (!seenLocations.has(log.log_location)) {
-                uniqueLogs.push(log);
-                seenLocations.add(log.log_location);
+        for (const item of items) {
+            if (!seenLocations.has(item.log_location || item.start_location)) {
+                uniqueItems.push(item);
+                seenLocations.add(item.log_location || item.start_location);
             }
-            if (uniqueLogs.length >= 3) {
+            if (uniqueItems.length >= 3) {
                 break;
             }
         }
 
-        // console.log(uniqueLogs);
-        return uniqueLogs;
+        return uniqueItems;
     }
 
-    $: if(sortBy != 'All Time'){
+    $: if (sortBy !== 'All Time') {
         sortByYear();
-    }else{
+    } else {
         logsByYear = logsBeforeUpd;
     }
 
     function sortByYear() {
-        // console.log(sortBy);
         if (sortBy === "All Time") {
-            logsByYear = logs.reduce((acc, log) => {
-                const logDate = new Date(log.log_date);
-                const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
-                const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
-                const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
+            logsByYear = [...logs, ...journeys].reduce((acc, item) => {
+                const itemDate = new Date(item.log_date || item.start_date);
+                const year = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.getFullYear();
+                const month = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toLocaleString('default', { month: 'long' });
+                const date = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toISOString().split('T')[0];
                 if (!acc[year]) {
                     acc[year] = {};
                 }
@@ -225,15 +244,15 @@
                 if (!acc[year][month][date]) {
                     acc[year][month][date] = [];
                 }
-                acc[year][month][date].push(log);
+                acc[year][month][date].push(item);
                 return acc;
             }, {});
         } else {
-            logsByYear = logs.reduce((acc, log) => {
-                const logDate = new Date(log.log_date);
-                const year = isNaN(logDate.getTime()) ? 'Unknown' : logDate.getFullYear();
-                const month = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toLocaleString('default', { month: 'long' });
-                const date = isNaN(logDate.getTime()) ? 'Unknown' : logDate.toISOString().split('T')[0];
+            logsByYear = [...logs, ...journeys].reduce((acc, item) => {
+                const itemDate = new Date(item.log_date || item.start_date);
+                const year = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.getFullYear();
+                const month = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toLocaleString('default', { month: 'long' });
+                const date = isNaN(itemDate.getTime()) ? 'Unknown' : itemDate.toISOString().split('T')[0];
                 if (year == sortBy) {
                     if (!acc[year]) {
                         acc[year] = {};
@@ -244,7 +263,7 @@
                     if (!acc[year][month][date]) {
                         acc[year][month][date] = [];
                     }
-                    acc[year][month][date].push(log);
+                    acc[year][month][date].push(item);
                 }
                 return acc;
             }, {});
@@ -269,17 +288,16 @@
 
     onMount(() => {
         const settings = JSON.parse(localStorage.getItem('settings'));
-        if (settings.darkMode) {
+        if (settings && settings.darkMode) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
     });
 
-    import AddGroup from './components/AddGroup.svelte'
 
-    function addGroupOpen(){
-
+    function addGroupOpen() {
+        // Your logic for opening the add group modal
     }
 
 </script>

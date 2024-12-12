@@ -97,14 +97,26 @@ export async function getJourneysData() {
         if (record) {
             const data = record.data;
             const decompressedData = LZString.decompress(data);
-            return JSON.parse(decompressedData);
+            if (decompressedData) {
+                try {
+                    const parsedData = JSON.parse(decompressedData);
+                    // console.log("Parsed journeys data:", parsedData);
+                    return Array.isArray(parsedData) ? parsedData : [];
+                } catch (jsonError) {
+                    console.error("Failed to parse JSON data:", jsonError);
+                    return [];
+                }
+            } else {
+                console.log("Decompressed data is empty");
+                return [];
+            }
         } else {
             console.log("No data found in journeys store");
-            return null;
+            return [];
         }
     } catch (error) {
         console.error("Failed to get data from journeys store:", error);
-        return null;
+        return [];
     }
 }
 
@@ -189,3 +201,40 @@ export async function writeGroupsData(data) {
         console.error("Failed to write data to groups store:", error);
     }
 }
+
+export async function clearJourneysData() {
+    try {
+        await db.journeys.clear();
+        console.log("Journeys store cleared");
+    } catch (error) {
+        console.error("Failed to clear journeys store:", error);
+    }
+}
+
+export async function clearLogsData() {
+    try {
+        await db.logs.clear();
+        console.log("Logs store cleared");
+    } catch (error) {
+        console.error("Failed to clear logs store:", error);
+    }
+}
+
+export async function clearPlanningData() {
+    try {
+        await db.planning.clear();
+        console.log("Planning store cleared");
+    } catch (error) {
+        console.error("Failed to clear planning store:", error);
+    }
+}
+
+export async function clearLocationsData() {
+    try {
+        await db.locations.clear();
+        console.log("Locations store cleared");
+    } catch (error) {
+        console.error("Failed to clear locations store:", error);
+    }
+}
+
