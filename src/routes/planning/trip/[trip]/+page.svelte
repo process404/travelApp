@@ -8,16 +8,16 @@
 {#if editJourney && !loadStns}
 <EditJourney on:message={editJourneyFinal} day={editJourneyDay} journey={journeyToEdit} tripDateStart={thisTripDateStart} tripDateEnd={thisTripDateEnd} allStns={allStns}/>
 {/if}
-<div style="width: 100vw; display: flex; flex-direction: column" id="app">
+<main style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
-        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden mb-4 mt-2">
-            <div class="max-w-[1000px] w-full flex flex-col h-full">
-                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-3 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
+        <section class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden mb-4 mt-2">
+            <article class="max-w-[1000px] w-full flex flex-col h-full">
+                <article class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-3 sm:mr-8 sm:pt-4 sm:pb-6 pl-4 pr-3 pb-4  customScrollbar h-auto">
                     {#if tripName == ''}
                         <h1 class="text-2xl dark:text-white">Loading...</h1>
                         <span class="loader"></span>
                     {/if}
-                    <div class="flex  items-center mt-5 sm:mt-0 mb-5 relative flex-col">
+                    <article class="flex  items-center mt-5 sm:mt-0 mb-5 relative flex-col">
                         {#if $tripName.length != 0}
                             <button class="dark:text-white text-2xl font-semibold sm:mt-1 border-[1px] border-transparent hover:border-white rounded-md p-1" on:click={() => {tooltip = !tooltip}}>{$tripName}</button>
                         {:else}
@@ -43,12 +43,12 @@
                                 </div>
                             {/if}
                         </div>
-                    </div>
+                    </article>
                     <hr class="w-[50%] mb-8 border-neutral-700">
                     {#if thisTrip == null}
-                    <div class="w-full h-full flex items-center justify-center">
+                    <article class="w-full h-full flex items-center justify-center">
                         <span class="loader"></span>
-                    </div>
+                    </article>
                     {:else}
                         <div class="w-full pl-1 flex-col justify-center items-center  max-w-[800px]">
                             {#each thisTrip.days as day}
@@ -64,7 +64,7 @@
                                     <hr class="mt-2 border-neutral-700 mb-2">
                                     <div class="flex flex-col gap-3 mt-3">
                                         {#each sortJourneys(day.journeys) as journey}
-                                            <div class="border-[1px] dark:bg-black dark:bg-opacity-30 bg-opacity-100 bg-neutral-200 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
+                                            <article class="border-[1px] dark:bg-black dark:bg-opacity-30 bg-opacity-100 bg-neutral-200 border-neutral-800 rounded-md p-2 flex flex-col gap-2">
                                                 <div class="flex justify-between items-center sm:flex-row flex-col">
                                                     <div class="flex flex-col gap-1 items-start w-full">
                                                         <h3 class="dark:text-white text-md w-full flex sm:gap-2 gap-0 sm:items-center items-start mb-2 sm:mb-1 sm:flex-row flex-col">
@@ -151,24 +151,24 @@
                                                         <button class="button red p-1 text-xs w-full" on:click={deleteJourney(journey, day.day)}>Delete</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </article>
                                         {/each}
                                     </div>
                                 </div>
                             {/each} 
-                            <div class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
+                            <article class="mt-8 border-neutral-700 border-[1px] p-2 flex rounded-md gap-2">
                                 <button class="button green p-2 w-full taller" on:click={copyData}>Copy plan data</button>
                                 <button class="button blue p-2 w-full taller" on:click={goPrint}>Print</button>
-                            </div>
+                            </article>
                         </div>
                     {/if}
-                </div>
-            </div>
-        </div>
+                </article>
+            </article>
+        </section>
         <div class="mt-auto">
             <Footer/>
         </div>
-</div>
+</main>
 
 <script>
     import { onMount } from 'svelte';

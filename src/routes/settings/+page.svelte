@@ -1,8 +1,8 @@
 <Alert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 
-<div style="width: 100vw; height: 100vh; display: flex; flex-direction: column; overflow-x:hidden" id="app">
+<main style="width: 100vw; height: 100vh; display: flex; flex-direction: column; overflow-x:hidden" id="app">
     <Nav ver="back"/>
-    <div class="h-auto w-full flex flex-col items-center">
+    <section class="h-auto w-full flex flex-col items-center">
         <div class="max-w-[1000px] h-auto flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 sm:pt-6 sm:pb-6 pl-2 pr-2 sm:pl-12 sm:pr-12 pb-2">
             <h2 class="dark:text-white text-2xl font-semibold sm:mt-1 mt-4 mb-4">Settings</h2>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
@@ -11,7 +11,7 @@
                         <input type="checkbox" class="switch blue" bind:checked={darkMode} on:click={toggle_darkMode}>
                     </div>
                     <div class="w-full">
-                        <h2 class="dark:text-neutral-300 mb-2">Dark Mode</h2>
+                        <h3 class="dark:text-neutral-300 mb-2">Dark Mode</h3>
                         <p class="dark:text-neutral-400 text-sm italic">Change website appearance between Dark and Light modes.</p>
                     </div>
                 </div>
@@ -20,23 +20,23 @@
                         <input type="checkbox" class="switch blue" bind:checked={dbStn} on:click={toggle_dbStn}>
                     </div>
                     <div class="w-full">
-                        <h2 class="dark:text-neutral-300 mb-2">Get all stations from the database</h2>
+                        <h3 class="dark:text-neutral-300 mb-2">Get all stations from the database</h3>
                         <p class="dark:text-neutral-400 text-sm italic">When enabled, prompts to enter a station name will be compared to a database of all European stations in addition to your own previous entries. If not enabled, the app will only compare against only stations which you have entered previously. Please note that enabling this option will incur a time delay while the stations are loaded.</p>
                     </div>
                 </div>
             </div>
             <div class="border-[1px] border-neutral-700 rounded-md w-full flex flex-col mt-4">
                 <button class="w-full flex justify-between p-4 items-center group" on:click={() => {advancedDropdown = !advancedDropdown; if(advancedDropdown == false){understood = false; understood2 = false}}}>
-                    <h2 class="dark:text-white text-xl font-semibold">Advanced</h2>
+                    <h3 class="dark:text-white text-xl font-semibold">Advanced</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill w-5 h-5 opacity-50 group-hover:opacity-100 duration-100 dark:fill-neutral-200" viewBox="0 0 16 16" class:rotate={advancedDropdown}>
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </svg>
                 </button>
                 {#if advancedDropdown}
                 <div class="border-neutral-700 border-[1px] m-4">
-                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                    <article class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
-                            <h2 class="dark:text-neutral-300 mb-2">Print decompressed database data to console</h2>
+                            <h3 class="dark:text-neutral-300 mb-2">Print decompressed database data to console</h3>
                             <p class="dark:text-neutral-400 text-sm italic">Print decompressed data from database to console to check or store elsewhere</p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center flex-col gap-2">
@@ -45,19 +45,19 @@
                             <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("logs")}}>Print Logs</button>
                             <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {printData("planning")}}>Print Planning</button>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                    </article>
+                    <article class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
-                            <h2 class="dark:text-neutral-300 mb-2">Export database as CSV</h2>
+                            <h3 class="dark:text-neutral-300 mb-2">Export database as CSV</h3>
                             <p class="dark:text-neutral-400 text-sm italic">Export all database data as a CSV file, this may take a considerable time duration to generate.</p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
                             <button class="button w-full hover:before:bg-blue-800 hover:before:bg-opacity-80 md:max-w-[170px]" on:click={() => {exportCSV("all")}}>Export as CSV</button>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                    </article>
+                    <article class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
-                            <h2 class="dark:text-neutral-300 mb-2">Manage Data</h2>
+                            <h3 class="dark:text-neutral-300 mb-2">Manage Data</h3>
                             <p class="dark:text-neutral-400 text-sm italic">Clear parts of or all of the data stored. Either to free up storage, clear old plans or because of a technical issue. <br><br><span class="dark:text-yellow-300 text-yellow-800 font-semibold dark:font-normal">Warning! These actions are permanent and cannot be reversed (except getting stations from the database).</span></p>
                         </div>
                         <div class="md:w-1/3 w-full flex items-center justify-center">
@@ -74,8 +74,8 @@
                                 <button class="button w-full md:max-w-[200px]" on:click={() => {understood = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
                             {/if}
                         </div>
-                    </div>
-                    <div class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
+                    </article>
+                    <article class="flex items-center gap-6 pt-4 pb-4 pl-3 pr-3 md:flex-row flex-col">
                         <div class="md:w-3/4 w-full">
                             <h2 class="dark:text-neutral-300 mb-2">Clear logs, journeys and photographs over 1, 3, 6 or 12 months old or those with no date</h2>
                             <p class="dark:text-neutral-400 text-sm italic">Clears all logs, journeys and associated photographs which are older than a certain time ago such as 1, 3, 6 or 12 months. <br><br><span class="dark:text-yellow-300 text-yellow-800 font-semibold dark:font-normal">Warning! This action is permenant and cannot be reversed.</span></p>
@@ -93,18 +93,14 @@
                                 <button class="button md:max-w-[200px] w-full" on:click={() => {understood2 = true}}>Click to reveal options<br><span class="text-xs">(Acknowledge warning)</span></button>
                             {/if}
                         </div>
-                    </div>
+                    </article>
                 </div>
                 {/if}
-            </div>
-        </div>
-        
-        
-    </div>
-    <div class="mt-auto">
+    </section>
+    <footer class="mt-auto">
         <Footer/>
-    </div>
-</div>
+    </footer>
+</main>
 
 <script>
     import { onMount } from 'svelte';

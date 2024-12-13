@@ -1,15 +1,15 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
 <div role="button" tabindex="0" class="fixed w-full h-screen dark:bg-black bg-neutral-500 z-30 bg-opacity-70 sm:backdrop-blur-md backdrop-blur-none flex items-center justify-center p-0" on:mousedown|self={close}>
-    <div class="dark:bg-neutral-900 bg-neutral-200 w-[90%] max-w-[800px] h-[95%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col"  in:fade={{duration:100}} out:fade={{duration:100}}>
-        <div class="flex justify-between items-center">
+    <main class="dark:bg-neutral-900 bg-neutral-200 w-[90%] max-w-[800px] h-[95%] overflow-y-scroll rounded-md p-4 z-40 cursor-default border-[1px] border-neutral-700 flex flex-col"  in:fade={{duration:100}} out:fade={{duration:100}}>
+        <section class="flex justify-between items-center">
             <div>
                 <h2 class="dark:text-white text-2xl font-semibold text-left">Edit Journey <h4 class="text-neutral-500 italic text-xs inline-block sm:ml-2 sm:inline-block hidden">( Day {day} )</h4></h2>
                 <h4 class="text-neutral-500 italic text-xs sm:ml-2 inline-block sm:hidden">( Day {day} )</h4>
             </div>
             <button class="button red" style="padding-left:1rem; padding-right:1rem" on:click={close}>Cancel</button>
-        </div>
+        </section>
         <hr class="mt-4 mb-2 border-neutral-700">
-        <div class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
+        <section class="flex gap-2 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 sm:flex-row flex-col">
             <div class="w-full">
                 <h3 class="dark:text-neutral-300 italic text-left mb-1">From</h3>
                 {#if !loading}
@@ -26,8 +26,8 @@
                     <span class="loader"></span>
                 {/if}
             </div>
-        </div>
-        <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+        </section>
+        <section class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full flex gap-4">
                 <div class="md:w-2/4 w-full">
                     <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Departure Date</h3>
@@ -50,19 +50,19 @@
                 <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Operator</h3>
                 <input class="input blue w-full"  bind:value={operator}/>
             </div>
-        </div>
-        <div class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+        </section>
+        <section class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
             <div class="w-full">
                 <h3 class="dark:text-neutral-300 italic text-left mb-1 w-full">Description</h3>
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
-        </div>
-        <div class="flex gap-3 sm:mt-auto mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
+        </section>
+        <section class="flex gap-3 sm:mt-auto mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
             <div class="w-full flex">
                 <button class="button green w-full taller" on:click={addJourneyConfirm}>Edit Journey</button>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </div>
 
 <script>

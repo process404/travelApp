@@ -1,6 +1,6 @@
-<div style="width: 100vw; display: flex; flex-direction: column" class="overflow-x-hidden" id="app">
+<main style="width: 100vw; display: flex; flex-direction: column" class="overflow-x-hidden" id="app">
     <Nav ver="back"/>
-    <div class="h-auto w-full flex flex-col items-center pl-4 pr-4">
+    <section class="h-auto w-full flex flex-col items-center pl-4 pr-4">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 min-h-screen h-auto sm:pt-6 sm:pb-6 pl-2 pr-2 pb-2 max-w-[1500px] w-full">
             {#if param != "unknown"}
                 <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Overview for <span>{formatDate(param)}</span></h2>
@@ -8,12 +8,12 @@
             <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Overview for No Date</h2>
             {/if}
             {#if logsToday == null || logsToday == null}
-                <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
+                <article class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full mt-8">
                     <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
-                </div>
+                </article>
             {:else}
-            <div class="flex gap-4 h-full w-full mt-8 sm:flex-row flex-col">
-                    <div class="w-full h-full">
+            <article class="flex gap-4 h-full w-full mt-8 sm:flex-row flex-col">
+                    <article class="w-full h-full">
                         {#if !mapVisible && !mapErr}
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
                                 <span class="loader w-6 h-6" style="margin-top:0.5rem; margin-bottom: 0.5rem"></span>
@@ -24,8 +24,8 @@
                             <div class="w-full flex items-center justify-center border-neutral-700 border-[1px] rounded-sm h-full">
                             </div>
                         {/if}
-                    </div>
-                    <div class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible dark:customScrollbar lightScrollbar">
+                    </article>
+                    <article class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible dark:customScrollbar lightScrollbar">
                         <h2 class="dark:text-white text-lg font-semibold">Your Journeys</h2>
                         <div class="flex flex-col mt-4 gap-2">
                             {#each sortedJourneys as journey}
@@ -203,18 +203,18 @@
                                 </button>
                             {/each}
                         </div>
-                    </div>
-                </div>
+                    </article>
+                </article>
             {/if}
         </div>
-    </div>
+    </section>
     <div class="h-full w-full flex flex-col items-center pl-4 pr-4 mt-4">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen pl-4 pr-4 pb-4 pt-4 max-w-[1500px] w-full">
             <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3 w-full text-left">Your Logs</h2>
         </div>
     </div>
     <Footer/>
-</div>
+</main>
 <script>
     import { onMount} from 'svelte';
     import { page } from '$app/stores';

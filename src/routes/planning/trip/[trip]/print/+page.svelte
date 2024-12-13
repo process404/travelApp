@@ -1,23 +1,23 @@
 
-<div style="width: 100vw; display: flex; flex-direction: column; overflow-y:scroll; background: rgb(255,255,255)" class="pb-16" id="app">
-    <div class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
+<main style="width: 100vw; display: flex; flex-direction: column; overflow-y:scroll; background: rgb(255,255,255)" class="pb-16" id="app">
+    <section class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
             <button class="button dark p-3 text-sm wider2 taller" on:click={() => window.history.back()}>Go Back</button>
             <button class="button green p-3 text-sm pl-6 pr-6 wider2 taller" on:click={print}>Print</button>
         </div>
         <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
-    </div>
+    </section>
     {#if plan}
-    <div class="ml-6 mr-6 mb-4 flex justify-between items-center">
-        <div>
+    <section class="ml-6 mr-6 mb-4 flex justify-between items-center">
+        <article>
             <h2 class="font-bold text-xl">{$titleSet}</h2>
             {#if plan.description}
             <h3 class="font-regular italic text-sm mt-1">{$descriptionSet}</h3>
             {:else}
             <h3 class="font-regular italic text-sm mt-1">{GD()}</h3>
             {/if}
-        </div>
-        <div class="flex gap-6">
+        </article>
+        <article class="flex gap-6">
             <div class="flex items-center">
                 {#if plan.days && plan.days.length > 1}
                     <h2 class="font-bold text-xl">{$calcDaysWr} DAYS</h2>
@@ -29,9 +29,9 @@
                 <h2 class="font-semibold text-md text-right">{formatDate(plan.start)}</h2>
                 <h3 class="font-semibold text-md mt-1 text-right">{formatDate(plan.end)}</h3>
             </div>
-        </div>
-    </div>
-    <div class="ml-6 mr-6">
+        </article>
+    </section>
+    <section class="ml-6 mr-6">
         <table class="table-auto w-full">
             <thead class="bg-black">
                 <th class="text-white w-[7%] text-left">ID</th>
@@ -90,9 +90,9 @@
                 {/if}
             </tbody>
         </table>
-    </div>
+    </section>
     {/if}
-</div>
+</main>
 
 <script>
     import { page } from "$app/stores";

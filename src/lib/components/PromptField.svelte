@@ -1,12 +1,12 @@
 {#if suggestions.length != 0}
     <button class="fixed w-screen h-screen z-40 left-0 top-0 cursor-default p-0" on:click={() => {suggestions = []}}></button>
 {/if}
-<div class="flex gap-1 w-full">
-    <div class="relative w-full gap-2">
+<main class="flex gap-1 w-full">
+    <section class="relative w-full gap-2">
         <!--TO-DO add precise location info and country selector-->
         <input minlength="3" placeholder="" class="input blue w-full" bind:value on:input={() => promptSuggestions()} class:inputDisabled={disabled} disbled={disabled} class:reduced={red}>
         {#if suggestions.length != 0}
-        <div class="absolute bottom-100 dark:bg-neutral-800 bg-neutral-200 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
+        <article class="absolute bottom-100 dark:bg-neutral-800 bg-neutral-200 border-[1px] border-neutral-700  p-2 w-full rounded-md rounded-t-none pl-4 pr-4 pb-4 z-50" style="filter:drop-shadow(0px 10px 20px rgba(0,0,0,0.5))">
             {#if !loading}
                 {#each suggestions.slice(0,5) as suggestion}
                     <!-- {#if name.name != value && value.length < name.name.length && value.length > 0} -->
@@ -26,9 +26,9 @@
             {:else}
                 <span class="loader"></span>
             {/if}
-        </div>
+        </article>
         {/if}
-    </div>
+    </section>
     {#if ver === "loc"}
         <select class="input blue" bind:value={presetC} class:inputDisabled={disabled} disbled={disabled} class:selectReduced={red}>
             {#each countryList as country}
@@ -36,7 +36,7 @@
             {/each}
         </select>
     {/if}
-</div>
+</main>
 
 
 <script>

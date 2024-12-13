@@ -1,11 +1,11 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div style="width: 100vw; display: flex; flex-direction: column" id="app">
+<main style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
-        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+        <section class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
             <div class="max-w-[1000px] w-full flex flex-col">
-                <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
+                <article class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                     <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Add Log</h2>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Location</h3>
                         <div class="relative mt-2">
                             <div class="flex items-center w-full gap-3 mr-1">
@@ -29,8 +29,8 @@
                             </div>
                             
                         </div>
-                    </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    </article>
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Date / Time</h3>
                         <div class="flex gap-1 sm:gap-3 flex-col sm:flex-row" class:opacity-50={$noDT} class:pointer-events-none={$noDT} >
                             <input type="date" class="input blue mt-2 dark:iconEdit w-full" bind:value={inputDate}>
@@ -40,8 +40,8 @@
                             <input type="checkbox" class="checkbox blue" name="no_location" bind:checked={$noDT}>
                             <label for="no_location" class="text-neutral-500 italic  text-xs">No Date / Time</label>
                         </div>
-                    </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    </article>
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex mb-2 rounded-md border-neutral-800 gap-1 w-full items-start">
@@ -138,8 +138,8 @@
                             </div>
                     
                         </div>
-                    </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    </article>
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Photographs</h3>
                         {#if pictures.length == 0 && addPhoto == false}
                             <div class="border-neutral-700 rounded-md p-2 border-[1px] mt-2">
@@ -271,7 +271,7 @@
 
                             
                         </div>
-                    </div>
+                    </article>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Notes</h3>
                         <textarea class="input blue text-xs resize-none w-full mt-2" maxlength="500" rows="4" placeholder="" bind:value={inputNote}></textarea>
@@ -280,13 +280,13 @@
                     <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
                     
-                </div>
+                </article>
             </div>
-        </div>
-        <div class="mt-auto">
+        </section>
+        <footer class="mt-auto">
             <Footer/>
-        </div>
-</div>
+        </footer>
+</main>
 
 <script>
     import { getAllContexts, onMount, tick } from 'svelte';
