@@ -1,21 +1,21 @@
 <div style="width: 100vw; display: flex; flex-direction: column; overflow-y:scroll" id="app">
 <Nav ver="back"/>
-    <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+    <section class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
         <div class="max-w-[1000px] w-full flex flex-col h-full">
-            <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-2 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
+            <article class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-2 mr-2 sm:mr-8 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                 {#if plansFromDB.length == 0}
                 <h2 class="dark:text-white  text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
-                <div class="h-full flex items-center justify-center flex-col gap-4">
+                <article class="h-full flex items-center justify-center flex-col gap-4">
                     <h3 class="text-neutral-400 italic mt-2 text-md">You have no plans yet</h3>
                     <div class="flex gap-2 flex-col">
                         <button class="button blue pl-8 pr-8 xl-padding" on:click={createPlanPg}>Create a plan</button>
                         <button class="button green pl-8 pr-8 xl-padding" on:click={loadFromData}>Load from data</button>
                         <!-- <button class="fadeButton green p-2 pl-8 pr-8">Load from String</button> -->
                     </div>
-                </div>
+                </article>
                 {:else}
                 <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-5 mb-7">Your Planning</h2>
-                <div class="flex flex-col w-full h-full overflow-y-scroll customScrollbar sm:ml-0 items-center gap-3">
+                <article class="flex flex-col w-full h-full overflow-y-scroll customScrollbar sm:ml-0 items-center gap-3">
                         {#each sortPlans(plansFromDB) as plan}
                         <button class="w-full border-[1px] rounded-md border-neutral-700 p-3 dark:bg-black dark:bg-opacity-30 opacity-100 bg-neutral-200 text-left dark:focus:border-white duration-100 dark:hover:border-white hover:border-blue-800 focus:border-blue-800 hover:border-opacity-50  max-w-[700px]" on:click={() => window.location.href = '/planning/trip/' + plan.tripID}>
                             <div class="flex items-center gap-4 justify-between">
@@ -82,18 +82,18 @@
                             <!-- Stuff to go here = start / end date / days (work this out) / perhaps number of journeys within trip-->
                         </button>
                         {/each}
-                    </div>
+                    </article>
                 <div class="w-full border-neutral-700 rounded-md border-[1px] p-2 max-w-[700px] flex gap-4">
                     <button class="button blue w-full p-2" on:click={createPlanPg}>Create a plan</button>
                     <button class="button green w-1/2 p-2" on:click={loadFromData}>Load from data</button>
                 </div>
                 {/if}
-            </div>
+            </article>
         </div>
-    </div>
-    <div class="mt-auto">
+    </section>
+    <footer class="mt-auto">
         <Footer/>
-    </div>
+    </footer>
 </div>
 
 <script>

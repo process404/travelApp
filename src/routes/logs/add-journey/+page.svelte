@@ -1,11 +1,11 @@
 <CustomAlert mode={$alrtMode} active={$alrtAct} text={$alrtTxt} on:close={() => $alrtAct = false} />
-<div style="width: 100vw; display: flex; flex-direction: column" id="app">
+<main style="width: 100vw; display: flex; flex-direction: column" id="app">
     <Nav ver="back"/>
-        <div class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
-            <div class="max-w-[1000px] w-full flex flex-col">
+        <section class="flex flex-col items-center h-full justify-start overflow-y-scroll customScrollbar overflow-x-hidden">
+            <article class="max-w-[1000px] w-full flex flex-col">
                 <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-2 sm:mr-4 h-full sm:pt-6 sm:pb-6 pl-4 pr-4 pb-4">
                     <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3">Add Journey</h2>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex items-center justify-center gap-3 mr-1 flex-col mb-3 sm:mb-1">
                             <div class="w-full">
                                 <!--TO-DO - country selector ?-->
@@ -124,8 +124,8 @@
                                 {/if}
                             </div>
                         </div>
-                    </div>
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    </article>
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <div class="flex gap-4">
                             <div class="w-full">
                                 <h3 class="dark:text-neutral-300 italic">Departure</h3>
@@ -292,7 +292,7 @@
                                 </div>
                             {/if}
                         </div>
-                    </div>
+                    </article>
 
 
 
@@ -303,7 +303,7 @@
 
 
 
-                    <div class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
+                    <article class="border-[1px] border-neutral-700 rounded-md sm:mt-8 mt-4 w-full max-w-[500px] p-4">
                         <h3 class="dark:text-neutral-300 italic">Numbers</h3>
                         <div class="mt-2 flex gap-2 items-center flex-wrap">
                             <div class="flex mb-2 rounded-md border-neutral-800 gap-1 w-full items-start">
@@ -383,17 +383,17 @@
                             </div>
                     
                         </div>
-                    </div>
+                    </article>
                     <div class="border-[1px] border-neutral-700 rounded-md sm:mt-16 mt-8 w-full max-w-[500px] p-4">
-                    <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
+                        <button class="button blue w-full p-2 text-sm x-padding" on:click={confirmLog}>Submit Log</button>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="mt-auto">
+            </article>
+        </section>
+        <footer class="mt-auto">
             <Footer/>
-        </div>
-</div>
+        </footer>
+</main>
 
 <script>
     // TO-DO
