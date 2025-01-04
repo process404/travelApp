@@ -60,20 +60,16 @@
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.from} ({journey.fromCountry})</td>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.to} ({journey.toCountry})</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 text-left text-xs">{journey.operator}</td>
-                                {#if journey.description != '' && journey.description != null}
-                                    <td class="border border-neutral-200 p-1 text-xs">
+                                <td class="border border-neutral-200 p-1 text-xs">
+                                    {#if journey.description != '' && journey.description != null}
                                         {journey.description}
                                         {#if journey.eticketLink}
                                             <br><a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
                                         {/if}
-                                    </td>
-                                {:else}
-                                    <td class="border border-neutral-200 p-1 text-xs">
-                                        {#if journey.eticketLink}
-                                            <a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
-                                        {/if}
-                                    </td>
-                                {/if}
+                                    {:else if journey.eticketLink}
+                                        <a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
+                                    {/if}
+                                </td>
                             </tr>
                         {/each}
                         {#if day.journeys.length === 0}
