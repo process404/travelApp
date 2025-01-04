@@ -291,33 +291,33 @@
     
     function addJourneyFn(day, sd, ed){
 
-        const startDate = new Date(sd);
+    const startDate = new Date(sd);
 
-        // Calculate the target date by adding (day - 1) days to the start date
-        const targetDate = new Date(startDate);
-        targetDate.setDate(startDate.getDate() + (day.day - 1));
+    // Calculate the target date by adding (day - 1) days to the start date
+    const targetDate = new Date(startDate);
+    targetDate.setDate(startDate.getDate() + (day.day - 1));
 
-        // Format the target date as a string (e.g., "YYYY-MM-DD")
-        const year = targetDate.getFullYear();
-        const month = String(targetDate.getMonth() + 1).padStart(2, '0');
-        const date = String(targetDate.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${date}`;
-        console.log(formattedDate);
+    // Format the target date as a string (e.g., "YYYY-MM-DD")
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const date = String(targetDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${date}`;
+    console.log(formattedDate);
 
-        thisTripDateStart = formattedDate;
-        thisTripDateEnd = formattedDate;
+    thisTripDateStart = formattedDate;
+    thisTripDateEnd = formattedDate;
 
-        addJourney = true;
-        addJourneyDay = day.day;
-        addDay = day;
+    addJourney = true;
+    addJourneyDay = day.day;
+    addDay = day;
     }
-    
-    
+
+
     async function addJourneyFinal(data){
         // console.log(data.detail.text);
         addJourney = false;
         for(const plan in storage){
-            if(storage[plan].tripID == param){
+            if(storage[plan].tripID.replace("#","")== param){
                 for(const day in storage[plan].days){
                     if(storage[plan].days[day].day == data.detail.text.day){
                         storage[plan].days[day].journeys.push(data.detail.text.journey);
@@ -328,6 +328,7 @@
             }
         }
     }
+
     
     let journeyToEdit
     
@@ -362,21 +363,22 @@
         editJourneyDay = day;
     }
     
-    async function editJourneyFinal(data){
-        // console.log(data.detail.text);
+    async function editJourneyFinal(event) {
+        const { day, journey } = event.detail.text;
         editJourney = false;
-        for(const plan of storage){
-            if(plan.tripID === param){
-            for(const day of plan.days){
-                if(day.day === data.detail.text.day){
-                const journeyIndex = day.journeys.findIndex(journey => journey.code === data.detail.text.journey.code);
-                if(journeyIndex !== -1){
-                    day.journeys[journeyIndex] = data.detail.text.journey;
-                    await writePlanningData(storage);
-                    getPlan();
+        for (const plan of storage) {
+            if (plan.tripID.replace("#","") === param) {
+                for (const dayPlan of plan.days) {
+                    if (dayPlan.day === day) {
+                        const journeyIndex = dayPlan.journeys.findIndex(j => j.code === journey.code);
+                        if (journeyIndex !== -1) {
+                            dayPlan.journeys[journeyIndex] = journey;
+                            await writePlanningData(storage);
+                            getPlan();
+                            return;
+                        }
+                    }
                 }
-                }
-            }
             }
         }
     }

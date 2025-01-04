@@ -110,7 +110,7 @@ import extraStationsNonDs from '../../../../db/additionalStations.json'
 import { writable, get } from "svelte/store";
 var loading = true;
 
-let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId;
+let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId, eTicketLink;
 let alrtMode = writable("err");
 let alrtTxt = writable("");
 let alrtAct = writable(false);
@@ -118,7 +118,6 @@ let alrtAct = writable(false);
 let fromCountry = "GB"
 let toCountry = "GB"
 
-let eTicketLink = "";
 let uploadedFile = null;
 let uploadedFiles = writable({});
 
@@ -212,7 +211,7 @@ function generateCode() {
 }
 
 async function addJourneyConfirm() {
-    if (from === null || to === null || arrivalDate === null || departureDate === null) {
+    if (from === null || to === null || tripDateEnd === null || tripDateStart === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
         console.log("Please fill in all fields");
@@ -233,8 +232,8 @@ async function addJourneyConfirm() {
                 toId: toId,
                 arrivalTime: arrivalTime,
                 departureTime: departureTime,
-                departureDate: departureDate,
-                arrivalDate: arrivalDate,
+                departureDate: tripDateStart,
+                arrivalDate: tripDateEnd,
                 service: service,
                 operator: operator,
                 description: description,

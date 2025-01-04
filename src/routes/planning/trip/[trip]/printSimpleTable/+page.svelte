@@ -128,6 +128,7 @@
         plan = {};
 
     let allUploadedFiles = [];
+    let allETicketLinks = [];
 
     function print() {
         window.print();
@@ -158,16 +159,18 @@
     function collectUploadedFilesAndETickets() {
         allUploadedFiles = [];
         allETicketLinks = [];
-        plan.days.forEach(day => {
-            day.journeys.forEach(journey => {
-                if (journey.uploadedFiles) {
-                    allUploadedFiles.push(...Object.entries(journey.uploadedFiles));
-                }
-                if (journey.eTicketLink) {
-                    allETicketLinks.push(journey.eTicketLink);
-                }
+        if (plan && plan.days) {
+            plan.days.forEach(day => {
+                day.journeys.forEach(journey => {
+                    if (journey.uploadedFiles) {
+                        allUploadedFiles.push(...Object.entries(journey.uploadedFiles));
+                    }
+                    if (journey.eTicketLink) {
+                        allETicketLinks.push(journey.eTicketLink);
+                    }
+                });
             });
-        });
+        }
     }
 
     onMount(async () => {
