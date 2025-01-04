@@ -57,7 +57,29 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </article>
-        <article class="flex gap-3 sm:mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-4">
+        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">E-Ticket Link</h3>
+            <input class="input blue w-full" type="url" bind:value={eTicketLink} placeholder="Enter e-ticket link"/>
+            </div>
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Upload Files</h3>
+            <input class="input blue w-full" type="file" accept=".pdf,.jpg,.png" multiple on:change={handleFilesUpload}/>
+            </div>
+        </article>
+        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Uploaded Files</h3>
+            <ul>
+                {#each Object.values($uploadedFiles) as file}
+                <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
+                    <span class="w-full block">{file.name.slice(0,15)}</span>
+                </button>
+                {/each}
+            </ul>
+            </div>
+        </article>
+        <article class="flex gap-3 sm:mt-8 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-8">
             <div class="w-full flex">
                 <button class="button green w-full taller" on:click={addJourneyConfirm}>Add Journey</button>
             </div>
@@ -85,7 +107,7 @@ import '../../../siteDB.js';
 import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 import extraStationsNonDs from '../../../../db/additionalStations.json'
 
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 var loading = true;
 
 let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId;
@@ -95,6 +117,30 @@ let alrtAct = writable(false);
 
 let fromCountry = "GB"
 let toCountry = "GB"
+
+let eTicketLink = "";
+let uploadedFile = null;
+let uploadedFiles = writable({});
+
+function handleFilesUpload(event) {
+    const files = event.target.files;
+    uploadedFiles.update(currentFiles => {
+        const newFiles = { ...currentFiles };
+        for (let i = 0; i < files.length; i++) {
+            newFiles[files[i].name] = files[i];
+        }
+        return newFiles;
+    });
+    console.log("Files uploaded:", get(uploadedFiles));
+}
+
+function deleteFile(name) {
+    uploadedFiles.update(files => {
+        delete files[name];
+        return files;
+    });
+    console.log("Files uploaded:", get(uploadedFiles));
+}
 
 function close() {
     dispatch("message", { text: "close" });
@@ -192,6 +238,8 @@ async function addJourneyConfirm() {
                 service: service,
                 operator: operator,
                 description: description,
+                eTicketLink: eTicketLink,
+                files: get(uploadedFiles),
             },
         };
         console.log("JI: ", journey);

@@ -61,6 +61,13 @@
                                 {:else}
                                     <td class="border border-neutral-200 p-1"></td>
                                 {/if}
+                                {#if journey.eTicketLink}
+                                    <td class="border border-neutral-200 p-1 text-xs">
+                                        <a href={journey.eTicketLink} target="_blank">eTicket</a>
+                                    </td>
+                                {:else}
+                                    <td class="border border-neutral-200 p-1"></td>
+                                {/if}
                             </tr>
                         {/each}
                         {#if day.journeys.length === 0}
@@ -83,7 +90,18 @@
                             <td class="border border-neutral-200 p-1 h-[25px]"></td>
                         </tr>
                         {/each}
-                {:else}
+                    <!-- New section for uploaded files -->
+                    {#if allUploadedFiles.length > 0}
+                        <section>
+                            <h2>Uploaded Files</h2>
+                            <ul>
+                                {#each allUploadedFiles as [fileName, file]}
+                                    <li><a href={URL.createObjectURL(file)} target="_blank">{fileName}</a></li>
+                                {/each}
+                            </ul>
+                        </section>
+                    {/if}
+                    {:else}
                     <tr>
                         <td colspan="7" class="text-center">Loading...</td>
                     </tr>
@@ -97,6 +115,7 @@
 <script>
     import { page } from "$app/stores";
     import "../../../../../global.css";
+    import { get } from 'svelte/store';
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import '../../../../siteDB.js';
@@ -107,6 +126,8 @@
         titleSet = writable("No title set"),
         descriptionSet = writable("No description set"),
         plan = {};
+
+    let allUploadedFiles = [];
 
     function print() {
         window.print();
@@ -134,11 +155,27 @@
         return `Generated ${String(t.getDate()).padStart(2, "0")}/${String(t.getMonth() + 1).padStart(2, "0")}/${t.getFullYear()} ${String(t.getHours()).padStart(2, "0")}:${String(t.getMinutes()).padStart(2, "0")}:${String(t.getSeconds()).padStart(2, "0")}`;
     }
 
+    function collectUploadedFilesAndETickets() {
+        allUploadedFiles = [];
+        allETicketLinks = [];
+        plan.days.forEach(day => {
+            day.journeys.forEach(journey => {
+                if (journey.uploadedFiles) {
+                    allUploadedFiles.push(...Object.entries(journey.uploadedFiles));
+                }
+                if (journey.eTicketLink) {
+                    allETicketLinks.push(journey.eTicketLink);
+                }
+            });
+        });
+    }
+
     onMount(async () => {
         let t = await getPlanningData();
         console.log(t)
         plan = t.find(t => t.tripID === param),
         console.log(t)
+        collectUploadedFilesAndETickets(),
         plan && (calcDays(plan.start, plan.end), titleSet.set(UC(plan.name)), descriptionSet.set(UC(plan.description)), document.title = "Print (" + plan.name + ")");
     });
 

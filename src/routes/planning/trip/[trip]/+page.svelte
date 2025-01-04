@@ -228,8 +228,9 @@
     async function getPlan(){
         storage = await getPlanningData();
         for(const plan in storage){
-            // console.log(storage[plan])
-            if(storage[plan].tripID == param){
+            console.log(storage[plan])
+            console.log(param)
+            if(storage[plan].tripID.replace("#","") == param){
                 tripName.set(storage[plan].name);
                 tripDescription.set(storage[plan].description);
                 tripStart.set(storage[plan].startDate);
@@ -429,7 +430,7 @@
     }
     
     function goPrint(){
-        window.location.href = '/planning/trip/' + param + '/print';
+        window.location.href = '/planning/trip/' + param + '/printSimpleTable';
     }
     
     
