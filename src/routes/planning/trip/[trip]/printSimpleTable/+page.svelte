@@ -50,23 +50,29 @@
                         </tr>
                         {#each sortJourneys(day.journeys) as journey}
                             <tr>
+                                {#if journey.service != undefined}
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.service}</td>
+                                {:else}
+                                <td class="border border-neutral-200 p-1 text-xs"></td>
+                                {/if}
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.departureTime}</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.arrivalTime}</td>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.from} ({journey.fromCountry})</td>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.to} ({journey.toCountry})</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 text-left text-xs">{journey.operator}</td>
                                 {#if journey.description != '' && journey.description != null}
-                                    <td class="border border-neutral-200 p-1 text-xs">{journey.description}</td>
-                                {:else}
-                                    <td class="border border-neutral-200 p-1"></td>
-                                {/if}
-                                {#if journey.eTicketLink}
                                     <td class="border border-neutral-200 p-1 text-xs">
-                                        <a href={journey.eTicketLink} target="_blank">eTicket</a>
+                                        {journey.description}
+                                        {#if journey.eticketLink}
+                                            <br><a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
+                                        {/if}
                                     </td>
                                 {:else}
-                                    <td class="border border-neutral-200 p-1"></td>
+                                    <td class="border border-neutral-200 p-1 text-xs">
+                                        {#if journey.eticketLink}
+                                            <a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
+                                        {/if}
+                                    </td>
                                 {/if}
                             </tr>
                         {/each}
@@ -90,18 +96,7 @@
                             <td class="border border-neutral-200 p-1 h-[25px]"></td>
                         </tr>
                         {/each}
-                    <!-- New section for uploaded files -->
-                    {#if allUploadedFiles.length > 0}
-                        <section>
-                            <h2>Uploaded Files</h2>
-                            <ul>
-                                {#each allUploadedFiles as [fileName, file]}
-                                    <li><a href={URL.createObjectURL(file)} target="_blank">{fileName}</a></li>
-                                {/each}
-                            </ul>
-                        </section>
-                    {/if}
-                    {:else}
+                {:else}
                     <tr>
                         <td colspan="7" class="text-center">Loading...</td>
                     </tr>
@@ -115,7 +110,6 @@
 <script>
     import { page } from "$app/stores";
     import "../../../../../global.css";
-    import { get } from 'svelte/store';
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import '../../../../siteDB.js';
@@ -126,9 +120,6 @@
         titleSet = writable("No title set"),
         descriptionSet = writable("No description set"),
         plan = {};
-
-    let allUploadedFiles = [];
-    let allETicketLinks = [];
 
     function print() {
         window.print();
@@ -156,30 +147,23 @@
         return `Generated ${String(t.getDate()).padStart(2, "0")}/${String(t.getMonth() + 1).padStart(2, "0")}/${t.getFullYear()} ${String(t.getHours()).padStart(2, "0")}:${String(t.getMinutes()).padStart(2, "0")}:${String(t.getSeconds()).padStart(2, "0")}`;
     }
 
-    function collectUploadedFilesAndETickets() {
-        allUploadedFiles = [];
-        allETicketLinks = [];
-        if (plan && plan.days) {
-            plan.days.forEach(day => {
-                day.journeys.forEach(journey => {
-                    if (journey.uploadedFiles) {
-                        allUploadedFiles.push(...Object.entries(journey.uploadedFiles));
-                    }
-                    if (journey.eTicketLink) {
-                        allETicketLinks.push(journey.eTicketLink);
-                    }
-                });
-            });
-        }
-    }
+    function collectUploadedFiles(){
+        let files = [];
+        document.querySelectorAll('.file-input').forEach((fileInput) => {
+            if(fileInput.files.length > 0){
+                files.push(fileInput.files[0]);
+            }
+        });
+        return files;
+    };
 
     onMount(async () => {
         let t = await getPlanningData();
         console.log(t)
-        plan = t.find(t => t.tripID === param),
+        plan = t.find(t => t.tripID.replace("#","") === param),
         console.log(t)
-        collectUploadedFilesAndETickets(),
         plan && (calcDays(plan.start, plan.end), titleSet.set(UC(plan.name)), descriptionSet.set(UC(plan.description)), document.title = "Print (" + plan.name + ")");
+        
     });
 
     function sortJourneys(journeys) {

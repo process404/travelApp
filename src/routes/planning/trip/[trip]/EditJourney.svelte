@@ -71,11 +71,13 @@
             <div class="w-full">
             <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Uploaded Files</h3>
             <ul>
-                {#each Object.values($uploadedFiles) as file}
-                <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
-                    <span class="w-full block">{file.name.slice(0,15)}</span>
-                </button>
-                {/each}
+                {#if $uploadedFiles}
+                    {#each Object.values($uploadedFiles) as file}
+                    <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
+                        <span class="w-full block">{file.name.slice(0,15)}</span>
+                    </button>
+                    {/each}
+                {/if}
             </ul>
             </div>
         </article>
