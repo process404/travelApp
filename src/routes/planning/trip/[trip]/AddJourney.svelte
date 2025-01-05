@@ -62,22 +62,6 @@
             <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">E-Ticket Link</h3>
             <input class="input blue w-full" type="url" bind:value={eTicketLink} placeholder="Enter e-ticket link"/>
             </div>
-            <div class="w-full">
-            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Upload Files</h3>
-            <input class="input blue w-full" type="file" accept=".pdf,.jpg,.png" multiple on:change={handleFilesUpload}/>
-            </div>
-        </article>
-        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
-            <div class="w-full">
-            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Uploaded Files</h3>
-            <ul>
-                {#each Object.values($uploadedFiles) as file}
-                <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
-                    <span class="w-full block">{file.name.slice(0,15)}</span>
-                </button>
-                {/each}
-            </ul>
-            </div>
         </article>
         <article class="flex gap-3 sm:mt-8 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-8">
             <div class="w-full flex">
@@ -120,26 +104,6 @@ let toCountry = "GB"
 
 let uploadedFile = null;
 let uploadedFiles = writable({});
-
-function handleFilesUpload(event) {
-    const files = event.target.files;
-    uploadedFiles.update(currentFiles => {
-        const newFiles = { ...currentFiles };
-        for (let i = 0; i < files.length; i++) {
-            newFiles[files[i].name] = files[i];
-        }
-        return newFiles;
-    });
-    console.log("Files uploaded:", get(uploadedFiles));
-}
-
-function deleteFile(name) {
-    uploadedFiles.update(files => {
-        delete files[name];
-        return files;
-    });
-    console.log("Files uploaded:", get(uploadedFiles));
-}
 
 function close() {
     dispatch("message", { text: "close" });
@@ -220,6 +184,7 @@ async function addJourneyConfirm() {
     }
 
     if (confirm("Please confirm you would like to enter this journey.")) {
+        console.log(get(uploadedFiles));
         const journey = {
             day: day,
             journey: {
@@ -238,7 +203,6 @@ async function addJourneyConfirm() {
                 operator: operator,
                 description: description,
                 eTicketLink: eTicketLink,
-                files: get(uploadedFiles),
             },
         };
         console.log("JI: ", journey);

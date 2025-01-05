@@ -74,7 +74,7 @@
                 {#if $uploadedFiles}
                     {#each Object.values($uploadedFiles) as file}
                     <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
-                        <span class="w-full block">{file.name.slice(0,15)}</span>
+                        <span class="w-full block">{file.name}</span>
                     </button>
                     {/each}
                 {/if}
@@ -94,6 +94,7 @@
 import { fade, fly } from 'svelte/transition';
 import { createEventDispatcher, onMount } from "svelte";
 const dispatch = createEventDispatcher();
+import { get } from 'svelte/store';
 
 export let day;
 export let journey;
@@ -111,27 +112,6 @@ import { writable } from "svelte/store";
 
 let uploadedFile = null;
 
-function handleFilesUpload(event) {
-    const files = event.target.files;
-    uploadedFiles.update(currentFiles => {
-        const newFiles = { ...currentFiles };
-        for (let i = 0; i < files.length; i++) {
-            newFiles[files[i].name] = files[i];
-        }
-        return newFiles;
-    });
-    console.log("Files uploaded:", get(uploadedFiles));
-}
-
-function deleteFile(name) {
-    uploadedFiles.update(files => {
-        delete files[name];
-        return files;
-    });
-    console.log("Files uploaded:", get(uploadedFiles));
-}
-
-
 let from = journey.from, fromId = null, toId = null,
 fromCountry = journey.fromCountry,
     to = journey.to,
@@ -147,8 +127,7 @@ fromCountry = journey.fromCountry,
     alrtMode = writable("err"),
     alrtTxt = writable(""),
     alrtAct = writable(false),
-    eTicketLink = journey.eTicketLink,
-    uploadedFiles = writable(journey.uploadedFiles)
+    eTicketLink = journey.eTicketLink
 
     onMount(() => {
         arrivalDate = arrivalDate.split("T")[0];
@@ -234,6 +213,7 @@ async function addJourneyConfirm() {
     if (
         confirm("Please confirm you would like to edit this journey.")
     ) {
+        console.log(get(uploadedFiles));
         let o = {
             day: day,
             journey: {
@@ -251,6 +231,7 @@ async function addJourneyConfirm() {
                 service: service,
                 operator: operator,
                 description: description,
+                files : get(uploadedFiles),
             },
         };
         console.log("JI: ", o);
