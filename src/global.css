@@ -806,3 +806,60 @@
 .switch.pink:checked {
     @apply bg-pink-800 before:bg-white
 }
+
+
+.inline.red {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-red-500 relative before:h-[1px] hover:bg-red-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-red-200
+}
+
+.inline.red.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.orange {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-orange-500 relative before:h-[1px] hover:bg-orange-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-orange-200
+}
+
+.inline.orange.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.yellow {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-yellow-500 relative before:h-[1px] hover:bg-yellow-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-yellow-200
+}
+
+.inline.yellow.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.green {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-green-500 relative before:h-[1px] hover:bg-green-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-green-200
+}
+
+.inline.green.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.blue {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-blue-500 relative before:h-[1px] hover:bg-blue-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-blue-200
+}
+
+.inline.blue.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.purple {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-purple-500 relative before:h-[1px] hover:bg-purple-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-purple-200
+}
+
+.inline.purple.no-move {
+    @apply p-1 hover:p-1
+}
+
+.inline.pink {
+    @apply before:absolute before:bottom-0 before:left-0 before:w-full before:bg-pink-500 relative before:h-[1px] hover:bg-pink-500 hover:bg-opacity-20 p-0 hover:p-1 duration-100 hover:text-pink-200
+}
+
+.inline.pink.no-move {
+    @apply p-1 hover:p-1
+}

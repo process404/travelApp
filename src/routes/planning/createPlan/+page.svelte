@@ -90,7 +90,7 @@
 
             var plan = {
                 tripID: [...Array(15)].map(() => {
-                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$%^&*()';
                     return characters[Math.floor(Math.random() * characters.length)];
                 }).join(''),
                 description: description,

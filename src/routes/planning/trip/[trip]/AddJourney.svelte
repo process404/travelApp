@@ -57,7 +57,13 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </article>
-        <article class="flex gap-3 sm:mt-auto border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-4">
+        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">E-Ticket Link</h3>
+            <input class="input blue w-full" type="url" bind:value={eTicketLink} placeholder="Enter e-ticket link"/>
+            </div>
+        </article>
+        <article class="flex gap-3 sm:mt-8 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col mt-8">
             <div class="w-full flex">
                 <button class="button green w-full taller" on:click={addJourneyConfirm}>Add Journey</button>
             </div>
@@ -85,16 +91,19 @@ import '../../../siteDB.js';
 import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
 import extraStationsNonDs from '../../../../db/additionalStations.json'
 
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 var loading = true;
 
-let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId;
+let from, to, arrivalDate, departureDate, service, operator, description, departureTime, arrivalTime, fromId, toId, eTicketLink;
 let alrtMode = writable("err");
 let alrtTxt = writable("");
 let alrtAct = writable(false);
 
 let fromCountry = "GB"
 let toCountry = "GB"
+
+let uploadedFile = null;
+let uploadedFiles = writable({});
 
 function close() {
     dispatch("message", { text: "close" });
@@ -166,7 +175,7 @@ function generateCode() {
 }
 
 async function addJourneyConfirm() {
-    if (from === null || to === null || arrivalDate === null || departureDate === null) {
+    if (from === null || to === null || tripDateEnd === null || tripDateStart === null) {
         alrtTxt.set("Please fill in all fields");
         alrtAct.set(true);
         console.log("Please fill in all fields");
@@ -175,6 +184,7 @@ async function addJourneyConfirm() {
     }
 
     if (confirm("Please confirm you would like to enter this journey.")) {
+        console.log(get(uploadedFiles));
         const journey = {
             day: day,
             journey: {
@@ -187,11 +197,12 @@ async function addJourneyConfirm() {
                 toId: toId,
                 arrivalTime: arrivalTime,
                 departureTime: departureTime,
-                departureDate: departureDate,
-                arrivalDate: arrivalDate,
+                departureDate: tripDateStart,
+                arrivalDate: tripDateEnd,
                 service: service,
                 operator: operator,
                 description: description,
+                eTicketLink: eTicketLink,
             },
         };
         console.log("JI: ", journey);

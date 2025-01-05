@@ -3,7 +3,7 @@
     <section class="w-full h-auto p-2 flex items-center justify-between non-print mb-4">
         <div class="flex gap-2">
             <button class="button dark p-3 text-sm wider2 taller" on:click={() => window.history.back()}>Go Back</button>
-            <button class="button green p-3 text-sm pl-6 pr-6 wider2 taller" on:click={print}>Print</button>
+            <button class="button green p-3 text-sm pl-6 pr-6 wider2 taller" on:click={printPage}>Print</button>
         </div>
         <h3 class="text-xs w-1/2 text-right">This header will not show when you click print. <br><b>Desktop recommended.</b></h3>
     </section>
@@ -50,17 +50,26 @@
                         </tr>
                         {#each sortJourneys(day.journeys) as journey}
                             <tr>
+                                {#if journey.service != undefined}
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.service}</td>
+                                {:else}
+                                <td class="border border-neutral-200 p-1 text-xs"></td>
+                                {/if}
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.departureTime}</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 font-bold text-center text-xs">{journey.arrivalTime}</td>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.from} ({journey.fromCountry})</td>
                                 <td class="border border-neutral-200 p-1 text-xs">{journey.to} ({journey.toCountry})</td>
                                 <td class="border border-neutral-200 p-1 bg-gray-100 text-left text-xs">{journey.operator}</td>
-                                {#if journey.description != '' && journey.description != null}
-                                    <td class="border border-neutral-200 p-1 text-xs">{journey.description}</td>
-                                {:else}
-                                    <td class="border border-neutral-200 p-1"></td>
-                                {/if}
+                                <td class="border border-neutral-200 p-1 text-xs">
+                                    {#if journey.description != '' && journey.description != null}
+                                        {journey.description}
+                                        {#if journey.eticketLink}
+                                            <br><a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
+                                        {/if}
+                                    {:else if journey.eticketLink}
+                                        <a href="{journey.eticketLink}" target="_blank" class="text-blue-500 underline">eTicket</a>
+                                    {/if}
+                                </td>
                             </tr>
                         {/each}
                         {#if day.journeys.length === 0}
@@ -98,17 +107,18 @@
     import { page } from "$app/stores";
     import "../../../../../global.css";
     import { writable } from "svelte/store";
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import '../../../../siteDB.js';
 	import { getPlanningData } from "../../../../siteDB.js";
+
 
     var param = $page.params.trip;
     let calcDaysWr = writable(""),
         titleSet = writable("No title set"),
         descriptionSet = writable("No description set"),
-        plan = {};
+        plan = {}
 
-    function print() {
+    function printPage() {
         window.print();
     }
 
@@ -137,9 +147,10 @@
     onMount(async () => {
         let t = await getPlanningData();
         console.log(t)
-        plan = t.find(t => t.tripID === param),
-        console.log(t)
+        plan = t.find(t => t.tripID.replace("#","") === param),
+        console.log(t);    
         plan && (calcDays(plan.start, plan.end), titleSet.set(UC(plan.name)), descriptionSet.set(UC(plan.description)), document.title = "Print (" + plan.name + ")");
+        
     });
 
     function sortJourneys(journeys) {

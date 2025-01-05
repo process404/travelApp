@@ -57,6 +57,31 @@
                 <textarea class="input blue text-xs resize-none w-full" maxlength="500" rows="4" placeholder="" bind:value={description}></textarea>
             </div>
         </section>
+        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">E-Ticket Link</h3>
+            <input class="input blue w-full" type="url" bind:value={eTicketLink} placeholder="Enter e-ticket link"/>
+            </div>
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Upload Files</h3>
+            <input class="input blue w-full" type="file" accept=".pdf,.jpg,.png" multiple on:change={handleFilesUpload}/>
+            </div>
+        </article>
+        <article class="flex gap-3 mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-3 items-center md:flex-row flex-col">
+            <div class="w-full">
+            <h3 class="dark:text-neutral-300 italic text-left mb-1 text-sm">Uploaded Files</h3>
+            <ul>
+                {#if $uploadedFiles}
+                    {#each Object.values($uploadedFiles) as file}
+                    <button type="button" class=" button text-white italic flex justify-between items-center w-full" on:click={() => deleteFile(file.name)} on:keydown={(e) => e.key === 'Enter' && deleteFile(file.name)}>
+                        <span class="w-full block">{file.name}</span>
+                    </button>
+                    {/each}
+                {/if}
+            </ul>
+            </div>
+        </article>
+        
         <section class="flex gap-3 sm:mt-auto mt-4 border-[1px] border-neutral-700 rounded-md p-2 pb-2 items-center md:flex-row flex-col">
             <div class="w-full flex">
                 <button class="button green w-full taller" on:click={addJourneyConfirm}>Edit Journey</button>
@@ -69,6 +94,7 @@
 import { fade, fly } from 'svelte/transition';
 import { createEventDispatcher, onMount } from "svelte";
 const dispatch = createEventDispatcher();
+import { get } from 'svelte/store';
 
 export let day;
 export let journey;
@@ -84,6 +110,8 @@ import PromptField from "../../../../lib/components/PromptField.svelte";
 import CustomAlert from "../../../../lib/components/Alert.svelte";
 import { writable } from "svelte/store";
 
+let uploadedFile = null;
+
 let from = journey.from, fromId = null, toId = null,
 fromCountry = journey.fromCountry,
     to = journey.to,
@@ -98,7 +126,8 @@ fromCountry = journey.fromCountry,
     code = journey.code,
     alrtMode = writable("err"),
     alrtTxt = writable(""),
-    alrtAct = writable(false);
+    alrtAct = writable(false),
+    eTicketLink = journey.eTicketLink
 
     onMount(() => {
         arrivalDate = arrivalDate.split("T")[0];
@@ -184,6 +213,7 @@ async function addJourneyConfirm() {
     if (
         confirm("Please confirm you would like to edit this journey.")
     ) {
+        console.log(get(uploadedFiles));
         let o = {
             day: day,
             journey: {
@@ -201,6 +231,7 @@ async function addJourneyConfirm() {
                 service: service,
                 operator: operator,
                 description: description,
+                files : get(uploadedFiles),
             },
         };
         console.log("JI: ", o);

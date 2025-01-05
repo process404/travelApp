@@ -100,11 +100,11 @@
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                                                                   </svg>
-                                                                  {#if journey.operator != '' && journey.service != ''}
+                                                                  {#if journey.operator != '' && journey.service != '' && journey.service != undefined}
                                                                         <h4 class="dark:text-white text-sm">{journey.service}<span class="ml-1 mr-1 opacity-30">/</span>{journey.operator}</h4>
                                                                   {:else if journey.operator != ''}
                                                                         <h4 class="dark:text-white text-sm">{journey.operator}</h4>
-                                                                  {:else if journey.service != ''}
+                                                                  {:else if journey.service != '' && journey.service != undefined}
                                                                         <h4 class="dark:text-white text-sm">{journey.service}</h4>
                                                                   {/if}
                                                                 </div>
@@ -228,8 +228,9 @@
     async function getPlan(){
         storage = await getPlanningData();
         for(const plan in storage){
-            // console.log(storage[plan])
-            if(storage[plan].tripID == param){
+            console.log(storage[plan])
+            console.log(param)
+            if(storage[plan].tripID.replace("#","") == param){
                 tripName.set(storage[plan].name);
                 tripDescription.set(storage[plan].description);
                 tripStart.set(storage[plan].startDate);
@@ -290,33 +291,33 @@
     
     function addJourneyFn(day, sd, ed){
 
-        const startDate = new Date(sd);
+    const startDate = new Date(sd);
 
-        // Calculate the target date by adding (day - 1) days to the start date
-        const targetDate = new Date(startDate);
-        targetDate.setDate(startDate.getDate() + (day.day - 1));
+    // Calculate the target date by adding (day - 1) days to the start date
+    const targetDate = new Date(startDate);
+    targetDate.setDate(startDate.getDate() + (day.day - 1));
 
-        // Format the target date as a string (e.g., "YYYY-MM-DD")
-        const year = targetDate.getFullYear();
-        const month = String(targetDate.getMonth() + 1).padStart(2, '0');
-        const date = String(targetDate.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${date}`;
-        console.log(formattedDate);
+    // Format the target date as a string (e.g., "YYYY-MM-DD")
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const date = String(targetDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${date}`;
+    console.log(formattedDate);
 
-        thisTripDateStart = formattedDate;
-        thisTripDateEnd = formattedDate;
+    thisTripDateStart = formattedDate;
+    thisTripDateEnd = formattedDate;
 
-        addJourney = true;
-        addJourneyDay = day.day;
-        addDay = day;
+    addJourney = true;
+    addJourneyDay = day.day;
+    addDay = day;
     }
-    
-    
+
+
     async function addJourneyFinal(data){
         // console.log(data.detail.text);
         addJourney = false;
         for(const plan in storage){
-            if(storage[plan].tripID == param){
+            if(storage[plan].tripID.replace("#","")== param){
                 for(const day in storage[plan].days){
                     if(storage[plan].days[day].day == data.detail.text.day){
                         storage[plan].days[day].journeys.push(data.detail.text.journey);
@@ -327,6 +328,7 @@
             }
         }
     }
+
     
     let journeyToEdit
     
@@ -361,21 +363,22 @@
         editJourneyDay = day;
     }
     
-    async function editJourneyFinal(data){
-        // console.log(data.detail.text);
+    async function editJourneyFinal(event) {
+        const { day, journey } = event.detail.text;
         editJourney = false;
-        for(const plan of storage){
-            if(plan.tripID === param){
-            for(const day of plan.days){
-                if(day.day === data.detail.text.day){
-                const journeyIndex = day.journeys.findIndex(journey => journey.code === data.detail.text.journey.code);
-                if(journeyIndex !== -1){
-                    day.journeys[journeyIndex] = data.detail.text.journey;
-                    await writePlanningData(storage);
-                    getPlan();
+        for (const plan of storage) {
+            if (plan.tripID.replace("#","") === param) {
+                for (const dayPlan of plan.days) {
+                    if (dayPlan.day === day) {
+                        const journeyIndex = dayPlan.journeys.findIndex(j => j.code === journey.code);
+                        if (journeyIndex !== -1) {
+                            dayPlan.journeys[journeyIndex] = journey;
+                            await writePlanningData(storage);
+                            getPlan();
+                            return;
+                        }
+                    }
                 }
-                }
-            }
             }
         }
     }
@@ -429,7 +432,7 @@
     }
     
     function goPrint(){
-        window.location.href = '/planning/trip/' + param + '/print';
+        window.location.href = '/planning/trip/' + param + '/printSimpleTable';
     }
     
     
