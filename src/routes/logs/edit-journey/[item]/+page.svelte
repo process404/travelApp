@@ -732,9 +732,14 @@
         }
 
         let miles = 0;
+
+        import OpenRouteService from 'openrouteservice-js';
+
     
         async function confirmLog(){
-    
+            $alrtMode = 'info_nc';
+            $alrtTxt = 'Processing...';
+            $alrtAct = true;
     
             if(from === '' || to === ''){
                 if(!$noLocation){
@@ -760,6 +765,8 @@
             if (!journeys) {
                 journeys = JSON.stringify([]);
             }
+
+            let railRoute = null;
     
             logNumbers.subscribe(async numbers => {
                 const updatedJourney = {
@@ -772,14 +779,15 @@
                     fromLong: fromLong,
                     toLat: toLat,
                     toLong: toLong,
+                    railRoute: railRoute,
                     start_date: inputDateStart,
                     start_time: inputTimeStart,
                     end_date: inputDateEnd,
                     end_time: inputTimeEnd,
                     viaPoints: viaPoints,
                     operator: operator,
-                    delayHours: delayHours,
-                    delayMinutes: delayMinutes,
+                    delayHours: delayHours ?? 0,
+                    delayMinutes: delayMinutes ?? 0,
                     journeyReason: journeyReason,
                     journeyFirstClass: journeyFirstClass,
                     journeySecondClass: journeySecondClass,
@@ -799,9 +807,6 @@
 
                 const updatedJourneys = journeys.map(j => j.id === param ? updatedJourney : j);
                 let test = await writeJourneysData(updatedJourneys);
-                $alrtMode = 'info_nc';
-                $alrtTxt = 'Processing...';
-                $alrtAct = true;
                 await sleep(3000)
                 window.location.href = `/overview/` + inputDateStart;
             });

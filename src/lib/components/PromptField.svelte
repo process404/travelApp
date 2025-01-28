@@ -279,14 +279,44 @@
 </script>
 
 <style>
-
-    .loader{margin-top:12px;width:24px;height:24px;border:3px solid rgb(50,50,50);border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    select.selectReduced{
-        @apply p-0 w-[50px]
+    .loader {
+        margin-top: 12px;
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgb(50, 50, 50);
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
     }
 
-    select{
-        @apply w-[65px]
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
+    select.selectReduced {
+        @apply p-0 w-[50px];
+    }
+
+    select {
+        @apply w-[65px];
+    }
+
+    /* Add dark mode styles */
+    :global(.dark) select {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        border-color: #444444;
+    }
+
+    :global(.dark) option {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
 </style>

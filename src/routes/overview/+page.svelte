@@ -23,7 +23,7 @@
                     <div class="flex gap-2 w-full justify-end">
                         <select class="input blue reduced"   bind:value={sortBy}>
                             <option>All Time</option>
-                            {#each Object.keys(logsBeforeUpd) as year}
+                            {#each Object.keys(logsBeforeUpd).sort((a, b) => b - a) as year}
                                 <option>{year}</option>
                             {/each}
                         </select>
@@ -42,7 +42,7 @@
                     </div>
                 {:else}
                     <div class="flex gap-2 flex-col mt-4">
-                        {#each Object.keys(logsByYear) as year}
+                        {#each Object.keys(logsByYear).sort((a, b) => b - a) as year}
                             <ul class="flex-wrap w-full">
                             {#each Object.keys(logsByYear[year]) as month}
                                 {#if month != 'Unknown'}
