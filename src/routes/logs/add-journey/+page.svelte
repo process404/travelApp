@@ -29,6 +29,15 @@
                                 {/if}
                 
                             </div>
+                            {#if from && to && suggestedViaPoints.length != 0}
+                                <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6  bg-opacity-30 duration-50 w-full">
+                                    <div class="flex ju</div>stify-between items-center">
+                                        <h3 class="dark:text-neutral-300 text-sm">Suggested Via Points</h3>
+                                        <h4 class="dark:text-neutral-300 text-xs">?</h4>
+                                    </div>
+                                    <hr class="border-neutral-700 mt-2 mb-2">
+                                </div>
+                            {/if}
                             <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 dark:bg-neutral-800 bg-neutral-300 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
                                 <button class="flex justify-between w-full items-center" on:click={() => viaPointsDropdown = !viaPointsDropdown}>
                                     <h2 class="dark:text-neutral-300">Via</h2>
@@ -404,7 +413,6 @@
     
 
 
-
     import { onMount, tick } from 'svelte';
     import Nav from '../../../lib/components/Nav.svelte';
     import Footer from '../../../lib/components/Footer.svelte';
@@ -443,6 +451,7 @@
     var delayHours; 
     var operator;
     var journeyReason = ''
+    var suggestedViaPoints = []
 
     function selectOperator(o){
         operator = o.detail.text.name;
@@ -485,6 +494,17 @@
     var journeyNotes = ''
     let serviceCode = ''
 
+    $: if (from || to || fromC || toC) {
+        // suggested via points
+        suggestedViaPointRouting();
+        if(from.length == 0){
+            fromC = ''
+        }
+        if(to.length == 0){
+            toC = ''
+        }
+    }
+
     function selectVia(o) {
         via = o.detail.text.name;
         viaPoints.push(o.detail.text);
@@ -495,7 +515,7 @@
     async function getTagsFromJourneys(){
         let journeys = await getJourneysData();
         if(journeys != null){
-            const parsedJourneys = JSON.parse(journeys);
+            const parsedJourneys = typeof journeys === 'string' ? JSON.parse(journeys) : journeys;
             parsedJourneys.forEach(journey => {
                 if(journey.tags){
                     journey.tags.forEach(tag => {
@@ -503,10 +523,15 @@
                             existingTags.push(tag);
                         }
                     })
-                    journeyTags.concat(existingTags)
+                    journeyTags = journeyTags.concat(existingTags);
                 }
             });
         }
+    }
+
+    async function suggestedViaPointRouting(){
+        console.log("suggestedCalled");
+        suggestedViaPoints = []
     }
     
     let allStns = null
@@ -690,6 +715,8 @@
 
     let miles = 0;
 
+    
+
     async function confirmLog(){
 
 
@@ -721,6 +748,9 @@
         let id = null;
         id = Math.random().toString(36).substring(2, 32);
 
+        
+        var railRoute = null;
+
         logNumbers.subscribe(async numbers => {
             const journey = {
                 id: id,
@@ -732,6 +762,7 @@
                 fromLong: fromLong,
                 toLat: toLat,
                 toLong: toLong,
+                railRoute: railRoute,
                 start_date: inputDateStart,
                 start_time: inputTimeStart,
                 end_date: inputDateEnd,
