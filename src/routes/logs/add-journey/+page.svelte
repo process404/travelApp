@@ -28,14 +28,32 @@
                                     <PromptField ds={locations} on:select={selectTo} bind:value={to} disabled={$noLocation} ver="loc" bind:presetC={toC} adDs={allStns}/>
                                 {/if}
                 
-                            </div>
-                            {#if from && to && suggestedViaPoints.length != 0}
+                            {#if from && to && suggestedRoutes.length != 0 && suggestedRoutes[0].stations && getViaPoints(suggestedRoutes[0].stations).length > 0}
                                 <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6  bg-opacity-30 duration-50 w-full">
-                                    <div class="flex ju</div>stify-between items-center">
+                                    <div class="flex justify-between items-center">
                                         <h3 class="dark:text-neutral-300 text-sm">Suggested Via Points</h3>
                                         <h4 class="dark:text-neutral-300 text-xs">?</h4>
                                     </div>
                                     <hr class="border-neutral-700 mt-2 mb-2">
+                                    <div class="flex flex-wrap gap-2 w-full">
+                                        {#each suggestedRoutes as suggestedRoute}
+                                            <button class="border-[1px] border-neutral-700 p-2 hover:bg-neutral-800 duration-100" on:click={() => selectSuggestedRoute(suggestedRoute)}>
+                                                <h4 class="dark:text-neutral-500 italic text-xs">Route</h4>
+                                                <h3 class="dark:text-neutral-300">{suggestedRoute.route}</h3>
+                                                <!-- <p class="dark:text-neutral-300"><span class="dark:text-neutral-500 italic text-sm">{getViaPoints(suggestedRoute.stations)}</span></p> -->
+                                                <hr class="border-neutral-700 h-[1px] mt-2">
+                                                <h4 class="text-xs italic text-neutral-600">via</h4>
+                                                <hr class="border-neutral-700 h-[1px]">
+                                                <ul class="mt-2">
+                                                    {#each getViaPoints(suggestedRoute.stations) as viaPoint}
+                                                        <li class="dark:text-neutral-500 text-sm italic text-left">{viaPoint}</li>
+                                                    {/each}
+                                                </ul>
+                                                <hr class="border-neutral-700 h-[1px] mt-2">
+                                            </button>
+                                        {/each}
+                                    </div>
+                                    
                                 </div>
                             {/if}
                             <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 dark:bg-neutral-800 bg-neutral-300 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
@@ -451,7 +469,7 @@
     var delayHours; 
     var operator;
     var journeyReason = ''
-    var suggestedViaPoints = []
+    var suggestedRoutes = []
 
     function selectOperator(o){
         operator = o.detail.text.name;
@@ -464,7 +482,7 @@
     var db;
     import additionalStns from '../../../db/additionalStations.json'
     import { tl_getAllData, tl_putData } from '../../tl_stationsDB';
-	import { add } from 'dexie';
+    import mappedRoutes from '../../../db/mappedRoutes.json';
     var logAreas = []
     dbWriteable.set(db)
 
@@ -495,8 +513,7 @@
     let serviceCode = ''
 
     $: if (from || to || fromC || toC) {
-        // suggested via points
-        suggestedViaPointRouting();
+        checkMappedRoutes(from, to);
         if(from.length == 0){
             fromC = ''
         }
@@ -510,6 +527,38 @@
         viaPoints.push(o.detail.text);
         viaPointsAdd = false;
         // console.log("select", via);
+    }
+
+    function getViaPoints(suggestedRouteStns) {
+        let startIndex = suggestedRouteStns.indexOf(from);
+        let endIndex = suggestedRouteStns.indexOf(to);
+
+        if (startIndex === -1 || endIndex === -1) {
+            // console.log(`No via points found for route from ${from} to ${to}`);
+            return [];
+        }
+
+        if (startIndex < endIndex) {
+            // console.log(`Via points from ${from} to ${to}:`, suggestedRouteStns.slice(startIndex + 1, endIndex));
+            return suggestedRouteStns.slice(startIndex + 1, endIndex);
+        } else {
+            // console.log(`Via points from ${to} to ${from}:`, suggestedRouteStns.slice(endIndex + 1, startIndex).reverse());
+            return suggestedRouteStns.slice(endIndex + 1, startIndex).reverse();
+        }
+    }
+
+    async function checkMappedRoutes(from, to) {
+        if (from && to && from != to) {
+            mappedRoutes.forEach(route => {
+                if (route.stations.includes(from) && route.stations.includes(to) && route.countries.includes(fromC) && route.countries.includes(toC)) {
+                    const routeExists = suggestedRoutes.some(suggestedRoute => suggestedRoute.route === route.route);
+                    if (!routeExists) {
+                        suggestedRoutes.push(route);
+                    }
+                }
+            });
+        }
+        // console.log(suggestedRoutes);
     }
 
     async function getTagsFromJourneys(){
@@ -529,10 +578,33 @@
         }
     }
 
-    async function suggestedViaPointRouting(){
-        console.log("suggestedCalled");
-        suggestedViaPoints = []
+    function selectSuggestedRoute(suggestedRoute) {
+        let via = getViaPoints(suggestedRoute.stations);
+        viaPoints = via.map(point => {
+            const station = allStns.find(station => station.name === point) || additionalStns.find(station => station.name === point);
+            if (station && suggestedRoute.countries.includes(station.country)) {
+                console.log(station);
+                return {
+                    name: station.name,
+                    id: station.id,
+                    lat: station.latitude,
+                    long: station.longitude,
+                    country: station.country
+                };
+            } else {
+                return {
+                    name: point,
+                    id: null,
+                    lat: null,
+                    long: null,
+                    country: null
+                };
+            }
+        }).filter(station => station.id !== null); // Filter out stations that are not in the suggestedRoute countries list
+        console.log(viaPoints);
+        suggestedRoutes = [];
     }
+
     
     let allStns = null
     let loadStns = true;
@@ -862,6 +934,7 @@
             fromId = o.detail.text.id;
             fromLat = o.detail.text.lat;
             fromLong = o.detail.text.long;
+            checkMappedRoutes(from, to);
         }
 
         function selectTo(o){
@@ -869,6 +942,7 @@
             toId = o.detail.text.id;
             toLat = o.detail.text.lat;
             toLong = o.detail.text.long;
+            checkMappedRoutes(from, to);
             // console.log(from, to, fromId, toId);
         }
 
@@ -887,6 +961,7 @@
         });
 
         import { countryFlags } from '../../../db/countries.js'
+	import { A } from 'flowbite-svelte';
 
         function getFlag(item){
             let country = item.country

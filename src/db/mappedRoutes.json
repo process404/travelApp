@@ -1,0 +1,148 @@
+[
+    {
+        "route":"Ormskirk to Hunts Cross",
+        "stations":[
+            "Ormskirk",
+            "Aughton Park",
+            "Town Green",
+            "Maghull North",
+            "Maghull",
+            "Old Roan",
+            "Aintree",
+            "Orrell Park",
+            "Walton",
+            "Kirkdale",
+            "Sandhills",
+            "Moorfields",
+            "Liverpool Central",
+            "Brunswick",
+            "St Michaels",
+            "Aigburth",
+            "Cressington",
+            "Liverpool South Parkway",
+            "Hunts Cross"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"Southport to Hunts Cross",
+        "stations":[
+            "Southport",
+            "Birkdale",
+            "Hillside",
+            "Ainsdale",
+            "Freshfield",
+            "Formby",
+            "Hightown",
+            "Hall Road",
+            "Blundellsands & Crosby",
+            "Waterloo",
+            "Seaforth & Litherland",
+            "Bootle New Strand",
+            "Bootle Oriel Road",
+            "Bank Hall",
+            "Sandhills",
+            "Moorfields",
+            "Liverpool Central",
+            "Brunswick",
+            "St Michaels",
+            "Aigburth",
+            "Cressington",
+            "Liverpool South Parkway",
+            "Hunts Cross"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"Headbolt Lane to Liverpool Central",
+        "stations":[
+            "Headbolt Lane",
+            "Kirkby",
+            "Fazakerley",
+            "Rice Lane",
+            "Kirkdale",
+            "Sandhills",
+            "Moorfields",
+            "Liverpool Central"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"Chester to Liverpool Central",
+        "stations":[
+            "Chester",
+            "Bache",
+            "Capenhurst",
+            "Hooton",
+            "Eastham Rake",
+            "Bromborough",
+            "Bromborough Rake",
+            "Spital",
+            "Port Sunlight",
+            "Bebington",
+            "Rock Ferry",
+            "Green Lane",
+            "Birkenhead Central",
+            "Hamilton Square",
+            "Liverpool James Street",
+            "Liverpool Central"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"Ellesmere Port to Liverpool Central",
+        "stations":[
+            "Ellesmere Port",
+            "Overpool",
+            "Little Sutton",
+            "Hooton",
+            "Eastham Rake",
+            "Bromborough",
+            "Bromborough Rake",
+            "Spital",
+            "Port Sunlight",
+            "Bebington",
+            "Rock Ferry",
+            "Green Lane",
+            "Birkenhead Central",
+            "Hamilton Square",
+            "Liverpool James Street",
+            "Liverpool Central"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"New Brighton to Liverpool Central",
+        "stations":[
+            "New Brighton",
+            "Wallasey Grove Road",
+            "Wallasey Village",
+            "Birkenhead North",
+            "Birkenhead Park",
+            "Conway Park",
+            "Hamilton Square",
+            "Liverpool James Street",
+            "Liverpool Central"
+        ],
+        "countries":["GB"]
+    },
+    {
+        "route":"West Kirby to Liverpool Central",
+        "stations":[
+            "West Kirby",
+            "Hoylake",
+            "Manor Road",
+            "Meols",
+            "Moreton",
+            "Leasowe",
+            "Bidston",
+            "Birkenhead North",
+            "Birkenhead Park",
+            "Conway Park",
+            "Hamilton Square",
+            "Liverpool James Street",
+            "Liverpool Central"
+        ],
+        "countries":["GB"]
+    }
+]

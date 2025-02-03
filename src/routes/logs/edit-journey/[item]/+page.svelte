@@ -29,6 +29,34 @@
                                     {/if}
                     
                                 </article>
+                                {#if from && to && suggestedRoutes.length != 0 && suggestedRoutes[0].stations && getViaPoints(suggestedRoutes[0].stations).length > 0}
+                                    <div class="border-[1px] border-neutral-700 rounded-md p-2 mt-6  bg-opacity-30 duration-50 w-full">
+                                        <div class="flex justify-between items-center">
+                                            <h3 class="dark:text-neutral-300 text-sm">Suggested Via Points</h3>
+                                            <h4 class="dark:text-neutral-300 text-xs">?</h4>
+                                        </div>
+                                        <hr class="border-neutral-700 mt-2 mb-2">
+                                        <div class="flex flex-wrap gap-2 w-full">
+                                            {#each suggestedRoutes as suggestedRoute}
+                                                <button class="border-[1px] border-neutral-700 p-2 hover:bg-neutral-800 duration-100" on:click={() => selectSuggestedRoute(suggestedRoute)}>
+                                                    <h4 class="dark:text-neutral-500 italic text-xs">Route</h4>
+                                                    <h3 class="dark:text-neutral-300">{suggestedRoute.route}</h3>
+                                                    <!-- <p class="dark:text-neutral-300"><span class="dark:text-neutral-500 italic text-sm">{getViaPoints(suggestedRoute.stations)}</span></p> -->
+                                                    <hr class="border-neutral-700 h-[1px] mt-2">
+                                                    <h4 class="text-xs italic text-neutral-600">via</h4>
+                                                    <hr class="border-neutral-700 h-[1px]">
+                                                    <ul class="mt-2">
+                                                        {#each getViaPoints(suggestedRoute.stations) as viaPoint}
+                                                            <li class="dark:text-neutral-500 text-sm italic text-left">{viaPoint}</li>
+                                                        {/each}
+                                                    </ul>
+                                                    <hr class="border-neutral-700 h-[1px] mt-2">
+                                                </button>
+                                            {/each}
+                                        </div>
+                                        
+                                    </div>
+                                {/if}
                                 <article class="border-[1px] border-neutral-700 rounded-md p-2 mt-6 bg-neutral-800 bg-opacity-30 hover:border-neutral-400 duration-50 w-full">
                                     <button class="flex justify-between w-full items-center" on:click={() => viaPointsDropdown = !viaPointsDropdown}>
                                         <h2 class="dark:text-neutral-300">Via</h2>
@@ -414,7 +442,8 @@
     
         import "../../../siteDB.js"
         import { writePlanningData, writeLocationsData, writeJourneysData, writeLogsData, getPlanningData, getLocationsData, getJourneysData, getLogsData } from '../../../siteDB';
-        
+        import mappedRoutes from '../../../../db/mappedRoutes.json';
+
         import operators from '../../../../db/operators.json';
 
         
@@ -444,6 +473,7 @@
         var delayHours; 
         var operator;
         var journeyReason = ''
+        var suggestedRoutes = [];
     
         function selectOperator(o){
             operator = o.detail.text.name;
@@ -485,6 +515,49 @@
         var existingTags = []
         var journeyNotes = ''
         let serviceCode = ''
+
+        $: if (from || to || fromC || toC) {
+            checkMappedRoutes(from, to);
+            if(from.length == 0){
+                fromC = ''
+            }
+            if(to.length == 0){
+                toC = ''
+            }
+        }
+
+        function getViaPoints(suggestedRouteStns) {
+            let startIndex = suggestedRouteStns.indexOf(from);
+            let endIndex = suggestedRouteStns.indexOf(to);
+
+            if (startIndex === -1 || endIndex === -1) {
+                // console.log(`No via points found for route from ${from} to ${to}`);
+                return [];
+            }
+
+            if (startIndex < endIndex) {
+                // console.log(`Via points from ${from} to ${to}:`, suggestedRouteStns.slice(startIndex + 1, endIndex));
+                return suggestedRouteStns.slice(startIndex + 1, endIndex);
+            } else {
+                // console.log(`Via points from ${to} to ${from}:`, suggestedRouteStns.slice(endIndex + 1, startIndex).reverse());
+                return suggestedRouteStns.slice(endIndex + 1, startIndex).reverse();
+            }
+        }
+
+        async function checkMappedRoutes(from, to) {
+            if (from && to && from != to) {
+                mappedRoutes.forEach(route => {
+                    if (route.stations.includes(from) && route.stations.includes(to) && route.countries.includes(fromC) && route.countries.includes(toC)) {
+                        const routeExists = suggestedRoutes.some(suggestedRoute => suggestedRoute.route === route.route);
+                        if (!routeExists) {
+                            suggestedRoutes.push(route);
+                        }
+                    }
+                });
+            }
+            // console.log(suggestedRoutes);
+        }
+
     
         function selectVia(o) {
             via = o.detail.text.name;
@@ -510,6 +583,33 @@
             }
         }
 
+        function selectSuggestedRoute(suggestedRoute) {
+            let via = getViaPoints(suggestedRoute.stations);
+            viaPoints = via.map(point => {
+                const station = allStns.find(station => station.name === point) || additionalStns.find(station => station.name === point);
+                if (station && suggestedRoute.countries.includes(station.country)) {
+                    console.log(station);
+                    return {
+                        name: station.name,
+                        id: station.id,
+                        lat: station.latitude,
+                        long: station.longitude,
+                        country: station.country
+                    };
+                } else {
+                    return {
+                        name: point,
+                        id: null,
+                        lat: null,
+                        long: null,
+                        country: null
+                    };
+                }
+            }).filter(station => station.id !== null); // Filter out stations that are not in the suggestedRoute countries list
+            // console.log(viaPoints);
+            suggestedRoutes = [];
+        }
+
         import { page } from '$app/stores';
         let param = null;
         
@@ -526,6 +626,7 @@
             }else{
                 locations = additionalStns;
             }
+
     
             if (typeof window !== 'undefined') {
                 const settings = JSON.parse(localStorage.getItem('settings'));
@@ -571,8 +672,8 @@
                     inputTimeEnd = journey.end_time;
                     viaPoints = journey.viaPoints;
                     operator = journey.operator;
-                    delayHours = journey.delayHours;
-                    delayMinutes = journey.delayMinutes;
+                    delayHours = isNaN(parseInt(journey.delayHours)) ? "00" : journey.delayHours.toString().padStart(2, '0');
+                    delayMinutes = isNaN(parseInt(journey.delayMinutes)) ? "00" : journey.delayMinutes.toString().padStart(2, '0');
                     journeyReason = journey.journeyReason;
                     journeyFirstClass = journey.journeyFirstClass;
                     journeySecondClass = journey.journeySecondClass;
@@ -835,9 +936,9 @@
                 // console.log(type)
                 // console.log(db)
                 if (type === "Train") {
-                    console.log("TR");
+                    // console.log("TR");
                     db.vehTypes.forEach(item => {
-                        console.log(item)
+                        // console.log(item)
                         if (item.trainTypes) {
                             logAreas.push(item);
                             // console.log(item);

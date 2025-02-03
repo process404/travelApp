@@ -75,8 +75,8 @@
                     const lowerCaseName = set.name.toLowerCase();
                     const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
                     return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
-                           !suggestions.some(suggestion => suggestion.name === set.name) &&
-                           index === self.findIndex(s => s.name === set.name);
+                           !suggestions.some(suggestion => suggestion.name === set.name && suggestion.country === set.country) &&
+                           index === self.findIndex(s => s.name === set.name && s.country === set.country);
                 });
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));
@@ -87,8 +87,8 @@
                         const lowerCaseName = set.name.toLowerCase();
                         const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
                         return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
-                               !suggestions.some(suggestion => suggestion.name === set.name) &&
-                               !filteredStations.some(suggestion => suggestion.name === set.name);
+                               !suggestions.some(suggestion => suggestion.name === set.name && suggestion.country === set.country) &&
+                               !filteredStations.some(suggestion => suggestion.name === set.name && suggestion.country === set.country);
                     });
                 } catch (e) {
                     console.log(e);
@@ -96,14 +96,14 @@
 
                 let uniqueStations = null;
                 try {
-                    uniqueStations = filteredStations2.filter(set => !suggestions.some(suggestion => suggestion.name === set.name));
+                    uniqueStations = filteredStations2.filter(set => !suggestions.some(suggestion => suggestion.name === set.name && suggestion.country === set.country));
                 } catch (e) {
                     console.log(e);
                 }
 
                 try {
                     uniqueStations.forEach(set => {
-                        if (!suggestions.some(suggestion => suggestion.name === set.name)) {
+                        if (!suggestions.some(suggestion => suggestion.name === set.name && suggestion.country === set.country)) {
                             suggestions.push({ name: set.name, country: set.country, short: set.short });
                         }
                     });
@@ -115,8 +115,8 @@
                     const lowerCaseName = set.name.toLowerCase();
                     const lowerCaseShort = set.short ? set.short.toLowerCase() : '';
                     return (lowerCaseName.startsWith(lowerCaseValue) || lowerCaseShort.startsWith(lowerCaseValue)) &&
-                           !suggestions.some(suggestion => suggestion.name === set.name) &&
-                           index === self.findIndex(s => s.name === set.name);
+                           !suggestions.some(suggestion => suggestion.name === set.name && suggestion.country === set.country) &&
+                           index === self.findIndex(s => s.name === set.name && s.country === set.country);
                 });
 
                 suggestions.push(...filteredStations.map(set => ({ name: set.name, country: set.country, short: set.short })));
@@ -129,7 +129,7 @@
         value = name.name;
         var selectedStation
         if(adDs){
-            selectedStation = adDs.find(station => station.name === name.name);
+            selectedStation = adDs.find(station => station.name === name.name && station.country === name.country);
         }
         if (adDs && selectedStation) {
             value = selectedStation.name;
@@ -149,7 +149,7 @@
             value = selectedStation.name;
 
         }else{
-            const locSearch = ds.find(station => station.name === name.name);
+            const locSearch = ds.find(station => station.name === name.name && station.country === name.country);
             if(locSearch){
                 value = locSearch;
                 presetC = locSearch.country;
