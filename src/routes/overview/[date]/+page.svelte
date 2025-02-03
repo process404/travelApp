@@ -99,33 +99,33 @@
                                             {#if !journey.delayHours && !journey.delayMinutes}
                                                 <p class="dark:text-white text-sm">{journey.end_time}</p>
                                             {:else}
-                                            <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
-                                                <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
-                                                <span class="flex flex-col"> 
-                                                    {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
-                                                        <p class="text-neutral-600 line-through text-sm">{journey.end_time}
-                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
-                                                            {/if}
-                                                        </p>
-                                                        <p class="dark:text-green-500 text-green-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
-                                                    {:else if getDiffMinutes(journey.delayHours, journey.delayMinutes) != 0}
-                                                        <p class="text-neutral-600 line-through text-sm">{journey.end_time}
-                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
-                                                            {/if}
-                                                        </p>
-                                                        <p class="dark:text-red-500 text-red-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
-                                                    {/if}
-                                                    {#if getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes) != null}
-                                                        <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
-                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
-                                                            {/if}
-                                                        </p>
-                                                    {/if}
+                                                <span class="flex gap-1 items-center" class:mt-1={journey.delayHours || journey.delayMinutes}>
+                                                    <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
+                                                    <span class="flex flex-col"> 
+                                                        {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
+                                                            <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                                {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                    <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                                {/if}
+                                                            </p>
+                                                            <p class="dark:text-green-500 text-green-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                        {:else if getDiffMinutes(journey.delayHours, journey.delayMinutes) != 0}
+                                                            <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                                {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                    <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                                {/if}
+                                                            </p>
+                                                            <p class="dark:text-red-500 text-red-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
+                                                        {/if}
+                                                        {#if getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes) != null}
+                                                            <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                                {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                    <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                                {/if}
+                                                            </p>
+                                                        {/if}
+                                                    </span>
                                                 </span>
-                                            </span>
                                             {/if}
                                         </div>
                                         <div class="border-neutral-700 border-[1px] rounded-md duration-300 delay-100 motion-reduce:duraton-0 pointer-events-none" class:p-2={journey.dropdown} class:h-0={!journey.dropdown} class:opacity-0={!journey.dropdown} class:mt-0={!journey.dropdown} class:h-full={journey.dropdown} class:mt-2={journey.dropdown} class:opacity-100={journey.dropdown}>
@@ -453,7 +453,7 @@
                                                 
                                             </span> 
                                             </span>
-                                              ${journey.delayHours || journey.delayMinutes ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                              ${getDiffMinutes(journey.delayHours, journey.delayMinutes) !== 0 ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     ${journey.numbers.length > 0 ? `

@@ -626,6 +626,7 @@
             }else{
                 locations = additionalStns;
             }
+
     
             if (typeof window !== 'undefined') {
                 const settings = JSON.parse(localStorage.getItem('settings'));
@@ -671,8 +672,8 @@
                     inputTimeEnd = journey.end_time;
                     viaPoints = journey.viaPoints;
                     operator = journey.operator;
-                    delayHours = journey.delayHours;
-                    delayMinutes = journey.delayMinutes;
+                    delayHours = isNaN(parseInt(journey.delayHours)) ? "00" : journey.delayHours.toString().padStart(2, '0');
+                    delayMinutes = isNaN(parseInt(journey.delayMinutes)) ? "00" : journey.delayMinutes.toString().padStart(2, '0');
                     journeyReason = journey.journeyReason;
                     journeyFirstClass = journey.journeyFirstClass;
                     journeySecondClass = journey.journeySecondClass;
