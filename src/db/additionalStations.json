@@ -3,32 +3,48 @@
         "name":"Reston",
         "country":"GB",
         "code":"RSN",
-        "lat": 55.849720,
-        "long": -2.192615,
+        "latitude": "55.849720",
+        "longitude": "-2.192615",
         "id":"c_lev_196929"
     },
     {
         "name":"Cameron Bridge",
         "country":"GB",
         "code":"CBX",
-        "lat": 56.202500,
-        "long": -3.047095,
+        "latitude": "56.202500",
+        "longitude": "-3.047095",
         "id":"c_cbx_793491"
     },
     {
         "name":"Leven",
         "country":"GB",
         "code":"LEV",
-        "lat": 56.192355,
-        "long": -3.001926,
+        "latitude": "56.192355",
+        "longitude": "-3.001926",
         "id":"c_lev_143525"
     },
     {
         "name":"Ashley Down",
         "country":"GB",
         "code":"ASD",
-        "lat": 51.479047,
-        "long": -2.576521,
+        "latitude": "51.479047",
+        "longitude": "-2.576521",
         "id":"c_asd_48638643"
+    },
+    {
+        "name":"Maghull North",
+        "country":"GB",
+        "code":"MNS",
+        "latitude": "53.516740",
+        "longitude": "-2.921136",
+        "id":"c_mns_196929"
+    },
+    {
+        "name":"Brunswick",
+        "country":"GB",
+        "code":"BRW",
+        "latitude": "53.383365",
+        "longitude": "-2.976220",
+        "id":"c_brw_196929"
     }
 ]

@@ -117,13 +117,13 @@
                                                         </p>
                                                         <p class="dark:text-red-500 text-red-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">+{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                     {/if}
-                                                        {#if getNewArrivalTime(journey.end_time. journey.delayHours, journey.delayMinutes) != null}
-                                                            <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
-                                                                {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
-                                                                    <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
-                                                                {/if}
-                                                            </p>
-                                                        {/if}
+                                                    {#if getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes) != null}
+                                                        <p class="dark:text-white text-sm">{getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}
+                                                            {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
+                                                                <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
+                                                            {/if}
+                                                        </p>
+                                                    {/if}
                                                 </span>
                                             </span>
                                             {/if}
