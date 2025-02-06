@@ -908,7 +908,7 @@
 
                 const updatedJourneys = journeys.map(j => j.id === param ? updatedJourney : j);
                 let test = await writeJourneysData(updatedJourneys);
-                await sleep(3000)
+                // await sleep(3000)
                 window.location.href = `/overview/` + inputDateStart;
             });
     

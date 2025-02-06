@@ -144,5 +144,16 @@
             "Liverpool Central"
         ],
         "countries":["GB"]
+    },
+    {
+        "route":"Ormskirk to Preston",
+        "stations":[
+            "Ormskirk",
+            "Burscough Junction",
+            "Rufford",
+            "Croston",
+            "Preston"
+        ],
+        "countries":["GB"]
     }
 ]
