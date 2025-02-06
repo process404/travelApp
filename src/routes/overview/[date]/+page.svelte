@@ -26,7 +26,10 @@
                         {/if}
                     </article>
                     <article class="w-full h-full border-neutral-700 border-[1px] rounded-md p-4 md:overflow-y-scroll overflow-y-visible dark:customScrollbar lightScrollbar">
-                        <h2 class="dark:text-white text-lg font-semibold">Your Journeys</h2>
+                        <div class="flex justify-between items-center">
+                            <h2 class="dark:text-white text-lg font-semibold">Your Journeys</h2>
+                            <button class="blue2 button text-xs" on:click={() => addJourneySummon()}>Add Journey</button>
+                        </div>
                         <div class="flex flex-col mt-4 gap-2">
                             {#each sortedJourneys as journey}
                                 <button class="border-neutral-700 rounded-md border-[1px] p-2" on:click={() => {journey.dropdown = !journey.dropdown}}>
@@ -34,39 +37,39 @@
                                         {#if journey.journeySecondClass && !journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-neutral-600 rounded-sm">2nd</span>
-                                                <h2 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                                <h2 class="dark:text-white font-semibold flex items-center justify-end gap-2 w-full">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
                                                 {:else}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                         <span class="text-xs text-white italic bg-neutral-600 pl-1 pr-1 rounded-sm">2nd</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center justify-end gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                             <hr class="w-full  h-[2px] bg-neutral-500 border-none">
                                         {:else if journey.journeyFirstClass}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                    <h2 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
+                                                    <h2 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h2>
                                                 {:else}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                     <span class="text-xs text-white italic pl-1 pr-1 bg-yellow-500 rounded-sm">1st</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                                 <hr class="w-full h-[2px] bg-yellow-500 border-none">
                                             </div>
                                         {:else if journey.journeyOvernight && !journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                         <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
                                                 {:else}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                         <span class="text-xs text-white italic bg-green-800 pl-1 pr-1 rounded-md">Overnight ({journey.journeyFirstClass ? '1st' : '2nd'})</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                         
@@ -74,13 +77,13 @@
                                         {:else if journey.journeySleeper}
                                             <div class="flex justify-between items-center w-full mb-1">
                                                 {#if !isMobileDevice}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from}<img class="w-4 h-4" src={getCountryEmoji(journey.fromCountry)} alt={journey.fromCountry}></h3>
                                                     <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to}<img class="w-4 h-4" src={getCountryEmoji(journey.toCountry)} alt={journey.toCountry}></h3>
                                                 {:else}
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 w-full">{journey.from} <span>{getCountryEmoji(journey.fromCountry)}</span></h3>
                                                     <span class="text-xs text-white italic bg-teal-800 pl-1 pr-1 rounded-sm">Sleeper</span>
-                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
+                                                    <h3 class="dark:text-white font-semibold flex items-center gap-2 justify-end w-full">{journey.to} <span>{getCountryEmoji(journey.toCountry)}</span></h3>
                                                 {/if}
                                             </div>
                                             <hr class="w-full  h-[2px] bg-teal-800 border-none">
@@ -103,14 +106,14 @@
                                                     <!-- <p class="text-green-500 text-sm">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p> -->
                                                     <span class="flex flex-col"> 
                                                         {#if getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0}
-                                                            <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                            <p class="text-neutral-600 line-through text-sm italic">{journey.end_time}
                                                                 {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
                                                                     <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
                                                                 {/if}
                                                             </p>
                                                             <p class="dark:text-green-500 text-green-800 font-semibold dark:font-normal text-sm text-[10px] w-full text-center">{getDiffMinutes(journey.delayHours, journey.delayMinutes)}</p>
                                                         {:else if getDiffMinutes(journey.delayHours, journey.delayMinutes) != 0}
-                                                            <p class="text-neutral-600 line-through text-sm">{journey.end_time}
+                                                            <p class="text-neutral-600 line-through text-sm italic">{journey.end_time}
                                                                 {#if new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime()}
                                                                     <span class="italic text-[9px]">+{workOutDays(journey.start_date, journey.end_date)}d</span>
                                                                 {/if}
@@ -138,16 +141,6 @@
                                                         <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">OC:</span> {journey.operator}</p>
                                                     {/if}
                                                 </div>
-                                                {#if journey.journeyTags.length > 0}
-                                                    <div class="lg:flex hidden gap-2 items-baseline w-auto">
-                                                        <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
-                                                        <div class="flex gap-2  w-full mt-1">
-                                                            {#each journey.journeyTags as tag}
-                                                                <p class="text-left text-sm dark:text-white bg-green-900 p-1 rounded-sm">{tag}</p>
-                                                            {/each}
-                                                        </div>
-                                                    </div>
-                                                {/if}
                                             </div>
                                             {#if checkForPictureAllTime(true,journey.numbers) != false}
                                             <div class="border-[1px] p-1 border-neutral-700 rounded-md mt-2">
@@ -182,6 +175,19 @@
                                                 </div>
                                             </div>
                                             {:else}
+                                            {#if journey.miles}
+                                                <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Miles:</span>{journey.miles}</p>
+                                            {/if}
+                                            {#if journey.journeyTags.length > 0}
+                                                <div class="lg:flex hidden gap-2 items-baseline w-auto">
+                                                    <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Tags:</span></p>
+                                                    <div class="flex gap-2  w-full mt-1">
+                                                        {#each journey.journeyTags as tag}
+                                                            <p class="text-left dark:text-white bg-green-900 pl-1 pr-1 rounded-sm text-xs">{tag}</p>
+                                                        {/each}
+                                                    </div>
+                                                </div>
+                                            {/if}
                                             <p class="text-left text-sm dark:text-white"><span class="text-neutral-500 italic text-xs mr-2">Numbers:</span>{journey.numbers.map(num => num.number).join(', ')}</p>
                                             {/if}
                                             {#if journey.journeyTags.length > 0}
@@ -198,6 +204,7 @@
                                                 <button class="button w-3/4 blue2" class:pointer-events-auto={journey.dropdown} on:click={() => {window.location.href = '/logs/edit-journey/' + journey.id}}>Edit Journey</button>
                                                 <button class="button w-2/5 hover:before:bg-red-700 hover:before:bg-opacity-50 pointer-events-auto" class:pointer-events-auto={journey.dropdown} on:click={() => {deleteJourney(journey.id)}}>Delete</button>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </button>
@@ -210,7 +217,10 @@
     </section>
     <div class="h-full w-full flex flex-col items-center pl-4 pr-4 mt-4">
         <div class="flex flex-col items-center border-[1px] rounded-md border-neutral-700 sm:ml-8 ml-4 mr-4 sm:mr-8 h-screen pl-4 pr-4 pb-4 pt-4 max-w-[1500px] w-full">
-            <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3 w-full text-left">Your Logs</h2>
+            <div class="flex w-full justify-between items-center">
+                <h2 class="dark:text-white text-xl font-semibold sm:mt-1 mt-3 text-left">Your Logs</h2>
+                <button class="blue2 text-xs button" on:click={() => addLogsSummon()}>Add Logs</button>
+            </div>
         </div>
     </div>
     <Footer/>
@@ -431,7 +441,7 @@
                                             <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} ${getCountryEmoji(journey.fromCountry)}</p>
                                             <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} ${getCountryEmoji(journey.toCountry)}</p>
                                         </div>
-                                        <div class="h-auto w-1/4 flex items-center justify-center">
+                                        <div class="h-auto w-1/4 flex items-center justify-center pl-3">
                                             <p class="text-neutral-500 italic !mt-0 !mb-0">${journey.miles && journey.miles !== 0 ? `${journey.miles}mi` : ''}</p>
                                         </div>
                                     </div>
@@ -482,7 +492,7 @@
                                             <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">From:</span> ${journey.from} <img class="w-5 h-5" src="${getCountryEmoji(journey.fromCountry)}" alt="${journey.fromCountry}"></p>
                                             <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs">To:</span> ${journey.to} <img class="w-5 h-5" src="${getCountryEmoji(journey.toCountry)}" alt="${journey.toCountry} flag"></p>
                                         </div>
-                                        <div class="h-auto w-1/4 flex items-center justify-center">
+                                        <div class="h-auto w-auto flex items-center justify-center pl-3">
                                             <p class="text-neutral-500 italic !mt-0 !mb-0">${journey.miles && journey.miles !== 0 ? `${journey.miles}mi` : ''}</p>
                                         </div>
                                     </div>
@@ -852,11 +862,11 @@
         let uniqueJourneys = new Set();
         for (var item of combined) {
             for (var journey of item.journeys) {
-            journey.dropdownOpen = false;
-            uniqueJourneys.add(journey);
+                journey.dropdownOpen = false;
+                uniqueJourneys.add(journey);
             }
         }
-        sortedJourneys = Array.from(uniqueJourneys);
+        sortedJourneys = Array.from(uniqueJourneys).sort((a, b) => new Date(a.start_date + 'T' + a.start_time) - new Date(b.start_date + 'T' + b.start_time));
     }
 
 
@@ -977,6 +987,14 @@
             writeJourneysData(journeys.filter(journey => journey.id !== id));
             window.location.reload();
         }
+    }
+    function addJourneySummon(){
+        localStorage.setItem('addJourneySummon', param);
+        window.location.href = '/logs/add-journey';
+    }
+    function addLogsSummon(){
+        localStorage.setItem('addLogsSummon', param);
+        window.location.href = '/logs/add-log';
     }
 
 

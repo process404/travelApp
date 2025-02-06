@@ -349,12 +349,20 @@
     let selectedPhoto = ''
     let addPhoto = false;
 
+
     onMount(() => {
         const settings = JSON.parse(localStorage.getItem('settings'));
         if (settings.darkMode) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
+        }
+
+        const addLogsSummon = localStorage.getItem('addLogsSummon');
+        if (addLogsSummon) {
+            const [year, month, day] = addLogsSummon.split('/');
+            inputDate = `${year}-${month}-${day}`;
+            localStorage.removeItem('addLogsSummon');
         }
     });
 

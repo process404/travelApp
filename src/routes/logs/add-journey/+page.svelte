@@ -605,6 +605,16 @@
         suggestedRoutes = [];
     }
 
+    onMount(() => {
+        const addJourneySummon = localStorage.getItem('addJourneySummon');
+        if (addJourneySummon) {
+            const [year, month, day] = addJourneySummon.split('/');
+            inputDateStart = `${year}-${month}-${day}`;
+            inputDateEnd = `${year}-${month}-${day}`;
+            localStorage.removeItem('addJourneySummon');
+        }
+    })
+
     
     let allStns = null
     let loadStns = true;
@@ -866,8 +876,8 @@
             $alrtMode = 'info_nc';
             $alrtTxt = 'Processing...';
             $alrtAct = true;
-            await sleep(1500)
-            // window.location.href = `../overview/` + inputDateStart; 
+            // await sleep(1500)
+            window.location.href = `../overview/` + inputDateStart; 
         });
 
         // console.log($logNumbers)
