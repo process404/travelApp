@@ -457,13 +457,13 @@
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
                                                 </span>
                                                 <span>
-                                                    ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                                    ${(journey.delayHours || journey.delayMinutes) && (journey.delayHours != 0 || journey.delayMinutes != 0) ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date, journey.delayHours, journey.delayMinutes)}d</span>` : ''}
                                                 </span>
                                                 
                                             </span> 
                                             </span>
-                                              ${getDiffMinutes(journey.delayHours, journey.delayMinutes) !== 0 ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                              ${(journey.delayHours || journey.delayMinutes) && (journey.delayHours != 0 || journey.delayMinutes != 0) ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                     </p>
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     ${journey.numbers.length > 0 ? `
@@ -508,13 +508,13 @@
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class=" italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
                                                 </span>
                                                 <span>
-                                                    ${journey.delayHours || journey.delayMinutes ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                                    ${(journey.delayHours || journey.delayMinutes) && (journey.delayHours != 0 || journey.delayMinutes != 0) ? `<span class="text-white italic">${getNewArrivalTime(journey.end_time, journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                                     ${new Date(journey.end_date).getTime() > new Date(journey.start_date).getTime() ? `<span class="text-white italic text-[9px]">+${workOutDays(journey.start_date, journey.end_date)}d</span>` : ''}
                                                 </span>
                                                 
                                             </span> 
                                             </span>
-                                            ${journey.delayHours || journey.delayMinutes ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
+                                            ${(journey.delayHours || journey.delayMinutes) && (journey.delayHours != 0 || journey.delayMinutes != 0) ? `<span class="${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? 'text-green-500' : 'text-red-500'} no-underline">${getDiffMinutes(journey.delayHours, journey.delayMinutes) < 0 ? '' : '+'}${getDiffMinutes(journey.delayHours, journey.delayMinutes)}</span>` : ''}
                                             
             
                                     </p>
