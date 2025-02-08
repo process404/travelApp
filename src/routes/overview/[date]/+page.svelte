@@ -448,7 +448,7 @@
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-1 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
-                                     <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours || journey.delayMinutes ? '!mt-2' : ''}">
+                                     <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
                                             <span class="flex flex-col">
@@ -499,7 +499,7 @@
                                     <hr class="border-neutral-700 mb-2 mt-1">
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Date:</span> ${new Date(journey.start_date).toLocaleDateString('en-GB')}</p>
                                     <p class="flex gap-2 items-center !mt-0 !mb-0"><span class="text-neutral-500 italic text-xs w-1/2">Departure Time:</span> ${journey.start_time}</p>
-                                    <p class="flex gap-2 items-center !mt-0 !mb-0 ${journey.delayHours && journey.delayHours != 0 || journey.delayMinutes && journey.delayMinutes != 0 ? '!mt-2' : ''}">
+                                    <p class="flex gap-2 items-center !mt-0 !mb-0">
                                         <span class="text-neutral-500 italic text-xs w-1/2">Arrival Time: </span>
                                         <span class="flex gap-1">
                                             <span class="flex flex-col">
